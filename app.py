@@ -1,12 +1,49 @@
-from flask import Flask, render_template, request
+from flask import Flask, session, render_template, request, redirect
 from openai import OpenAI
-import os
+import pyrebase
+# import os
 
 app = Flask(__name__)
 
 client = OpenAI()
 
+config = {
+    'apiKey': "AIzaSyCTeA7uOR0K7vdYvNDE5mnux1CIDyk61Aw",
+    'authDomain': "ai-feedback-generator.firebaseapp.com",
+    'projectId': "ai-feedback-generator",
+    'storageBucket': "ai-feedback-generator.appspot.com",
+    'messagingSenderId': "501121730918",
+    'appId': "1:501121730918:web:85f0198b401024e59c20a7",
+    'measurementId': "G-2LTX4Q4FL9",
+    'databaseURL': ''
+}
+
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+
+app.secret_key = 'secret'
+
 conversations = []
+
+@app.route('/login')
+def login():
+    if('user' in  session):
+        return 'Hi, {}'.format(session['user'])
+    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+            session['user'] = email
+        except:
+            return 'Failet to access'
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect('login.html')
 
 ## rutas
 @app.route('/')
