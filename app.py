@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from openai import OpenAI
 import os
-from docx import Document
 import helper
 
 
