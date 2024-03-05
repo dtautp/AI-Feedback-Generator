@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 from openai import OpenAI
 import os
+from docx import Document
+import helper
+
 
 app = Flask(__name__)
 
@@ -16,6 +19,7 @@ def index():
 # pestaña 1
 @app.route('/feedback-gen')
 def option1():
+
     return render_template('feedback-gen.html')
 
 # pestaña 2
@@ -27,6 +31,32 @@ def option2():
 @app.route('/feedback-preview')
 def preview():
     return render_template('feedback-preview.html')
+
+
+# preview hitoric
+@app.route('/feedback-test')
+def prev_test():
+    return render_template('test.html')
+
+# preview hitoric
+@app.route('/test-upload', methods=['POST'])
+def test_rec_file():
+    if 'file' not in request.files:
+        return 'No file part'
+    file = request.files['file']
+    if file.filename == '':
+        return 'No selected file'
+    if file:
+        print('Received file:', file.filename.split('.')[-1])
+        if(file.filename.split('.')[-1]=='docx'):
+            print(helper.extract_text_from_docx(file))
+        if(file.filename.split('.')[-1]=='pdf'):
+            print(helper.extract_text_from_pdf(file))
+        return 'File uploaded successfully'
+
+
+
+
 
 # # ruta uso api
 # @app.route('/', methods=['GET', 'POST'])
