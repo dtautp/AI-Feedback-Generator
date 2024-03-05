@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="feedback">
+    <div class="feedback-banner">
+        <p class="banner-title">Feedback automático UTP</p>
+        <p class="banner-desc">Una herramienta simple y poderosa para generar feedback para corregir tareas, <strong>automáticamente.</strong></p>
+    </div>
+    <div class="feedback-menu"> 
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/feedback-gen">
+                    <img class="disable" src="/static/img/box-disable.svg" alt="">
+                    <img class="active" src="/static/img/box.svg" alt="">
+                    <p>Generador de Feedback</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/historial">
+                    <img class="disable" src="/static/img/clock-disable.svg" alt="">
+                    <img class="active" src="/static/img/clock.svg" alt="">
+                    <p>Historial</p>
+                </a>
+            </li>
+        </ul>
+        <div class="content-tabs">
+            <div class="select-assignment">
+                <div class="input">
+                    <p>Curso :</p>
+                    <select class="form-select" aria-label="Disabled select example" disabled>
+                        <option selected>Inglés I</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <p>Tarea:</p>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">🔴 (AC-S04) Week 04 - Task: Assignment – Jobs and Occupations</option>
+                        <option value="2">🔴 (AC-S07) Week 07 - Task: Assignment - My Family</option>
+                        <option value="3">🔴 (AC-S09) Week 09 - Task: Assignment - A family member I admire</option>
+                        <option value="4">🔴 (AC-S12) Week 12 - Task: Assignment – What's their daily routine?</option>
+                        <option value="5">🔴 (AC-S14) Week 14 - Task: Assignment - Things I like and don't like</option>
+                        <option value="6">🔴 (AC-S17) Week 17 - Task: Assignment - Final Assignment - “Applying to Disney - Part I”</option>
+                    </select>
+                </div>
+            </div>
+            <div class="upload-message">
+                <p>Puedes subir múltiples archivos.</p>
+            </div>
+            <div class="upload-files">
+                <div class="upload-button">
+                    <button>
+                        <img src="/static/img/upload.svg" alt="">
+                        <p>Subir archivo</p>
+                    </button>
+                </div>
+                <div class="upload-desc">
+                    <p>Archivos permitidos: .PDF o Word</p>
+                    <p>(Máximo tamaño por archivo: 500MB)</p>
+                </div>
+            </div>
+            <div class="upload-next">
+                <button type="button" class="btn btn-secondary" disabled>
+                    <p>siguiente</p>
+                    <img src="/static/img/next.svg" alt="">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

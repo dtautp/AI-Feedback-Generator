@@ -1,0 +1,1 @@
+# subiendo flask a vercel con uso de Open IA chat GPT #
