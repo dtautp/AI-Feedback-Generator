@@ -124,7 +124,7 @@ p, h1, h2, h3, span {
     gap: 16px;
 }
 
-.login-form .user, .password{
+.login-form .user, .login-form .password{
     margin: 0 !important;
 }
 
