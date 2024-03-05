@@ -1,6 +1,7 @@
 from flask import Flask, session, render_template, request, redirect
 from openai import OpenAI
 import pyrebase
+import openia
 # import os
 import os
 import helper
