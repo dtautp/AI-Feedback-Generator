@@ -23,7 +23,7 @@ app.secret_key = 'secret'
 
 conversations = []
 
-@app.route('/login')
+@app.route('/login', methods=['POST','GET'])
 def login():
     if('user' in  session):
         return 'Hi, {}'.format(session['user'])
@@ -40,7 +40,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user')
+    session.pop(user)
     return redirect('login.html')
 
 ## rutas
