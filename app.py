@@ -12,7 +12,7 @@ conversations = []
 @app.route('/login', methods=['POST','GET'])
 def login():
     if('user' in  session):
-        return render_template('feedback-gen.html')
+        return render_template('feedback-generator.html')
     
     if request.method == 'POST':
         email = request.form.get('email')
@@ -20,7 +20,7 @@ def login():
         try:
             user = validator_login(email, password)
             session['user'] = email
-            return render_template('feedback-gen.html')
+            return render_template('feedback-generator.html')
         except:
             return 'Failet to access'
         
@@ -34,24 +34,23 @@ def logout():
 ## rutas
 @app.route('/')
 def index():
-    return render_template('feedback-gen.html')
+    return render_template('feedback-generator.html')
 
 # pestaña 1
-@app.route('/feedback-gen')
+@app.route('/feedback-generator')
 def option1():
 
-    return render_template('feedback-gen.html')
+    return render_template('feedback-generator.html')
 
 # pestaña 2
-@app.route('/historial')
+@app.route('/feedback-historic')
 def option2():
-    return render_template('feedback-list.html')
+    return render_template('feedback-historic.html')
 
 # preview hitoric
 @app.route('/feedback-preview')
 def preview():
     return render_template('feedback-preview.html')
-
 
 # preview hitoric
 @app.route('/feedback-test')
@@ -95,9 +94,9 @@ def limpiar_array():
     return render_template('api-openai.html')
 
 # ruta nosotros
-@app.route('/nosotros')
-def nosotros():
-    return render_template('nosotros.html')
+# @app.route('/nosotros')
+# def nosotros():
+#     return render_template('feedback-gen copy.html')
 
 # bloque de prueba
 if __name__ == '__main__':

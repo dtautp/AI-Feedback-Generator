@@ -18,7 +18,7 @@
     --font-size-4: 20px;
     --font-size-5: 26px;
     --font-size-6: 38px;
-    --font-size-7: 63px;     
+    --font-size-7: 63px;
 }
 
 html, body {
@@ -127,42 +127,6 @@ p, h1, h2, h3, span {
 .login-form .user, .login-form .password{
     margin: 0 !important;
 }
-
-/* .login-form input {
-    width: 100%;
-    height: 29px;
-    border-radius: 2px;
-    border: 0.75px solid #848D95;
-    padding: 0;
-} */
-
-/* .login-form input::placeholder {
-    margin-left: 8px;
-} */
-
-/* .login-form .input-user, .login-form .input-pass {
-    position: relative;
-} */
-
-/* .login-form .svg-mail {
-    width: 16px;
-    height: 12.8px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 8px;
-    pointer-events: none;
-}
-
-.login-form .svg-pass {
-    width: 16.064px;
-    height: 16px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 8px;
-    pointer-events: none;
-} */
 
 .login-button {
     width: 100%;
@@ -285,8 +249,9 @@ p, h1, h2, h3, span {
     background: #F2F4F8 !important;
 }
 
-/* contents tabs */
-.content-tabs {
+/* content feedback generator */
+
+.tab-feedback-generator {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -294,21 +259,19 @@ p, h1, h2, h3, span {
     gap: 24px;
 }
 
-/* content feedback generator */
-
-.content-tabs .select-assignment {
+.tab-feedback-generator .select-assignment {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.content-tabs .select-assignment .input {
+.tab-feedback-generator .select-assignment .input {
     display: flex;
     align-items: center;
 }
 
-.content-tabs .select-assignment .input p {
-    width: 10%;
+.tab-feedback-generator .select-assignment .input p {
+    width: 12%;
     color: var(--texto-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -316,12 +279,12 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs .upload-message {
+.tab-feedback-generator .upload-message {
     display: flex;
     justify-content: center;
 }
 
-.content-tabs .upload-message p {
+.tab-feedback-generator .upload-message p {
     color: var(--azul-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -329,7 +292,7 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs .upload-files {
+.tab-feedback-generator .upload-files {
     display: flex;
     flex-direction: column;
     padding: 56px 16px;
@@ -342,11 +305,11 @@ p, h1, h2, h3, span {
     background: var(--neutro-primario);
 }
 
-.content-tabs .upload-button {
+.tab-feedback-generator .upload-button {
     display: flex;
 }
 
-.content-tabs .upload-button button {
+.tab-feedback-generator .upload-button button {
     display: flex;
     padding: 10px 24px;
     justify-content: center;
@@ -358,12 +321,12 @@ p, h1, h2, h3, span {
 
 }
 
-.content-tabs .upload-button img {
+.tab-feedback-generator .upload-button img {
     width: 24px;
     height: 24px;
 }
 
-.content-tabs .upload-button p {
+.tab-feedback-generator .upload-button p {
     color: var(--azul-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -371,7 +334,7 @@ p, h1, h2, h3, span {
     line-height: 21px;
 }
 
-.content-tabs .upload-desc {
+.tab-feedback-generator .upload-desc {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -379,7 +342,7 @@ p, h1, h2, h3, span {
     gap: 8px;
 }
 
-.content-tabs .upload-desc p {
+.tab-feedback-generator .upload-desc p {
     color: var(--gris-gris-50);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -387,12 +350,12 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs .upload-next {
+.tab-feedback-generator .upload-next {
     display: flex;
     flex-direction: row-reverse;
 }
 
-.content-tabs .upload-next button{
+.tab-feedback-generator .upload-next button{
     display: flex;
     padding: 10px 16px;
     align-items: center;
@@ -401,7 +364,7 @@ p, h1, h2, h3, span {
     border: 0;
 }
 
-.content-tabs .upload-next button img {
+.tab-feedback-generator .upload-next button img {
     display: flex;
     width: 24px;
     height: 24px;
@@ -411,7 +374,7 @@ p, h1, h2, h3, span {
     flex-shrink: 0;
 }
 
-.content-tabs .upload-next button p {
+.tab-feedback-generator .upload-next button p {
     color: var(--gris-medio-gris-medio-50);
     font-feature-settings: 'clig' off, 'liga' off;
     font-size: var(--font-size-2);
@@ -422,14 +385,22 @@ p, h1, h2, h3, span {
 
 /* historic */
 
-.content-tabs .download-feedback {
+.tab-historic {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 64px;
+    gap: 24px;
+}
+
+.tab-historic .download-feedback {
     display: flex;
     gap: 24px;
     justify-content: space-between;
     align-items: center;
 }
 
-.content-tabs .download-title p {
+.tab-historic .download-title p {
     color: var(--texto-primario);
     font-size: var(--font-size-3);
     font-style: normal;
@@ -437,7 +408,7 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs .download-button button {
+.tab-historic .download-button button {
     display: flex;
     padding: 2px 8px;
     justify-content: center;
@@ -448,12 +419,12 @@ p, h1, h2, h3, span {
     background: var(--neutro-primario);
 }
 
-.content-tabs .download-button button img { 
+.tab-historic .download-button button img { 
     width: 12px;
     height: 12px;
 }
 
-.content-tabs .download-button button p { 
+.tab-historic .download-button button p { 
     color: var(--azul-primario);
     font-size: var(--font-size-1);
     font-style: normal;
@@ -461,15 +432,15 @@ p, h1, h2, h3, span {
     line-height: 21px;
 }
 
-.content-tabs .list-feedbacks {
+.tab-historic .list-feedbacks {
     text-align: center;
 }
 
-.content-tabs .list-feedbacks th {
+.tab-historic .list-feedbacks th {
     background: var(--azul-azul-70);
 }
 
-.content-tabs .list-feedbacks th p {
+.tab-historic .list-feedbacks th p {
     color: var(--neutro-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -477,7 +448,7 @@ p, h1, h2, h3, span {
     line-height: 21px;
 }
 
-.content-tabs .list-feedbacks tbody .preview {
+.tab-historic .list-feedbacks tbody .preview {
     display: flex;
     display: flex;
     justify-content: center;
@@ -485,12 +456,12 @@ p, h1, h2, h3, span {
     gap: 4px;
 }
 
-.content-tabs .list-feedbacks .preview img {
+.tab-historic .list-feedbacks .preview img {
     width: 16px;
     height: 16px;
 }
 
-.content-tabs .list-feedbacks .preview p {
+.tab-historic .list-feedbacks .preview p {
     color: var(--azul-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -499,7 +470,7 @@ p, h1, h2, h3, span {
     text-decoration-line: underline;
 }
 
-.content-tabs .list-feedbacks .checkbox-custom {
+.tab-historic .list-feedbacks .checkbox-custom {
     width: 16px;
     height: 16px;
 }
@@ -507,7 +478,7 @@ p, h1, h2, h3, span {
 
 /* preview-feedback */
 
-.content-tabs2 {
+.feedback-preview {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -516,14 +487,14 @@ p, h1, h2, h3, span {
     gap: 24px;
 }
 
-.content-tabs2 .preview-resumen{
+.feedback-preview .preview-resumen{
     display: flex;
     flex-direction: column;
     gap: 18px;
     width: 100%;
 }
 
-.content-tabs2 .back-historic a {
+.feedback-preview .back-historic a {
     display: flex;
     justify-content: flex-start;    
     gap: 8px;
@@ -531,12 +502,12 @@ p, h1, h2, h3, span {
     text-decoration: none;
 }
 
-.content-tabs2 .back-historic a img{
+.feedback-preview .back-historic a img{
     width: 16px;
     height: 16px;
 }
 
-.content-tabs2 .back-historic a p{
+.feedback-preview .back-historic a p{
     color: var(--gris-medio-gris-medio-50);
     text-align: center;
     font-size: var(--font-size-2);
@@ -545,22 +516,22 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs2 .preview-desc {
+.feedback-preview .preview-desc {
     display: flex;
 }
 
-.content-tabs2 .preview-desc div {
+.feedback-preview .preview-desc div {
     display: flex;
     gap: 8px;
     flex: 1;
 }
 
-.content-tabs2 .preview-desc div img {
+.feedback-preview .preview-desc div img {
     width: 16px;
     height: 16px;
 }
 
-.content-tabs2 .preview-desc div p {
+.feedback-preview .preview-desc div p {
     color: var(--texto-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -569,11 +540,11 @@ p, h1, h2, h3, span {
 }
 
 
-.content-tabs2 .assignment-text {
+.feedback-preview .assignment-text {
     display: flex;
 }
 
-.content-tabs2 .assignment-text p {
+.feedback-preview .assignment-text p {
     color: var(--azul-primario);
     font-size: var(--font-size-4);
     font-style: normal;
@@ -581,14 +552,14 @@ p, h1, h2, h3, span {
     line-height: 28px;
 }
 
-.content-tabs2 .feedback-text {
+.feedback-preview .feedback-text {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.content-tabs2 .feedback-text .text {
+.feedback-preview .feedback-text .text {
     color: var(--azul-primario);
     font-size: var(--font-size-4);
     font-style: normal;
@@ -596,13 +567,13 @@ p, h1, h2, h3, span {
     line-height: 28px; 
 }
 
-.content-tabs2 .feedback-text .buttons {
+.feedback-preview .feedback-text .buttons {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.content-tabs2 .feedback-text .buttons button{
+.feedback-preview .feedback-text .buttons button{
     display: flex;
     padding: 2px 8px;
     justify-content: center;
@@ -613,12 +584,12 @@ p, h1, h2, h3, span {
     background: var(--neutro-primario);
 }
 
-.content-tabs2 .feedback-text .buttons img {
+.feedback-preview .feedback-text .buttons img {
     width: 12px;
     height: 12px;
 }
 
-.content-tabs2 .feedback-text .buttons p {
+.feedback-preview .feedback-text .buttons p {
     color: var(--azul-primario);
     font-size: var(--font-size-2);
     font-style: normal;
@@ -626,8 +597,7 @@ p, h1, h2, h3, span {
     line-height: 21px;
 }
 
-
-.content-tabs2 .textarea p {
+.feedback-preview .textarea p {
     color: var(--texto-primario);
     font-size: var(--font-size-3);
     font-style: normal;
@@ -635,7 +605,7 @@ p, h1, h2, h3, span {
     line-height: normal;
 }
 
-.content-tabs2 .textarea {
+.feedback-preview .textarea {
     border: 1px solid #ccc;
     overflow-y: auto;
     padding: 16px;

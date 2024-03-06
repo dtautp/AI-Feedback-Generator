@@ -1,81 +1,58 @@
-{% extends "layout.html" %}
+<link href="/static/css/feedback-preview.css" rel="stylesheet">
 
-{% block main %}
-<div class="feedback">
-    <div class="feedback-banner">
-        <p class="banner-title">Feedback automático UTP</p>
-        <p class="banner-desc">Una herramienta simple y poderosa para generar feedback para corregir tareas, <strong>automáticamente.</strong></p>
+{% extends "layout-tabs.html" %}
+
+{% block tabs %}
+<div class="feedback-preview">
+    <div class="preview-resumen">
+       <div class="back-historic">
+           <a href="/feedback-historic">
+               <img src="/static/img/back.svg" alt="">
+               <p>Ver historial</p>
+           </a>
+       </div>
+       <div class="preview-desc">
+           <div>
+               <img src="/static/img/file.svg" alt="">
+               <p><strong>Archivo(s):</strong> AC-07_Juan_Perez.docx</p>
+           </div>
+           <div>
+               <img src="/static/img/calendar.svg" alt="">
+               <p><strong>Fecha de creación:</strong>  26/01/2024</p>
+           </div>
+       </div>
     </div>
-    <div class="feedback-menu"> 
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/feedback-gen">
-                    <img class="disable" src="/static/img/box-disable.svg" alt="">
-                    <img class="active" src="/static/img/box.svg" alt="">
-                    <p>Generador de Feedback</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="/historial">
-                    <img class="disable" src="/static/img/clock-disable.svg" alt="">
-                    <img class="active" src="/static/img/clock.svg" alt="">
-                    <p>Historial</p>
-                </a>
-            </li>
-        </ul>
-        <div class="content-tabs2">
-             <div class="preview-resumen">
-                <div class="back-historic">
-                    <a href="/historial">
-                        <img src="/static/img/back.svg" alt="">
-                        <p>Ver historial</p>
-                    </a>
-                </div>
-                <div class="preview-desc">
-                    <div>
-                        <img src="/static/img/file.svg" alt="">
-                        <p><strong>Archivo(s):</strong> AC-07_Juan_Perez.docx</p>
-                    </div>
-                    <div>
-                        <img src="/static/img/calendar.svg" alt="">
-                        <p><strong>Fecha de creación:</strong>  26/01/2024</p>
-                    </div>
-                </div>
-             </div>
-             <div class="assignment-text">
-                <p>Archivo de estudiante:</p>
-             </div>
-             <div class="textarea">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed augue iaculis, blandit nisl a, volutpat dolor. Pellentesque vel enim justo. Aliquam sodales ante nec libero maximus rutrum. Nulla efficitur est et quam convallis ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue. Aliquam dolor quam, malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna, in imperdiet lorem dapibus sit amet.
-                </p>
-                
-             </div>
-             <div class="feedback-text">
-                <p class="text">Feedback:</p>
-                <div class="buttons">
-                    <button>
-                        <img src="/static/img/download.svg" alt="">
-                        <p>Descargar</p>
-                    </button>
-                    <button>
-                        <img src="/static/img/copy.svg" alt="">
-                        <p>Copiar</p>
-                    </button>
-                </div>
-             </div>
-             <div class="textarea">
-                <p>
-                    <strong>Feedback General</strong>
-                    In venenatis dui sed ipsum vestibulum, sit amet commodo est gravida. Is ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, Nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel  dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue.
-                    <br><br>
-                    <strong>feedback Especifico</strong>
-                    Fusce scelerisque, odio et lacinia rhoncus, augue nisi maximus leo, in ultricies odio nunc a sapien. Cras quis tempus velit, et faucibus nisl.
-                    Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. Duis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna.Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. uis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna
-                </p>
-             </div>
-        </div>
+    <div class="assignment-text">
+       <p>Archivo de estudiante:</p>
+    </div>
+    <div class="textarea">
+       <p>
+           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed augue iaculis, blandit nisl a, volutpat dolor. Pellentesque vel enim justo. Aliquam sodales ante nec libero maximus rutrum. Nulla efficitur est et quam convallis ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue. Aliquam dolor quam, malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna, in imperdiet lorem dapibus sit amet.
+       </p>
+       
+    </div>
+    <div class="feedback-text">
+       <p class="text">Feedback:</p>
+       <div class="buttons">
+           <button>
+               <img src="/static/img/download.svg" alt="">
+               <p>Descargar</p>
+           </button>
+           <button>
+               <img src="/static/img/copy.svg" alt="">
+               <p>Copiar</p>
+           </button>
+       </div>
+    </div>
+    <div class="textarea">
+       <p>
+           <strong>Feedback General</strong>
+           In venenatis dui sed ipsum vestibulum, sit amet commodo est gravida. Is ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, Nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel  dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue.
+           <br><br>
+           <strong>feedback Especifico</strong>
+           Fusce scelerisque, odio et lacinia rhoncus, augue nisi maximus leo, in ultricies odio nunc a sapien. Cras quis tempus velit, et faucibus nisl.
+           Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. Duis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna.Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. uis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna
+       </p>
     </div>
 </div>
-
 {% endblock %}

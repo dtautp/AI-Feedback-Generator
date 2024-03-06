@@ -1,0 +1,61 @@
+<link href="/static/css/feedback-historic.css" rel="stylesheet">
+
+{% extends "layout-tabs.html" %}
+
+{% block tabs %}
+<div class="tab-historic">
+    <div class="download-feedback">
+        <div class="download-title" >
+            <p>Historial de feedback generado</p>
+        </div>
+        <div class="download-button">
+            <button>
+                <img src="/static/img/download.svg" alt="">
+                <p>Descargar</p>
+            </button>
+        </div>
+    </div>
+    <div class="list-feedbacks">
+        <table class="table table-striped">
+            <thead class="">
+                <tr>
+                    <th><input class="checkbox-custom" type="checkbox"></th>
+                    <th><p>Fecha creación</p></th>
+                    <th><p>Feedback generado</p></th>
+                    <th><p>Enlace</p></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input class="checkbox-custom" type="checkbox"></td>
+                    <td><p>26/01/2024</p></td>
+                    <td><p>AC-07_Juan_Perez.docx</p></td>
+                    <td class="preview">
+                        <img src="/static/img/eye.svg" alt="">
+                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input class="checkbox-custom" type="checkbox"></td>
+                    <td><p>26/01/2024</p></td>
+                    <td><p>AC-07_Juan_Perez.docx</p></td>
+                    <td class="preview">
+                        <img src="/static/img/eye.svg" alt="">
+                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input class="checkbox-custom" type="checkbox"></td>
+                    <td><p>26/01/2024</p></td>
+                    <td><p>AC-07_Juan_Perez.docx</p></td>
+                    <td class="preview">
+                        <img src="/static/img/eye.svg" alt="">
+                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

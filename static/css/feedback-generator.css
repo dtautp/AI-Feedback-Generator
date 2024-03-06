@@ -1,0 +1,131 @@
+.tab-feedback-generator {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 64px;
+    gap: 24px;
+}
+
+.tab-feedback-generator .select-assignment {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tab-feedback-generator .select-assignment .input {
+    display: flex;
+    align-items: center;
+}
+
+.tab-feedback-generator .select-assignment .input p {
+    width: 12%;
+    color: var(--texto-primario);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.tab-feedback-generator .upload-message {
+    display: flex;
+    justify-content: center;
+}
+
+.tab-feedback-generator .upload-message p {
+    color: var(--azul-primario);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.tab-feedback-generator .upload-files {
+    display: flex;
+    flex-direction: column;
+    padding: 56px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    align-self: stretch;
+    border-radius: 5px;
+    border: 1px dashed var(--azul-primario);
+    background: var(--neutro-primario);
+}
+
+.tab-feedback-generator .upload-button {
+    display: flex;
+}
+
+.tab-feedback-generator .upload-button button {
+    display: flex;
+    padding: 10px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 2px;
+    border: 1px solid var(--azul-primario);
+    background: var(--neutro-primario);
+
+}
+
+.tab-feedback-generator .upload-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.tab-feedback-generator .upload-button p {
+    color: var(--azul-primario);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+}
+
+.tab-feedback-generator .upload-desc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-feedback-generator .upload-desc p {
+    color: var(--gris-gris-50);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.tab-feedback-generator .upload-next {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.tab-feedback-generator .upload-next button{
+    display: flex;
+    padding: 10px 16px;
+    align-items: center;
+    border-radius: 2px;
+    background: var(--gris-medio-gris-medio-10);
+    border: 0;
+}
+
+.tab-feedback-generator .upload-next button img {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    padding: 5px 8px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tab-feedback-generator .upload-next button p {
+    color: var(--gris-medio-gris-medio-50);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 14px;
+}
