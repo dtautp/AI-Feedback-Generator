@@ -9,27 +9,27 @@ app.secret_key = 'secret'
 
 conversations = []
 
-# @app.route('/login', methods=['POST','GET'])
-# def login():
-#     if('user' in  session):
-#         return render_template('feedback-gen.html')
+@app.route('/login', methods=['POST','GET'])
+def login():
+    if('user' in  session):
+        return render_template('feedback-gen.html')
     
-#     if request.method == 'POST':
-#         email = request.form.get('email')
-#         password = request.form.get('password')
-#         try:
-#             user = validator_login(email, password)
-#             session['user'] = email
-#             return render_template('feedback-gen.html')
-#         except:
-#             return 'Failet to access'
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        try:
+            user = validator_login(email, password)
+            session['user'] = email
+            return render_template('feedback-gen.html')
+        except:
+            return 'Failet to access'
         
-#     return render_template('login.html')
+    return render_template('login.html')
 
-# @app.route('/logout')
-# def logout():
-#     session.pop('user', None)
-#     return render_template('login.html')
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return render_template('login.html')
 
 ## rutas
 @app.route('/')
