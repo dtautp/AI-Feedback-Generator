@@ -1,15 +1,9 @@
 from flask import Flask, session, render_template, request, redirect
-from openai import OpenAI
+from api_module import create_post_openAI
 import pyrebase
-# import os
-import os
-from docx import Document
 import helper
 
-
 app = Flask(__name__)
-
-client = OpenAI()
 
 config = {
     'apiKey': "AIzaSyCTeA7uOR0K7vdYvNDE5mnux1CIDyk61Aw",
@@ -92,46 +86,25 @@ def test_rec_file():
             print(helper.extract_text_from_pdf(file))
         return 'File uploaded successfully'
 
-
-
-
-
-# # ruta uso api
-# @app.route('/', methods=['GET', 'POST'])
-# def openai_api():
-#     if request.method == 'GET':
-#         return render_template('index.html', chat=conversations)
+# ruta uso api
+@app.route('/test-openai', methods=['GET', 'POST'])
+def openai_api():
+    if request.method == 'GET':
+        return render_template('api-openai.html')
     
-#     if request.method == 'POST':
-#         question = request.form.get('question')
+    if request.method == 'POST':
+        question = request.form.get('question')
 
-#         if question:
-#             response = client.chat.completions.create(
-#                 model = 'gpt-3.5-turbo-0125',
-#                 messages= [
-#                     {"role": "system", "content": ""},
-#                     {"role": "user", "content" : question}
-#                 ],
-#                 temperature = 0.5,
-#                 max_tokens = 150,
-#                 top_p = 1,
-#                 frequency_penalty = 0,
-#                 presence_penalty = 0.6
-#             )
+        if question:
+            conversations = create_post_openAI(question)
 
-#             answer = 'AI: ' + str(response.choices[0].message.content)
-#             question = 'Yo: ' + question
+        return render_template('api-openai.html', chat = conversations)
 
-#             conversations.append(question)
-#             conversations.append(answer)
-
-#         return render_template('index.html', chat = conversations)
-
-# # limpiar conversacion
-# @app.route('/limpiar_conversation', methods=['POST'])
-# def limpiar_array():
-#     conversations.clear()
-#     return render_template('index.html')
+# limpiar conversacion
+@app.route('/limpiar_conversation', methods=['POST'])
+def limpiar_array():
+    conversations.clear()
+    return render_template('api-openai.html')
 
 # ruta nosotros
 @app.route('/nosotros')
