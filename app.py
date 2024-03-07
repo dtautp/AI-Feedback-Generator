@@ -84,15 +84,11 @@ def openai_api():
         return render_template('api-openai.html', chat = conversations)
 
 # limpiar conversacion
-@app.route('/limpiar_conversation', methods=['POST'])
+@app.route('/limpiar_conversation')
 def limpiar_array():
     conversations.clear()
+    print(conversations)
     return render_template('api-openai.html')
-
-# ruta nosotros
-# @app.route('/nosotros')
-# def nosotros():
-#     return render_template('feedback-gen copy.html')
 
 # bloque de prueba
 if __name__ == '__main__':

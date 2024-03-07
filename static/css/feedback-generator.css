@@ -12,6 +12,15 @@
     gap: 15px;
 }
 
+.tab-feedback-generator .select-assignment .form-select{
+    font-family: 'Lato', sans-serif !important;
+    color: var(--Texto_Primario, #4A4F55);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
 .tab-feedback-generator .select-assignment .input {
     display: flex;
     align-items: center;

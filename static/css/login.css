@@ -4,7 +4,7 @@
     background: var(--primary-color-font);
     border-radius: var(--border-radio-1);
     width: 100%;
-    height: 850px;
+    height: 750px;
 }
 
 .login-content {
@@ -40,6 +40,16 @@
     flex-direction: column;
     gap: 16px;
 }
+
+.login-form input::placeholder {
+    font-size: var(--font-size-2);
+    color: var(--Gris-medio-Gris-medio-50, #848D95);
+    font-family: 'Lato', sans-serif !important;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+  
 
 .login-form .user, .login-form .password{
     margin: 0 !important;
