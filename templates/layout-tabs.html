@@ -11,14 +11,14 @@
     <div class="feedback-menu"> 
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/feedback-generator">
+                <a class="nav-link {% if current_route == '/feedback-generator' %}active{% endif %}" aria-current="page" href="/feedback-generator">
                     <img class="disable" src="/static/img/box-disable.svg" alt="">
                     <img class="active" src="/static/img/box.svg" alt="">
                     <p>Generador de Feedback</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/feedback-historic">
+                <a class="nav-link {% if current_route == '/feedback-historic' %}active{% endif %}" href="/feedback-historic">
                     <img class="disable" src="/static/img/clock-disable.svg" alt="">
                     <img class="active" src="/static/img/clock.svg" alt="">
                     <p>Historial</p>

@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, request, redirect
+from flask import Flask, session, render_template, request, redirect, url_for
 from openai_module import create_post_openAI
 from firebase_module import validator_login
 import helper
@@ -9,10 +9,11 @@ app.secret_key = 'secret'
 
 conversations = []
 
-@app.route('/login', methods=['POST','GET'])
+@app.route('/', methods=['POST','GET'])
 def login():
     if('user' in  session):
-        return render_template('feedback-generator.html')
+        # return render_template('feedback-generator.html')
+        return redirect(url_for('feedback_generator'))
     
     if request.method == 'POST':
         email = request.form.get('email')
@@ -20,7 +21,8 @@ def login():
         try:
             user = validator_login(email, password)
             session['user'] = email
-            return render_template('feedback-generator.html')
+            # return render_template('feedback-generator.html')
+            return redirect(url_for('feedback_generator'))
         except:
             return 'Failet to access'
         
@@ -31,21 +33,15 @@ def logout():
     session.pop('user', None)
     return render_template('login.html')
 
-## rutas
-@app.route('/')
-def index():
-    return render_template('feedback-generator.html')
-
 # pestaña 1
 @app.route('/feedback-generator')
-def option1():
-
-    return render_template('feedback-generator.html')
+def feedback_generator():
+    return render_template('feedback-generator.html', current_route='/feedback-generator')
 
 # pestaña 2
 @app.route('/feedback-historic')
-def option2():
-    return render_template('feedback-historic.html')
+def feedback_historic():
+    return render_template('feedback-historic.html', current_route='/feedback-historic')
 
 # preview hitoric
 @app.route('/feedback-preview')
