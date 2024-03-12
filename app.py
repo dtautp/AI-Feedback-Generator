@@ -1,27 +1,30 @@
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash
 from openai_module import create_post_openAI
-from firebase_module import validator_login
-import helper
+from firebase_module import validator_login, add_end_datetime_session
+from extract_text import update_textAssignments
+# from helpers import email_to_code
+# import uuid
+# from datetime import datetime
 
 app = Flask(__name__)
 
 app.secret_key = 'secret'
 
 conversations = []
+text_assignments = []
 
 @app.route('/', methods=['POST','GET'])
 def login():
-    if('user' in  session):
-        # return render_template('feedback-generator.html')
+    if 'session_details' in  session:
         return redirect(url_for('feedback_generator'))
-    
+
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
         try:
-            user = validator_login(email, password)
-            session['user'] = email
-            # return render_template('feedback-generator.html')
+            result = validator_login(email, password)
+            session['session_details'] = result['session_details']
+            session['session_id'] = result['session_id']
             return redirect(url_for('feedback_generator'))
         except:
             return 'Failet to access'
@@ -30,44 +33,59 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
-    return render_template('login.html')
+    session_details = session.get('session_details',{})
+    session_id = session.get('session_id', None)
+    print(session_details)
+    print(session_id)
 
-# pestaña 1
+    if session_details:
+        add_end_datetime_session(session_id)
+        session_details = session.pop('session_details', {})
+        session_id = session.pop('session_id', None)
+
+    return redirect(url_for('login'))
+
 @app.route('/feedback-generator')
 def feedback_generator():
+    session_details = session.get('session_details',{})
+    session_id = session.get('session_id', None)
+    print(session_details)
+    print(session_id)
+    global text_assignments
+    text_assignments.clear()
     return render_template('feedback-generator.html', current_route='/feedback-generator')
 
-# pestaña 2
+@app.route('/read-assignments', methods=['GET','POST'])
+def read_assignments():
+    if request.method == 'POST':
+        files = request.files.getlist('files[]')
+        if len(files) != 0:
+            print("si hay datos")
+            global text_assignments
+            text_assignments = update_textAssignments(files)
+
+        print("No hay nada en la lista") 
+        return redirect(url_for('show_text_assignments'))
+        
+    return render_template('feedback-generator3.html')
+
+@app.route('/show-text-assignments')
+def show_text_assignments():
+    global text_assignments
+    text_assignments2 = text_assignments
+    return render_template('feedback-generator3.html', text_assignments=text_assignments2)
+
 @app.route('/feedback-historic')
 def feedback_historic():
     return render_template('feedback-historic.html', current_route='/feedback-historic')
 
-# preview hitoric
 @app.route('/feedback-preview')
 def preview():
     return render_template('feedback-preview.html')
 
-# preview hitoric
 @app.route('/feedback-test')
 def prev_test():
     return render_template('test.html')
-
-# preview hitoric
-@app.route('/test-upload', methods=['POST'])
-def test_rec_file():
-    if 'file' not in request.files:
-        return 'No file part'
-    file = request.files['file']
-    if file.filename == '':
-        return 'No selected file'
-    if file:
-        print('Received file:', file.filename.split('.')[-1])
-        if(file.filename.split('.')[-1]=='docx'):
-            print(helper.extract_text_from_docx(file))
-        if(file.filename.split('.')[-1]=='pdf'):
-            print(helper.extract_text_from_pdf(file))
-        return 'File uploaded successfully'
 
 # ruta uso api
 @app.route('/test-openai', methods=['GET', 'POST'])
@@ -90,6 +108,5 @@ def limpiar_array():
     print(conversations)
     return render_template('api-openai.html')
 
-# bloque de prueba
 if __name__ == '__main__':
     app.run(debug=True)

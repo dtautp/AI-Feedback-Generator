@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Upload PDF and DOCX Files</h1>
+    <form id="uploadForm" enctype="multipart/form-data" action="/prueba" method="post">
+        <input type="file" id="fileInput" name="selectedFiles[]" multiple accept=".pdf,.docx">
+        <input type="button" value="Add More Files" onclick="addMoreFiles()" style="display: none;">
+        <input type="submit" value="Upload">
+    </form>
+
+    <ul id="selectedFilesList"></ul>
+
+    <ul id="fileList">
+        {% for file_info in file_data %}
+        <li>Timestamp: {{ file_info.timestamp }}, File Name: {{ file_info.file_name }}, Text: {{ file_info.file_text }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        var selectedFiles = [];
+        console.log(selectedFiles);
+        function addMoreFiles() {
+            document.getElementById('fileInput').click();
+        }
+    
+        document.getElementById('fileInput').addEventListener('change', function() {
+            var files = this.files;
+            var fileList = document.getElementById('selectedFilesList');
+    
+            for (var i = 0; i < files.length; i++) {
+                var fileType = files[i].type;
+                var listItem = document.createElement('li');
+                var deleteButton = document.createElement('button');
+                var itemId = 'file_' + i;
+                listItem.id = itemId;
+                deleteButton.textContent = 'Delete';
+                (function(listItem, itemId){
+                    deleteButton.onclick = function() {
+                        var index = Array.from(fileList.children).indexOf(listItem);
+                        selectedFiles.splice(index, 1);
+                        fileList.removeChild(listItem);
+                        console.log("Deleted:", itemId);
+                    };
+                })(listItem, itemId);
+                listItem.textContent = files[i].name;
+                listItem.appendChild(deleteButton);
+                fileList.appendChild(listItem);
+                selectedFiles.push(files[i]);
+            }
+    
+            document.getElementById('fileInput').style.display = 'none';
+            document.querySelector('input[type="submit"]').style.display = 'inline';
+            document.querySelector('input[type="button"]').style.display = 'inline';
+            console.log(selectedFiles);
+        });
+    
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            // event.preventDefault();
+            var formData = new FormData();
+    
+            for (var i = 0; i < selectedFiles.length; i++) {
+                formData.append('files[]', selectedFiles[i]);
+            }
+    
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/prueba");
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>

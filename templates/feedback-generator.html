@@ -25,25 +25,43 @@
         </div>
     </div>
     <div class="upload-message">
-        <p>Puedes subir múltiples archivos.</p>
+        <!-- <p>Puedes subir múltiples archivos.</p> -->
+        <p>Puedes subir multiples archivos word (docx) y pdf.</p>
     </div>
-    <div class="upload-files">
-        <div class="upload-button">
-            <button>
+    <div class="upload-files" id="uploadFilesArea">
+        <div class="text-drop-area" id="textDropArea" style="display: none;">
+            <p>Suelta para subir los archivos</p>
+        </div>
+        <div class="upload-button-first" id="uploadButtonFirst">
+            <button id="fileInputButtonFirst">
                 <img src="/static/img/upload.svg" alt="">
                 <p>Subir archivo</p>
             </button>
         </div>
-        <div class="upload-desc">
+        <div class="upload-desc" id="uploadDesc">
             <p>Archivos permitidos: .PDF o Word</p>
             <p>(Máximo tamaño por archivo: 500MB)</p>
         </div>
+        <div class="files-list" id="filesList" style="display: none;">
+            <ul id="selectedFilesList"></ul>
+        </div>
+        <div class="upload-button-second" id="uploadButtonSecond" style="display: none;">
+            <button id="fileInputButtonSecond">
+                <img src="/static/img/upload.svg" alt="">
+                <p>Agregar más archivos</p>
+            </button>
+        </div>
+        <div class="select-files-desc" id="selectFilesDesc" style="display: none;">
+        </div>
     </div>
-    <div class="upload-next">
-        <button type="button" class="btn btn-secondary" disabled>
+    <form id="uploadForm" action="/read-assignments" method="POST" enctype="multipart/form-data" class="upload-next">
+        <input type="file" name="selectedFiles[]" id="fileInput" hidden multiple accept=".pdf,.docx">
+        <button type="submit" id="submitFiles" class="btn btn-secondary" disabled>
             <p>siguiente</p>
-            <img src="/static/img/next.svg" alt="">
+            <img class="img-disable" id="imgSubmitDisable" src="/static/img/next.svg" alt="">
+            <img class="img-active" id="imgSubmitActive" src="/static/img/next-white.svg" alt="" style="display: none;">
         </button>
-    </div>
+    </form>
 </div>
+<script src="/static/js/assignmentReader.js"></script>
 {% endblock %}
