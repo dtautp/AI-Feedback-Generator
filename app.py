@@ -58,22 +58,29 @@ def feedback_generator():
 @app.route('/read-assignments', methods=['GET','POST'])
 def read_assignments():
     if request.method == 'POST':
-        files = request.files.getlist('files[]')
-        if len(files) != 0:
-            print("si hay datos")
+        files = request.files.getlist('Files[]')
+        if files:
             global text_assignments
             text_assignments = update_textAssignments(files)
-
-        print("No hay nada en la lista") 
-        return redirect(url_for('show_text_assignments'))
-        
+            # return redirect(url_for('show_text_assignments'))
+        else:
+            return "No se recibieron archivos"
     return render_template('feedback-generator3.html')
+
+@app.route('/prueba')
+def prueba():
+    return redirect(url_for('show_text_assignments'))
 
 @app.route('/show-text-assignments')
 def show_text_assignments():
-    global text_assignments
-    text_assignments2 = text_assignments
-    return render_template('feedback-generator3.html', text_assignments=text_assignments2)
+    file_text = []
+
+    for item in text_assignments:
+        file_text.append(item['file_text'])
+        # respuesta = create_post_openAI(item['file_text'])
+        # print(respuesta)
+    print('show-text-assignments', file_text)
+    return render_template('feedback-generator3.html', text_assignments=file_text)
 
 @app.route('/feedback-historic')
 def feedback_historic():

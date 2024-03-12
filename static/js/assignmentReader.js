@@ -172,15 +172,27 @@ function createDeleteHandler(listItem, fileId, fileList) {
     };
 }
 
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
-    // event.preventDefault();
+submitFiles.addEventListener('click', function(event) {
+    event.preventDefault();
     var formData = new FormData();
 
     for (var i = 0; i < selectedFiles.length; i++) {
-        formData.append('files[]', selectedFiles[i]);
+        formData.append('Files[]', selectedFiles[i]);
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/read-assignments");
+    xhr.open("POST", "/read-assignments", true);
+    
+    // Manejar la respuesta del servidor
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Redirigir al usuario a la página show-text-assignments
+            window.location.href = '/show-text-assignments';
+        } else {
+            // Manejar otros códigos de estado si es necesario
+            console.error('Error al procesar la solicitud');
+        }
+    };
+
     xhr.send(formData);
 });

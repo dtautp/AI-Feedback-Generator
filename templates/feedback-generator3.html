@@ -9,7 +9,8 @@
     <h1>Upload PDF and DOCX Files</h1>
     <ul id="fileList">
         {% for text_assignment in text_assignments %}
-        <li>Timestamp: {{ text_assignment.timestamp }}, File Name: {{ text_assignment.file_name }}, Text: {{ text_assignment.file_text }}</li>
+        <!-- <li>Timestamp: {{ text_assignment.timestamp }}, File Name: {{ text_assignment.file_name }}, Text: {{ text_assignment.file_text }}</li> -->
+        <li>File Text: {{ text_assignment }}</li>
         {% endfor %}
     </ul>
 </body>

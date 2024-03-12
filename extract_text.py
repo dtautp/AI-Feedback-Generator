@@ -26,7 +26,6 @@ def extract_text(file, file_type):
         return ''
     
 def update_textAssignments(files):
-    print('usando funcion update_textAssignments')
     listTextAssignments = []
     for file in files:
         file_name = file.filename
@@ -39,4 +38,5 @@ def update_textAssignments(files):
             'file_text': file_text
         }
         listTextAssignments.append(file_info)
+    print('usando funcion update_textAssignments', listTextAssignments)
     return listTextAssignments

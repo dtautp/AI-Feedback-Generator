@@ -34,10 +34,11 @@ def create_post_openAI(question):
         presence_penalty = 0
     )
 
-    answer = 'AI: ' + str(response.choices[0].message.content)
-    question = 'Yo: ' + question
+    # answer = 'AI: ' + str(response.choices[0].message.content)
+    # question = 'Yo: ' + question
 
-    conversations.append(question)
-    conversations.append(answer)
+    # conversations.append(question)
+    # conversations.append(answer)
     
-    return conversations
+    # return json.loads(response.json())['choices'][0]['message']['content']
+    return str(response.choices[0].message.content)
