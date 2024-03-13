@@ -21,3 +21,4 @@ def document_print(dic_list, output_path,output_file_name):
                 value_run.bold = False
         doc.add_paragraph()
     doc.save(output_path + output_file_name)
+    return output_path + output_file_name

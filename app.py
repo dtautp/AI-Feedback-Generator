@@ -1,7 +1,12 @@
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash
 from openai_module import create_post_openAI
+from openai_module import request_prompt
+from openai_module import extract_feedback_from_response
 from firebase_module import validator_login, add_end_datetime_session
 from extract_text import update_textAssignments
+from exportar_word import document_print
+import json
+import time
 # from helpers import email_to_code
 # import uuid
 # from datetime import datetime
@@ -74,13 +79,27 @@ def prueba():
 @app.route('/show-text-assignments')
 def show_text_assignments():
     file_text = []
-
+    dic_list = []
     for item in text_assignments:
-        file_text.append(item['file_text'])
+        # Procesamiento del feedback
+        respuesta_diccionario = request_prompt(item['file_text'])
+        print(respuesta_diccionario)
+        dic = {}
+        dic['archivo_nombre'] = (2, respuesta_diccionario['system_prompt_id'])
+        dic['Fecha proceso'] = (0, respuesta_diccionario['time_stamp'])
+        dic['Tarea entregada'] = (1, respuesta_diccionario['user_prompt'])
+        text = ''
+        text += json.loads(respuesta_diccionario['message'])['first_paragraph'] + '\n\n'
+        for i in json.loads(respuesta_diccionario['message'])['second_paragraph']:
+            text += i[list(i.keys())[0]] + ' '
+        dic['Feedback'] = (1, text)
+        # -------
+        file_text.append(extract_feedback_from_response(respuesta_diccionario))
         # respuesta = create_post_openAI(item['file_text'])
         # print(respuesta)
     print('show-text-assignments', file_text)
-    return render_template('feedback-generator3.html', text_assignments=file_text)
+    doc_url = document_print(dic_list, './temp_files/',str(int(time.time()*1000))+'.docx')
+    return render_template('feedback-generator3.html', text_assignments=file_text, doc_url=doc_url)
 
 @app.route('/feedback-historic')
 def feedback_historic():
