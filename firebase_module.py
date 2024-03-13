@@ -34,3 +34,7 @@ def validator_login(email, password):
 def add_end_datetime_session(session_id):
     end_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     db.child('sessions_log').child(session_id).child('end_datetime').set(end_datetime)
+
+def select_system_prompt_by_id(system_prompt_id):
+    system_prompt = dict(db.child('system_prompt').child(1).get().val())
+    return system_prompt

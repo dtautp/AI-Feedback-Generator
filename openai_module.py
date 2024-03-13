@@ -3,6 +3,7 @@ import os
 import time
 import datetime
 import json
+from firebase_module import select_system_prompt_by_id
 
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
@@ -52,19 +53,20 @@ def prompt_request(prompt, user_prompt, seed,temp_t, frequency_penalty):
     ],
     temperature=temp_t,
     max_tokens=500,
-    seed=seed,
+    # seed=seed,
     top_p=1,
     frequency_penalty=frequency_penalty,
     presence_penalty=0
     )
     return response
 
-def request_prompt(user_prompt):
-    PROMPT_ID = 0
-    PROMPT = 'Create feedback for a student\'s homework in an English class. Give feedback in a pedagogical way. Give the feedback considering that the students you are giving feedback to have entry level knowledge of the language. Give feedback as if you were a cool teacher, use emojis to make the message feel more friendly, but do NOT salute the student by its name. Give feedback ONLY about grammar AND vocabulary use, do NOT take in count capitalization mistakes. To give feedback use two paragraphs. The first paragraph should give general feedback about student performance overall, this paragraph must be present in your answer. The second paragraph should let the student know what their mistakes were and which language rules apply in those cases. This paragraph is optional, add it in your answer only if the student has made any grammar or vocabulary mistake, otherwise leave it blank. Give the second paragraph separated into ideas, each idea should talk about a specific mistake. Finally, let know in your answer the number of mistakes made by the student. To give me your answer use json format with the following structure: {"first_paragraph" : "","second_paragraph":[{"idea_1":""},{"idea_2":""...}],"number_mistakes":""}'
+def request_prompt(system_prompt_id,user_prompt):
+    PROMPT_ID = system_prompt_id
+    system_prompt = select_system_prompt_by_id(system_prompt_id)
+    PROMPT = system_prompt['prompt_content']
+    TEMPERATURA = system_prompt['temperatura']
+    FREQUENCY_PENALTY = system_prompt['frecuency_penalty']
     SEED = None
-    TEMPERATURA = 0.6
-    FREQUENCY_PENALTY = 1
     time_start = time.time()
     res = prompt_request(PROMPT, user_prompt, SEED,TEMPERATURA, FREQUENCY_PENALTY)
     time_end = time.time()
