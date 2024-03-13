@@ -2,8 +2,8 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session
-from extract_text import update_textAssignments
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group
+from extract_text import update_textAssignments, create_request_group
 from exportar_word import document_print
 import json
 import time
@@ -127,12 +127,33 @@ def openai_api():
 
         return render_template('api-openai.html', chat = conversations)
 
-# limpiar conversacion
-@app.route('/limpiar_conversation')
-def limpiar_array():
-    conversations.clear()
-    print(conversations)
-    return render_template('api-openai.html')
+request_group = []
+
+@app.route('/read-assignments2', methods=['GET','POST'])
+def read_assignments2():
+    if request.method == 'POST':
+        files = request.files.getlist('Files[]')
+        if files:
+            global request_group
+            request_group = create_request_group(files)
+            # return redirect(url_for('show_text_assignments'))
+        else:
+            return "No se recibieron archivos"
+    return render_template('feedback-generator4.html')
+
+@app.route('/show-text-assignments2')
+def show_text_assignments2():
+    user_id = session.get('session_details',{})['user_id']
+    file_text = []
+    insert_requests_group_result = insert_requests_group(request_group, user_id)
+    
+    for item in request_group:
+        file_text.append(item['file_text'])
+        # respuesta = create_post_openAI(item['file_text'])
+        # print(respuesta)
+    print('show-text-assignments', file_text)
+    return render_template('feedback-generator4.html', text_assignments=request_group)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

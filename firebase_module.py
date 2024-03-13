@@ -1,5 +1,5 @@
 from datetime import datetime
-from helpers import email_to_code
+from helpers import email_to_code, get_datetime
 import pyrebase
 import uuid
 import os
@@ -21,7 +21,7 @@ db = firebase.database()
 
 def validator_login(email, password):
     user = auth.sign_in_with_email_and_password(email, password)
-    current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    current_datetime = get_datetime()
     session_id = str(uuid.uuid4())
     session_details = {
         'user_id': email_to_code(email),
@@ -32,5 +32,25 @@ def validator_login(email, password):
     return {'session_id': session_id, 'session_details': session_details}
 
 def add_end_datetime_session(session_id):
-    end_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    end_datetime = get_datetime()
     db.child('sessions_log').child(session_id).child('end_datetime').set(end_datetime)
+
+def insert_requests_group(request_group, use_id):
+    request_group_data = {}
+    for request in request_group:
+        group_id = request['id_request_group']
+        if group_id not in request_group_data:
+            request_group_data[group_id] = {
+                'id_user': use_id,
+                'id_request': [],
+                'file_name': [],
+                'create_datetime': request['create_datetime'],
+            }
+        request_group_data[group_id]['id_request'].append(request['id_request'])
+        request_group_data[group_id]['file_name'].append(request['file_name'])
+
+    print(request_group_data[group_id])
+    db.child('requests_group').child(group_id).set(request_group_data[group_id])
+
+def insert_request():
+    return None

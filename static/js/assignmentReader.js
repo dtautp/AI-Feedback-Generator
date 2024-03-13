@@ -181,13 +181,13 @@ submitFiles.addEventListener('click', function(event) {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/read-assignments", true);
+    xhr.open("POST", "/read-assignments2", true);
     
     // Manejar la respuesta del servidor
     xhr.onload = function() {
         if (xhr.status === 200) {
             // Redirigir al usuario a la página show-text-assignments
-            window.location.href = '/show-text-assignments';
+            window.location.href = '/show-text-assignments2';
         } else {
             // Manejar otros códigos de estado si es necesario
             console.error('Error al procesar la solicitud');

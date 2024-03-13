@@ -1,6 +1,7 @@
 import datetime
 import PyPDF2
 import docx
+from helpers import generate_id, get_datetime
 
 def extract_text_pdf(file):
     full_text = ''
@@ -24,18 +25,42 @@ def extract_text(file, file_type):
         return extract_text_docx(file)
     else:
         return ''
-    
+
 def update_textAssignments(files):
     listTextAssignments = []
+    id_request_group = generate_id()
     for file in files:
         file_name = file.filename
         file_type = file.content_type
         file_text = extract_text(file, file_type)
-        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = get_datetime()
+        id_request = generate_id()
         file_info = {
-            'timestamp': timestamp,
+            'id_request': id_request,
+            'id_request_group': id_request_group,
             'file_name': file_name,
-            'file_text': file_text
+            'file_text': file_text,
+            'create_datetime': timestamp
+        }
+        listTextAssignments.append(file_info)
+    print('usando funcion update_textAssignments', listTextAssignments)
+    return listTextAssignments
+
+def create_request_group(files):
+    listTextAssignments = []
+    id_request_group = generate_id()
+    for file in files:
+        file_name = file.filename
+        file_type = file.content_type
+        file_text = extract_text(file, file_type)
+        timestamp = get_datetime()
+        id_request = generate_id()
+        file_info = {
+            'id_request': id_request,
+            'id_request_group': id_request_group,
+            'file_name': file_name,
+            'file_text': file_text,
+            'create_datetime': timestamp
         }
         listTextAssignments.append(file_info)
     print('usando funcion update_textAssignments', listTextAssignments)
