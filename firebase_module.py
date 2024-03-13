@@ -54,3 +54,7 @@ def insert_requests_group(request_group, use_id):
 
 def insert_request():
     return None
+
+def select_system_prompt_by_id(system_prompt_id):
+    system_prompt = dict(db.child('system_prompt').child(1).get().val())
+    return system_prompt

@@ -13,6 +13,9 @@
         <li>File Text: {{ text_assignment }}</li>
         {% endfor %}
     </ul>
-    <a href="{{doc_url}}">{{doc_url}}</a>
+    <form action="/generate_response_file" method="POST">
+        <input value="{{lis_responses}}" type="hidden" name="lis_responses">
+        <button type="submit">Download Word File</button>
+    </form>
 </body>
 </html>
