@@ -49,12 +49,33 @@ def insert_requests_group(request_group, use_id):
         request_group_data[group_id]['id_request'].append(request['id_request'])
         request_group_data[group_id]['file_name'].append(request['file_name'])
 
-    print(request_group_data[group_id])
+    # print(request_group_data[group_id])
     db.child('requests_group').child(group_id).set(request_group_data[group_id])
 
-def insert_request():
-    return None
+def insert_request(group_info, chatgpt_response, session_id, user_id):
+    insert_dict = {}
+    request_id = group_info['id_request']
+    insert_dict['id_session'] = session_id
+    insert_dict['id_request_group'] = group_info['id_request_group']
+    insert_dict['file_name'] = group_info['file_name']
+    insert_dict['id_user'] = user_id
+    insert_dict['system_prompt_id'] = chatgpt_response['system_prompt_id']
+    insert_dict['user_prompt'] = chatgpt_response['user_prompt']
+    insert_dict['seed'] = chatgpt_response['seed']
+    insert_dict['system_fingerprint'] = chatgpt_response['system_fingerprint']
+    insert_dict['usage'] = chatgpt_response['usage']
+    insert_dict['result_text'] = chatgpt_response['result_text']
+    insert_dict['time_stamp'] = chatgpt_response['time_stamp']
+    insert_dict['price'] = chatgpt_response['price']
+    insert_dict['execution_time'] = chatgpt_response['execution_time']
+
+    db.child('requests').child(request_id).set(insert_dict)
+    return insert_dict
 
 def select_system_prompt_by_id(system_prompt_id):
-    system_prompt = dict(db.child('system_prompt').child(1).get().val())
+    system_prompt = dict(db.child('system_prompt').child(system_prompt_id).get().val())
     return system_prompt
+
+def select_requests_by_id_request_group(id_request_group):
+    requests = dict(db.child("requests").order_by_child("id_request_group").equal_to(id_request_group).get().val())
+    return requests

@@ -78,7 +78,7 @@ def request_prompt(system_prompt_id,user_prompt):
         'seed': SEED,
         'system_fingerprint': response_dict['system_fingerprint'],
         'usage': response_dict['usage'],
-        'message': response_dict['choices'][0]['message']['content'],
+        'result_text': response_dict['choices'][0]['message']['content'],
         'time_stamp': time_stamp(),
         'price': api_price_calculator(response_dict['usage']),
         'execution_time': EXECUTIOM_TIME

@@ -2,9 +2,9 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, insert_request, select_requests_by_id_request_group
 from extract_text import update_textAssignments, create_request_group
-from exportar_word import document_print
+from exportar_word import document_print, preparar_diccionario
 import json
 import time
 import os
@@ -93,35 +93,18 @@ def show_text_assignments():
 
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
-    lis_responses = json.loads(request.form.get('lis_responses'))['lis_responses']
-    print(lis_responses)
-    dic_lis = []
-    for response in lis_responses:
-        print(response)
-        print(type(response))
-        dic = {}
-        dic['archivo_nombre'] = (2, response['system_fingerprint'])
-        dic['Fecha proceso'] = (0, response['time_stamp'])
-        dic['Tarea entregada'] = (1, response['user_prompt'])
-        text = ''
-        text += json.loads(response['message'])['first_paragraph'] + '\n\n'
-        for j in json.loads(response['message'])['second_paragraph']:
-            text += j[list(j.keys())[0]] + ' '
-        dic['Feedback'] = (1, text)
-        dic_lis.append(dic)
-        file_name = document_print(dic_lis, './temp_files/',str(int(time.time()*1000))+'.docx')
-
-        @after_this_request
-        def remove_temp_file(res):
+    id_request_group = request.form.get('id_request_group')
+    print(id_request_group)
+    file_name = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
+    @after_this_request
+    def remove_temp_file(res):
+        for i in os.listdir('./temp_files/'):
             try:
-                for i in os.listdir('./temp_files/'):
-                    if(i!=file_name.split('/')[-1]):
-                        os.remove('./temp_files/'+i)
-                    
+                os.remove('./temp_files/'+i)
             except Exception as error:
                 app.logger.error("Error removing file: %s", error)
-            return res
-    
+                continue
+        return res
     return send_file(file_name, as_attachment=True)
 
 
@@ -170,13 +153,18 @@ def show_text_assignments2():
     user_id = session.get('session_details',{})['user_id']
     file_text = []
     insert_requests_group_result = insert_requests_group(request_group, user_id)
-    
+    id_request_group = ''
     for item in request_group:
         file_text.append(item['file_text'])
+        print(item.keys())
+        chatgpt_response = request_prompt(1,item['file_text'])
+        insert_request(item, chatgpt_response, session.get('session_id', None), user_id)
         # respuesta = create_post_openAI(item['file_text'])
         # print(respuesta)
-    print('show-text-assignments', file_text)
-    return render_template('feedback-generator4.html', text_assignments=request_group)
+        id_request_group = item['id_request_group']
+    # print('show-text-assignments', file_text)
+    
+    return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
 
 
 if __name__ == '__main__':
