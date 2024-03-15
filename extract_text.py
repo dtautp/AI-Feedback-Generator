@@ -63,5 +63,5 @@ def create_request_group(files):
             'create_datetime': timestamp
         }
         listTextAssignments.append(file_info)
-    print('usando funcion update_textAssignments', listTextAssignments)
+    # print('usando funcion update_textAssignments', listTextAssignments)
     return listTextAssignments

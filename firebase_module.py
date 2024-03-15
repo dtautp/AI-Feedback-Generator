@@ -49,32 +49,12 @@ def insert_requests_group(request_group, use_id):
         request_group_data[group_id]['id_request'].append(request['id_request'])
         request_group_data[group_id]['file_name'].append(request['file_name'])
 
-    print(request_group_data[group_id])
+    # print(request_group_data[group_id])
     db.child('requests_group').child(group_id).set(request_group_data[group_id])
 
 def insert_request():
-    
     return None
 
 def select_system_prompt_by_id(system_prompt_id):
-    system_prompt = dict(db.child('system_prompt').child(1).get().val())
+    system_prompt = dict(db.child('system_prompt').child(system_prompt_id).get().val())
     return system_prompt
-
-def select_requests_group(user_id):
-
-    #obtener datos de fb
-    requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id).get()
-    print(requests_group_user)
-    # Ordenar las solicitudes por fecha de mayor a menor
-    requests_group_user_order = sorted(requests_group_user.each(), key=lambda x: x.val().get("create_datetime", 0), reverse=True)
-    # Convertir la lista ordenada en un diccionario
-    requests_group_user_data = {request.key(): request.val() for request in requests_group_user_order}
-
-    return requests_group_user_data
-
-def select_requests(id_requests_group):
-    requests = db.child("requests").order_by_child("id_request_group").equal_to(id_requests_group).get()
-    requests_order = sorted(requests.each(), key=lambda x: x.val().get("time_stamp", 0), reverse=True)
-    requests_data = {request.key(): request.val() for request in requests_order}
-
-    return requests_data

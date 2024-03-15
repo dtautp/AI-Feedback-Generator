@@ -2,13 +2,13 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_group, select_requests
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group
 from extract_text import update_textAssignments, create_request_group
 from exportar_word import document_print
-from helpers import format_datetime
 import json
 import time
 import os
+import asyncio
 # from helpers import email_to_code
 # import uuid
 # from datetime import datetime
@@ -97,35 +97,17 @@ def show_text_assignments():
 
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
-    lis_responses = json.loads(request.form.get('lis_responses'))['lis_responses']
-    print(lis_responses)
-    dic_lis = []
-    for response in lis_responses:
-        print(response)
-        print(type(response))
-        dic = {}
-        dic['archivo_nombre'] = (2, response['system_fingerprint'])
-        dic['Fecha proceso'] = (0, response['time_stamp'])
-        dic['Tarea entregada'] = (1, response['user_prompt'])
-        text = ''
-        text += json.loads(response['message'])['first_paragraph'] + '\n\n'
-        for j in json.loads(response['message'])['second_paragraph']:
-            text += j[list(j.keys())[0]] + ' '
-        dic['Feedback'] = (1, text)
-        dic_lis.append(dic)
-        file_name = document_print(dic_lis, './temp_files/',str(int(time.time()*1000))+'.docx')
-
-        @after_this_request
-        def remove_temp_file(res):
+    id_request_group = request.form.get('id_request_group')
+    file_name = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
+    @after_this_request
+    def remove_temp_file(res):
+        for i in os.listdir('./temp_files/'):
             try:
-                for i in os.listdir('./temp_files/'):
-                    if(i!=file_name.split('/')[-1]):
-                        os.remove('./temp_files/'+i)
-                    
+                os.remove('./temp_files/'+i)
             except Exception as error:
                 app.logger.error("Error removing file: %s", error)
-            return res
-    
+                continue
+        return res
     return send_file(file_name, as_attachment=True)
 
 
@@ -173,23 +155,45 @@ def read_assignments2():
             return "No se recibieron archivos"
     return render_template('feedback-generator4.html')
 
+contador_progreso = 0
 @app.route('/show-text-assignments2')
-def show_text_assignments2():
+async def show_text_assignments2():
+    global contador_progreso
+    contador_progreso = 0
+    return render_template('feedback-generator5.html')
+
+@app.route('/get-counter-semaphore', methods=['GET'])
+def get_counter_semaphore():
+    # Return the value of counter_semaphore
+    return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'doc_number':len(request_group)})
+
+# Initialize a semaphore
+counter_semaphore = asyncio.Semaphore(0)
+
+#
+@app.route('/show-text-assignments3', methods=['GET','POST'])
+async def show_text_assignments3():
+    global counter_semaphore
+    counter_semaphore = asyncio.Semaphore(0)
     user_id = session.get('session_details',{})['user_id']
     file_text = []
     insert_requests_group_result = insert_requests_group(request_group, user_id)
-
-    # solicitud para openai
-    # función para mandar al api de open ai
-    # insertar request
-
-
+    
     for item in request_group:
-        file_text.append(item['file_text'])
-        # respuesta = create_post_openAI(item['file_text'])
-        # print(respuesta)
-    print('show-text-assignments', file_text)
-    return render_template('feedback-generator4.html', text_assignments=request_group)
+        id_request_group = item['id_request_group']
+        task = asyncio.create_task(request_prompt(1, item['file_text']))
+        tasks.append(task)
+    
+    start_time = time.time()
+    chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+    end_time = time.time()
+    print(end_time - start_time)
+
+    # Wait until all tasks are completed
+    await counter_semaphore.acquire()
+        
+    return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
+    
 
 
 if __name__ == '__main__':

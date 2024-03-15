@@ -4,6 +4,7 @@ import time
 import datetime
 import json
 from firebase_module import select_system_prompt_by_id
+import asyncio
 
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
@@ -38,29 +39,38 @@ def api_price_calculator(usage):
     PROMPT_TOKEN_PRICE=0.0000005
     return (usage['prompt_tokens']*PROMPT_TOKEN_PRICE) + (usage['completion_tokens']*COMPLETION_TOKEN_PRICE)
 
-def prompt_request(prompt, user_prompt, seed,temp_t, frequency_penalty):
-    response = client.chat.completions.create(
-    model="gpt-3.5-turbo-0125",
-    messages=[
-        {
-        "role": "system",
-        "content": prompt,
-        
-        },  {
-          "role" : "user",
-          "content" : user_prompt
-      }
-    ],
-    temperature=temp_t,
-    max_tokens=500,
-    # seed=seed,
-    top_p=1,
-    frequency_penalty=frequency_penalty,
-    presence_penalty=0
-    )
-    return response
+async def prompt_request(prompt, user_prompt, seed,temp_t, frequency_penalty):
+    start_time = time.time()
+    try:
+        response = await asyncio.to_thread(
+                client.chat.completions.create,
+                model="gpt-3.5-turbo-0125",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": prompt,
+                    },
+                    {
+                        "role": "user",
+                        "content": user_prompt
+                    }
+                ],
+                temperature=temp_t,
+                max_tokens=500,
+                # seed=seed,
+                top_p=1,
+                frequency_penalty=frequency_penalty,
+                presence_penalty=0
+            )
+        end_time = time.time()
+        print('chatgpt response time: ' + str(end_time - start_time))
+        return response
+    except Exception as e:
+        print(e)
+        return None
+    
 
-def request_prompt(system_prompt_id,user_prompt):
+async def request_prompt(system_prompt_id,user_prompt):
     PROMPT_ID = system_prompt_id
     system_prompt = select_system_prompt_by_id(system_prompt_id)
     PROMPT = system_prompt['prompt_content']
@@ -68,22 +78,25 @@ def request_prompt(system_prompt_id,user_prompt):
     FREQUENCY_PENALTY = system_prompt['frecuency_penalty']
     SEED = None
     time_start = time.time()
-    res = prompt_request(PROMPT, user_prompt, SEED,TEMPERATURA, FREQUENCY_PENALTY)
+    res = await prompt_request(PROMPT, user_prompt, SEED,TEMPERATURA, FREQUENCY_PENALTY)
     time_end = time.time()
     EXECUTIOM_TIME = time_end - time_start
-    response_dict = json.loads(res.json())
-    return_dic = {
-        'system_prompt_id': PROMPT_ID,
-        'user_prompt': user_prompt,
-        'seed': SEED,
-        'system_fingerprint': response_dict['system_fingerprint'],
-        'usage': response_dict['usage'],
-        'message': response_dict['choices'][0]['message']['content'],
-        'time_stamp': time_stamp(),
-        'price': api_price_calculator(response_dict['usage']),
-        'execution_time': EXECUTIOM_TIME
-    }
-    return return_dic
+    if(res != None):
+        response_dict = json.loads(res.json())
+        return_dic = {
+            'system_prompt_id': PROMPT_ID,
+            'user_prompt': user_prompt,
+            'seed': SEED,
+            'system_fingerprint': response_dict['system_fingerprint'],
+            'usage': response_dict['usage'],
+            'result_text': response_dict['choices'][0]['message']['content'],
+            'time_stamp': time_stamp(),
+            'price': api_price_calculator(response_dict['usage']),
+            'execution_time': EXECUTIOM_TIME
+        }
+        return return_dic
+    else:
+        return None
 
 
 def extract_feedback_from_response(respuesta_diccionario):
