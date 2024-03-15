@@ -2,14 +2,15 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests
 from extract_text import update_textAssignments, create_request_group
-from exportar_word import document_print
+from exportar_word import document_print, preparar_diccionario
+from helpers import format_datetime
 import json
 import time
 import os
 import asyncio
-# from helpers import email_to_code
+
 # import uuid
 # from datetime import datetime
 
@@ -178,7 +179,24 @@ async def show_text_assignments3():
     user_id = session.get('session_details',{})['user_id']
     file_text = []
     insert_requests_group_result = insert_requests_group(request_group, user_id)
-    
+    id_request_group = ''
+    tasks = []
+
+    async def track_and_execute(index, task, counter_semaphore):
+        nonlocal id_request_group
+        
+        # Wait for the task to finish
+        result = await task
+        
+        # Increase the counter
+        counter_semaphore.release()
+        print("Semaphore value:", counter_semaphore._value)
+
+        if result is not None:
+            # Perform your insertions here
+            insert_request(request_group[index], result, session.get('session_id'), user_id)
+
+
     for item in request_group:
         id_request_group = item['id_request_group']
         task = asyncio.create_task(request_prompt(1, item['file_text']))
