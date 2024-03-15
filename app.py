@@ -8,6 +8,7 @@ from exportar_word import document_print, preparar_diccionario
 import json
 import time
 import os
+import asyncio
 # from helpers import email_to_code
 # import uuid
 # from datetime import datetime
@@ -94,7 +95,6 @@ def show_text_assignments():
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
     id_request_group = request.form.get('id_request_group')
-    print(id_request_group)
     file_name = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
     @after_this_request
     def remove_temp_file(res):
@@ -148,23 +148,62 @@ def read_assignments2():
             return "No se recibieron archivos"
     return render_template('feedback-generator4.html')
 
+contador_progreso = 0
 @app.route('/show-text-assignments2')
-def show_text_assignments2():
+async def show_text_assignments2():
+    global contador_progreso
+    contador_progreso = 0
+    return render_template('feedback-generator5.html')
+
+@app.route('/get-counter-semaphore', methods=['GET'])
+def get_counter_semaphore():
+    # Return the value of counter_semaphore
+    return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'doc_number':len(request_group)})
+
+# Initialize a semaphore
+counter_semaphore = asyncio.Semaphore(0)
+
+#
+@app.route('/show-text-assignments3', methods=['GET','POST'])
+async def show_text_assignments3():
+    global counter_semaphore
+    counter_semaphore = asyncio.Semaphore(0)
     user_id = session.get('session_details',{})['user_id']
     file_text = []
     insert_requests_group_result = insert_requests_group(request_group, user_id)
     id_request_group = ''
+    tasks = []
+
+    async def track_and_execute(index, task, counter_semaphore):
+        nonlocal id_request_group
+        
+        # Wait for the task to finish
+        result = await task
+        
+        # Increase the counter
+        counter_semaphore.release()
+        print("Semaphore value:", counter_semaphore._value)
+
+        if result is not None:
+            # Perform your insertions here
+            insert_request(request_group[index], result, session.get('session_id'), user_id)
+
+
     for item in request_group:
-        file_text.append(item['file_text'])
-        print(item.keys())
-        chatgpt_response = request_prompt(1,item['file_text'])
-        insert_request(item, chatgpt_response, session.get('session_id', None), user_id)
-        # respuesta = create_post_openAI(item['file_text'])
-        # print(respuesta)
         id_request_group = item['id_request_group']
-    # print('show-text-assignments', file_text)
+        task = asyncio.create_task(request_prompt(1, item['file_text']))
+        tasks.append(task)
     
+    start_time = time.time()
+    chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+    end_time = time.time()
+    print(end_time - start_time)
+
+    # Wait until all tasks are completed
+    await counter_semaphore.acquire()
+        
     return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
+    
 
 
 if __name__ == '__main__':
