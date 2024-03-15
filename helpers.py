@@ -11,3 +11,7 @@ def generate_id():
 def get_datetime():
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return fecha_actual
+
+def format_datetime(datetime_default):
+    datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S')
+    return datetime_format.strftime('%d/%m/%Y %I:%M %p')

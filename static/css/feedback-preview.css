@@ -38,6 +38,7 @@
 
 .feedback-preview .preview-desc {
     display: flex;
+    width: 100%;
 }
 
 .feedback-preview .preview-desc div {

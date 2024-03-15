@@ -11,16 +11,17 @@
                <p>Ver historial</p>
            </a>
        </div>
-       <div class="preview-desc">
-           <div>
-               <img src="/static/img/file2.svg" alt="">
-               <p><strong>Archivo(s):</strong> AC-07_Juan_Perez.docx</p>
-           </div>
-           <div>
-               <img src="/static/img/calendar.svg" alt="">
-               <p><strong>Fecha de creación:</strong>  26/01/2024</p>
-           </div>
-       </div>
+    </div>
+
+    <div class="preview-desc">
+        <div>
+            <img src="/static/img/file2.svg" alt="">
+            <p><strong>Archivo(s):</strong> AC-07_Juan_Perez.docx</p>
+        </div>
+        <div>
+            <img src="/static/img/calendar.svg" alt="">
+            <p><strong>Fecha de creación:</strong>  26/01/2024</p>
+        </div>
     </div>
     <div class="assignment-text">
        <p>Archivo de estudiante:</p>
@@ -54,5 +55,50 @@
            Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. Duis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna.Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. uis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna
        </p>
     </div>
+
+    {% for key, value in requests.items() %}
+        <div class="preview-desc">
+            <div>
+                <img src="/static/img/file2.svg" alt="">
+                <p><strong>Archivo(s):</strong> {{ value.file_name }}</p>
+            </div>
+            <div>
+                <img src="/static/img/calendar.svg" alt="">
+                <p><strong>Fecha de creación:</strong> {{ value.time_stamp }}</p>
+            </div>
+        </div>
+        <div class="assignment-text">
+        <p>Archivo de estudiante:</p>
+        </div>
+        <div class="textarea">
+        <p>
+            {{ value.user_prompt }}
+        </p>
+        
+        </div>
+        <div class="feedback-text">
+        <p class="text">Feedback:</p>
+        <div class="buttons">
+            <button>
+                <img src="/static/img/download.svg" alt="">
+                <p>Descargar</p>
+            </button>
+            <button>
+                <img src="/static/img/copy.svg" alt="">
+                <p>Copiar</p>
+            </button>
+        </div>
+        </div>
+        <div class="textarea">
+            <p>
+                {{ value.result_text }}
+            </p>
+            <p>
+                {{ key }}
+            </p>
+        </div>
+    {% endfor %}
+
+
 </div>
 {% endblock %}

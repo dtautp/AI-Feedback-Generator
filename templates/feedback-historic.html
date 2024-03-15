@@ -19,41 +19,26 @@
         <table class="table table-striped">
             <thead class="">
                 <tr>
-                    <th><input class="checkbox-custom" type="checkbox"></th>
+                    <!-- <th><input class="checkbox-custom" type="checkbox"></th> -->
                     <th><p>Fecha creación</p></th>
                     <th><p>Feedback generado</p></th>
                     <th><p>Enlace</p></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input class="checkbox-custom" type="checkbox"></td>
-                    <td><p>26/01/2024</p></td>
-                    <td><p>AC-07_Juan_Perez.docx</p></td>
-                    <td class="preview">
+            {% for key, value in requests_group_user.items() %}
+                <tr id="{{ key }}">
+                    <!-- <td><input class="checkbox-custom" type="checkbox"></td> -->
+                    <td><p>{{ value.create_datetime|format_date }}</p></td>
+                    <td class="files_name"><p><strong>{{ value.file_name|length }} archivo: </strong>{{ value.file_name|join(', ') }}</p></td>
+                    <td class="preview_link">
                         <img src="/static/img/eye.svg" alt="">
-                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
+                            <a href="/feedback-preview/{{ key }}" id="qwert">
+                                <p>Ver Feedback</p>
+                            </a>
                     </td>
                 </tr>
-                <tr>
-                    <td><input class="checkbox-custom" type="checkbox"></td>
-                    <td><p>26/01/2024</p></td>
-                    <td><p>AC-07_Juan_Perez.docx</p></td>
-                    <td class="preview">
-                        <img src="/static/img/eye.svg" alt="">
-                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input class="checkbox-custom" type="checkbox"></td>
-                    <td><p>26/01/2024</p></td>
-                    <td><p>AC-07_Juan_Perez.docx</p></td>
-                    <td class="preview">
-                        <img src="/static/img/eye.svg" alt="">
-                        <a href="/feedback-preview"><p>Ver Feedback</p></a>
-                    </td>
-                </tr>
-                
+            {% endfor %}
             </tbody>
         </table>
     </div>

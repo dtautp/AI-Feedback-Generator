@@ -2,9 +2,10 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_group, select_requests
 from extract_text import update_textAssignments, create_request_group
 from exportar_word import document_print
+from helpers import format_datetime
 import json
 import time
 import os
@@ -13,6 +14,9 @@ import os
 # from datetime import datetime
 
 app = Flask(__name__)
+
+# custom filter
+app.jinja_env.filters["format_date"] = format_datetime
 
 app.secret_key = 'secret'
 
@@ -127,11 +131,15 @@ def download_temp_document():
 
 @app.route('/feedback-historic')
 def feedback_historic():
-    return render_template('feedback-historic.html', current_route='/feedback-historic')
+    user_id = session.get('session_details',{})['user_id']
+    requests_group_user = select_requests_group(user_id)
+    return render_template('feedback-historic.html', current_route='/feedback-historic', requests_group_user=requests_group_user)
 
-@app.route('/feedback-preview')
-def preview():
-    return render_template('feedback-preview.html')
+@app.route('/feedback-preview/<id_requests_group>')
+def preview(id_requests_group):
+    requests = select_requests(id_requests_group)
+    print(requests)
+    return render_template('feedback-preview.html', requests=requests)
 
 @app.route('/feedback-test')
 def prev_test():
@@ -170,7 +178,12 @@ def show_text_assignments2():
     user_id = session.get('session_details',{})['user_id']
     file_text = []
     insert_requests_group_result = insert_requests_group(request_group, user_id)
-    
+
+    # solicitud para openai
+    # función para mandar al api de open ai
+    # insertar request
+
+
     for item in request_group:
         file_text.append(item['file_text'])
         # respuesta = create_post_openAI(item['file_text'])
