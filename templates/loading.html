@@ -9,10 +9,72 @@
     </div>
     <div class="progress-bar">
         <p>Cargando...</p>
-        <progress value="10" max="100"></progress>
+        <progress value="0" max="100" id="Progress"></progress>
     </div>
     <div class="progress-count">
-        <p>5 de 20 archivos</p>
+        <p><span id="counterValue"></span> de <span id="doc_number"></span> archivos</p>
     </div>
 </div>
+<form action="/show-text-assignments3" method="POST" id="form"></form>
+<script>
+    window.onload = function() {
+        document.getElementById("form").submit();
+    };
+</script>
+
+<script>
+    // Function to fetch counter semaphore value
+    // function update_progress_bar(new_value){
+    //     let progressBar = document.getElementById('Progress');
+    //     let old_value = progressBar.value;
+    //     for(i=old_value; i<=new_value;i++){
+    //         progressBar.value = i;
+    //     }
+    // }
+
+    var progressInterval;
+
+    function startAnimation(new_value) {
+        var progressBar = document.getElementById('Progress');
+        var currentValue = progressBar.value;
+        var targetValue = new_value;
+
+        // Clear previous interval to prevent overlapping animations
+        clearInterval(progressInterval);
+
+        // Define interval to update progress bar
+        progressInterval = setInterval(function() {
+            // Increment progress value gradually
+            currentValue++;
+            progressBar.value = currentValue;
+
+            // Check if target value is reached
+            if (currentValue >= targetValue) {
+                clearInterval(progressInterval); // Stop the interval
+            }
+        }, 100); // Update progress every 20 milliseconds
+    }
+
+    async function fetchCounterSemaphoreValue() {
+        let progressBar = document.getElementById('Progress');
+        try {
+            const response = await fetch('/get-counter-semaphore');
+            const data = await response.json();
+            document.getElementById('counterValue').textContent = data.counter_semaphore_value;
+            document.getElementById('doc_number').textContent = data.doc_number;
+            console.log(data.counter_semaphore_value);
+            progressBar.max = data.doc_number
+            progressBar.value = data.counter_semaphore_value
+            
+        } catch (error) {
+            console.error('Error fetching counter semaphore value:', error);
+        }
+    }
+
+    // Initial fetch
+    fetchCounterSemaphoreValue();
+
+    // Periodically update counter semaphore value
+    setInterval(fetchCounterSemaphoreValue, 100); //
+</script>
 {% endblock %}
