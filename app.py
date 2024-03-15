@@ -163,6 +163,10 @@ async def show_text_assignments2():
     contador_progreso = 0
     return render_template('feedback-generator5.html')
 
+@app.route('/loading')
+async def loading():
+    return render_template('loading.html')
+
 @app.route('/get-counter-semaphore', methods=['GET'])
 def get_counter_semaphore():
     # Return the value of counter_semaphore
