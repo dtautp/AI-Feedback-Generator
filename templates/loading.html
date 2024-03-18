@@ -18,15 +18,9 @@
 <form action="/processing" method="POST" id="form"></form>
 <script>
 
-    // Function to execute after waiting for 1 second
-    function delayedExecution() {
-        window.onload = function() {
-            document.getElementById("form").submit();
-        };
-    }
-
-    // Call setTimeout() to wait for 1 second before executing delayedExecution()
-    setTimeout(delayedExecution, 3000);
+    window.onload = function() {
+        document.getElementById("form").submit();
+    };
 
     
 </script>
