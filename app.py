@@ -191,7 +191,6 @@ def read_assignments2():
         files = request.files.getlist('Files[]')
         if files:
             global request_group
-            print(files)
             request_group = create_request_group(files)
             # return redirect(url_for('show_text_assignments'))
         else:
