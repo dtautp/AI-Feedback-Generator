@@ -174,22 +174,56 @@ function createDeleteHandler(listItem, fileId, fileList) {
 
 submitFiles.addEventListener('click', function(event) {
     event.preventDefault();
-    var formData = new FormData();
 
-    for (var i = 0; i < selectedFiles.length; i++) {
-        formData.append('Files[]', selectedFiles[i]);
-    }
+    var form = document.getElementById('uploadForm');
+    form.submit();
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/read-assignments2", false);
+    // var form = document.createElement('form');
+    // form.setAttribute('action', '/test_s');
+    // form.setAttribute('method', 'POST');
+    // form.setAttribute('enctype', 'multipart/form-data');
+    // var input = document.createElement('input');
+    // input.setAttribute('type', 'hidden');
+    // input.setAttribute('name', 'total');
+    // input.setAttribute('value', selectedFiles.length);
+    // form.appendChild(input);
+
+
+    // for (var i = 0; i < selectedFiles.length; i++) {
+    //     var input = document.createElement('input');
+    //     input.setAttribute('type', 'file');
+    //     input.setAttribute('name', i);
+    //     input.setAttribute('value', selectedFiles[i]);
+    //     form.appendChild(input);
+    // }
+
+    // document.body.appendChild(form);
+    // form.submit();
+
+
+    // var formData = new FormData();
+
+    // for (var i = 0; i < selectedFiles.length; i++) {
+    //     console.log(selectedFiles[i])
+    //     formData.append('Files[]', selectedFiles[i]);
+    // }
+
+    // console.log(JSON.stringify(formData));
+
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", "/read-assignments2", true);
     
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            window.location.href = '/loading';
-        } else {
-            console.error('Error al procesar la solicitud');
-        }
-    };
+    // xhr.onload = function() {
+    //     if (xhr.readyState === XMLHttpRequest.DONE) {
+    //         console.log('hello world')
+    //         if (xhr.status === 200) {
+    //             // window.location.href = '/loading';
+    //         } else {
+    //             console.error('Error al procesar la solicitud');
+    //         }
+    //     }
+        
+    // };
 
-    xhr.send(formData);
+    // xhr.send(formData);
 });

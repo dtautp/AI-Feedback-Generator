@@ -188,7 +188,7 @@ def read_assignments2():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        files = request.files.getlist('Files[]')
+        files = request.files.getlist('selectedFiles[]')
         if files:
             global request_group
             request_group = create_request_group(files)
@@ -196,7 +196,7 @@ def read_assignments2():
             # return redirect(url_for('show_text_assignments'))
         else:
             return "No se recibieron archivos"
-    return render_template('feedback-generator4.html')
+    return redirect(url_for('loading'))
 
 contador_progreso = 0
 @app.route('/show-text-assignments2')
@@ -277,6 +277,13 @@ async def show_text_assignments3():
 
     return redirect(url_for('preview', id_requests_group=id_request_group))   
     # return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
+
+
+# ruta uso api
+@app.route('/test_s', methods=['GET', 'POST'])
+def test_s():
+    print(request.files.getlist('selectedFiles[]'))
+    return "hello world"
     
 
 
