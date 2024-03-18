@@ -2,7 +2,7 @@ from flask import Flask, session, render_template, request, redirect, url_for, j
 from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests
+from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
 from extract_text import update_textAssignments, create_request_group
 from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value
@@ -34,13 +34,16 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        if(validador_multiples_sesiones(email)):
+            return render_template('login.html', error_code = 'Multiples sesiones')
         try:
             result = validator_login(email, password)
             session['session_details'] = result['session_details']
             session['session_id'] = result['session_id']
+            print(session)
             return redirect(url_for('feedback_generator'))
         except:
-            return 'Failet to access'
+            return render_template('login.html', error_code = 'Login Fallido')
         
     return render_template('login.html')
 
@@ -60,6 +63,11 @@ def logout():
 
 @app.route('/feedback-generator')
 def feedback_generator():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
+
     session_details = session.get('session_details',{})
     session_id = session.get('session_id', None)
     print(session_details)
@@ -70,6 +78,10 @@ def feedback_generator():
 
 @app.route('/read-assignments', methods=['GET','POST'])
 def read_assignments():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         files = request.files.getlist('Files[]')
         if files:
@@ -86,6 +98,10 @@ def prueba():
 
 @app.route('/show-text-assignments')
 def show_text_assignments():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     file_text = []
     lis_responses = []
     for item in text_assignments:
@@ -100,6 +116,10 @@ def show_text_assignments():
 
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+    
     id_request_group = request.form.get('id_request_group')
     file_name = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
     @after_this_request
@@ -116,22 +136,38 @@ def download_temp_document():
 
 @app.route('/feedback-historic')
 def feedback_historic():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+    
     user_id = session.get('session_details',{})['user_id']
     requests_group_user = select_requests_group(user_id)
     return render_template('feedback-historic.html', current_route='/feedback-historic', requests_group_user=requests_group_user)
 
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests)
 
 @app.route('/feedback-test')
 def prev_test():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     return render_template('test.html')
 
 # ruta uso api
 @app.route('/test-openai', methods=['GET', 'POST'])
 def openai_api():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return render_template('api-openai.html')
     
@@ -147,6 +183,10 @@ request_group = []
 
 @app.route('/read-assignments2', methods=['GET','POST'])
 def read_assignments2():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         files = request.files.getlist('Files[]')
         if files:
@@ -160,16 +200,28 @@ def read_assignments2():
 contador_progreso = 0
 @app.route('/show-text-assignments2')
 async def show_text_assignments2():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     global contador_progreso
     contador_progreso = 0
     return render_template('feedback-generator5.html')
 
 @app.route('/loading')
 async def loading():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+    
     return render_template('loading.html')
 
 @app.route('/get-counter-semaphore', methods=['GET'])
 def get_counter_semaphore():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     # Return the value of counter_semaphore
     return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'doc_number':len(request_group)})
 
@@ -179,6 +231,10 @@ counter_semaphore = asyncio.Semaphore(0)
 #
 @app.route('/show-text-assignments3', methods=['GET','POST'])
 async def show_text_assignments3():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
+
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
     user_id = session.get('session_details',{})['user_id']

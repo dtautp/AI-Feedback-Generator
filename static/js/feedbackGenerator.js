@@ -187,7 +187,7 @@ submitFiles.addEventListener('click', function(event) {
     xhr.onload = function() {
         if (xhr.status === 200) {
             // Redirigir al usuario a la página show-text-assignments
-            window.location.href = '/show-text-assignments2';
+            window.location.href = '/loading';
         } else {
             // Manejar otros códigos de estado si es necesario
             console.error('Error al procesar la solicitud');
