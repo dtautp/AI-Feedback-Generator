@@ -4,101 +4,92 @@
 
 {% block tabs %}
 <div class="feedback-preview">
-    <div class="preview-resumen">
-       <div class="back-historic">
-           <a href="/feedback-historic">
-               <img src="/static/img/back.svg" alt="">
-               <p>Ver historial</p>
-           </a>
-       </div>
+    <div class="back-historic">
+        <a href="/feedback-historic">
+            <img src="/static/img/back-blue.svg" alt="">
+            <p>Ver historial</p>
+        </a>
     </div>
-
-    <div class="preview-desc">
-        <div>
-            <img src="/static/img/file2.svg" alt="">
-            <p><strong>Archivo(s):</strong> AC-07_Juan_Perez.docx</p>
-        </div>
-        <div>
-            <img src="/static/img/calendar.svg" alt="">
-            <p><strong>Fecha de creación:</strong>  26/01/2024</p>
-        </div>
-    </div>
-    <div class="assignment-text">
-       <p>Archivo de estudiante:</p>
-    </div>
-    <div class="textarea">
-       <p>
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed augue iaculis, blandit nisl a, volutpat dolor. Pellentesque vel enim justo. Aliquam sodales ante nec libero maximus rutrum. Nulla efficitur est et quam convallis ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue. Aliquam dolor quam, malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna, in imperdiet lorem dapibus sit amet.
-       </p>
-       
-    </div>
-    <div class="feedback-text">
-       <p class="text">Feedback:</p>
-       <div class="buttons">
-           <button>
-               <img src="/static/img/download.svg" alt="">
-               <p>Descargar</p>
-           </button>
-           <button>
-               <img src="/static/img/copy.svg" alt="">
-               <p>Copiar</p>
-           </button>
-       </div>
-    </div>
-    <div class="textarea">
-       <p>
-           <strong>Feedback General</strong>
-           In venenatis dui sed ipsum vestibulum, sit amet commodo est gravida. Is ornare. Vivamus in venenatis enim. Integer id tempor nunc. Aliquam faucibus massa eros, vel maximus mi ultrices id. Curabitur aliquam, Nunc a tempor bibendum, nulla felis sodales diam, id sodales ligula nulla in nisl. Ut in augue et lacus gravida posuere ac quis odio. In vel  dolor ullamcorper, tristique nisl sit amet, pellentesque purus. Aenean eu lacus et sapien sagittis consectetur vitae vitae augue.
-           <br><br>
-           <strong>feedback Especifico</strong>
-           Fusce scelerisque, odio et lacinia rhoncus, augue nisi maximus leo, in ultricies odio nunc a sapien. Cras quis tempus velit, et faucibus nisl.
-           Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. Duis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna.Aenean interdum dictum nibh, et accumsan massa pellentesque vitae. uis imperdiet nulla in tristique aliquam. Suspendisse at magn. A malesuada vitae magna a, scelerisque varius magna. Vivamus gravida finibus magna
-       </p>
-    </div>
-
-    {% for key, value in requests.items() %}
-        <div class="preview-desc">
-            <div>
+    <div class="preview-nav">
+        <div class="desc-download">
+            <div class="desc">
                 <img src="/static/img/file2.svg" alt="">
-                <p><strong>Archivo(s):</strong> {{ value.file_name }}</p>
+                <p>Vista previa de feedback</p>
             </div>
-            <div>
-                <img src="/static/img/calendar.svg" alt="">
-                <p><strong>Fecha de creación:</strong> {{ value.time_stamp }}</p>
-            </div>
-        </div>
-        <div class="assignment-text">
-        <p>Archivo de estudiante:</p>
-        </div>
-        <div class="textarea">
-        <p>
-            {{ value.user_prompt }}
-        </p>
-        
-        </div>
-        <div class="feedback-text">
-        <p class="text">Feedback:</p>
-        <div class="buttons">
-            <button>
-                <img src="/static/img/download.svg" alt="">
-                <p>Descargar</p>
-            </button>
-            <button>
-                <img src="/static/img/copy.svg" alt="">
-                <p>Copiar</p>
+            <button class="download">
+                <img src="/static/img/download-white.svg" alt="">
+                <p>Descargar todo</p>
             </button>
         </div>
+        <div class="files-name" id="scrollContainer">
+            {% for key, value in requests.items() %}
+                <button id="{{ key }}" class="file_name {% if loop.first %} selected {% endif %}">
+                    <p>{{ value.file_name }}</p>
+                </button>
+            {% endfor%}
         </div>
-        <div class="textarea">
-            <p>
-                {{ value.result_text }}
-            </p>
-            <p>
-                {{ key }}
-            </p>
+        <div class="files-nav">
+            <button class="disabled" id="prevButton">
+                <img src="/static/img/back.svg" alt="">
+                <p>Anterior archivo</p>
+            </button>
+            <p id="selectionCounter"></p>
+            <button id="nextButton">
+                <p>Siguiente archivo</p>
+                <img src="/static/img/back-blue.svg" style="transform: scaleX(-1);" alt="">
+            </button>
+        </div>
+    </div>
+    {% for key, value in requests.items() %}
+        <div id="{{ key }}" class="preview-content {% if loop.first %} active {% endif %}">
+            <div class="file-detail" id="fileDetail">
+                <div class="file-title">
+                    <p >{{ value.file_name }}</p>
+                </div>
+                <div class="file-datetime">
+                    <img src="/static/img/calendar.svg" alt="">
+                    <p><strong>Fecha de creación:</strong>  {{ value.time_stamp}}</p>
+                </div>
+            </div>
+            <div class="assignment-detail">
+                <p class="assignment-desc">Archivo de estudiante:</p>
+                <div class="assignment-text">
+                    <p>
+                        {{ value.user_prompt }}
+                    </p>
+                </div>
+            </div>
+            <div class="feedback-detail">
+                <div class="feedback-download">
+                    <p class="feedback-desc">Feedback:</p>
+                    <button class="button-copy" onclick="copyFeedbackText('{{ key }}')">
+                        <img src="/static/img/copy.svg" alt="">
+                        <p>Copiar</p>
+                    </button>
+                </div>
+                
+                <div class="feedback-text" id="feedbackText_{{ key }}">
+                    {% set first_paragraph = value.result_text | first_paragraph_value %}
+                    {% if first_paragraph %}
+                        <p>
+                            <strong>Comentario general</strong>
+                            <br>
+                            {{ first_paragraph }}
+                        </p>
+                    {% endif %}
+                    
+                    {% set second_paragraph = value.result_text | second_paragraph_value %}
+                    {% if second_paragraph %}
+                        <p>
+                            <strong>Comentarios específicos</strong>
+                            <br>
+                            {{ second_paragraph }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     {% endfor %}
-
-
 </div>
+<script src="/static/js/feedbackPreview.js"></script>
 {% endblock %}

@@ -5,7 +5,7 @@ from openai_module import extract_feedback_from_response
 from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests
 from extract_text import update_textAssignments, create_request_group
 from exportar_word import document_print, preparar_diccionario
-from helpers import format_datetime
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value
 import json
 import time
 import os
@@ -18,6 +18,8 @@ app = Flask(__name__)
 
 # custom filter
 app.jinja_env.filters["format_date"] = format_datetime
+app.jinja_env.filters["first_paragraph_value"] = first_paragraph_value
+app.jinja_env.filters["second_paragraph_value"] = second_paragraph_value
 
 app.secret_key = 'secret'
 
@@ -121,8 +123,7 @@ def feedback_historic():
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
     requests = select_requests(id_requests_group)
-    print(requests)
-    return render_template('feedback-preview.html', requests=requests)
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests)
 
 @app.route('/feedback-test')
 def prev_test():

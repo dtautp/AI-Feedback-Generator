@@ -3,6 +3,7 @@ from helpers import email_to_code, get_datetime
 import pyrebase
 import uuid
 import os
+import json
 
 config = {
     'apiKey': os.environ.get('FIREBASE_API_KEY'),
@@ -83,7 +84,7 @@ def select_requests_group(user_id):
 
     #obtener datos de fb
     requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id).get()
-    print(requests_group_user)
+    # print(requests_group_user)
     # Ordenar las solicitudes por fecha de mayor a menor
     requests_group_user_order = sorted(requests_group_user.each(), key=lambda x: x.val().get("create_datetime", 0), reverse=True)
     # Convertir la lista ordenada en un diccionario
@@ -93,7 +94,7 @@ def select_requests_group(user_id):
 
 def select_requests(id_requests_group):
     requests = db.child("requests").order_by_child("id_request_group").equal_to(id_requests_group).get()
-    requests_order = sorted(requests.each(), key=lambda x: x.val().get("time_stamp", 0), reverse=True)
+    requests_order = sorted(requests.each(), key=lambda x: x.val().get("time_stamp", 0))
     requests_data = {request.key(): request.val() for request in requests_order}
 
     return requests_data
