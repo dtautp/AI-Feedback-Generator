@@ -236,6 +236,7 @@ async def show_text_assignments3():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
+    global request_group
     print("Process" + str(request_group))
 
     global counter_semaphore
