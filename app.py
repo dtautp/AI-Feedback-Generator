@@ -191,6 +191,7 @@ def read_assignments2():
         files = request.files.getlist('Files[]')
         if files:
             global request_group
+            print(files)
             request_group = create_request_group(files)
             # return redirect(url_for('show_text_assignments'))
         else:
@@ -235,7 +236,7 @@ async def show_text_assignments3():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
-    print(request_group)    
+    # print(request_group)    
 
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
