@@ -151,7 +151,7 @@ def preview(id_requests_group):
         return redirect(url_for('login'))
 
     requests = select_requests(id_requests_group)
-    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests)
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
 @app.route('/feedback-test')
 def prev_test():
@@ -229,7 +229,7 @@ def get_counter_semaphore():
 counter_semaphore = asyncio.Semaphore(0)
 
 #
-@app.route('/show-text-assignments3', methods=['GET','POST'])
+@app.route('/processing', methods=['GET','POST'])
 async def show_text_assignments3():
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
@@ -270,8 +270,9 @@ async def show_text_assignments3():
 
     # Wait until all tasks are completed
     await counter_semaphore.acquire()
-        
-    return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
+
+    return redirect(url_for('preview', id_requests_group=id_request_group))   
+    # return render_template('feedback-generator4.html', text_assignments=request_group, id_request_group=id_request_group)
     
 
 

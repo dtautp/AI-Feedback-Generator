@@ -15,7 +15,7 @@
         <p><span id="counterValue"></span> de <span id="doc_number"></span> archivos</p>
     </div>
 </div>
-<form action="/show-text-assignments3" method="POST" id="form"></form>
+<form action="/processing" method="POST" id="form"></form>
 <script>
     window.onload = function() {
         document.getElementById("form").submit();
@@ -32,28 +32,6 @@
     //     }
     // }
 
-    var progressInterval;
-
-    function startAnimation(new_value) {
-        var progressBar = document.getElementById('Progress');
-        var currentValue = progressBar.value;
-        var targetValue = new_value;
-
-        // Clear previous interval to prevent overlapping animations
-        clearInterval(progressInterval);
-
-        // Define interval to update progress bar
-        progressInterval = setInterval(function() {
-            // Increment progress value gradually
-            currentValue++;
-            progressBar.value = currentValue;
-
-            // Check if target value is reached
-            if (currentValue >= targetValue) {
-                clearInterval(progressInterval); // Stop the interval
-            }
-        }, 100); // Update progress every 20 milliseconds
-    }
 
     async function fetchCounterSemaphoreValue() {
         let progressBar = document.getElementById('Progress');

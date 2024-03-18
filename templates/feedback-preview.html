@@ -16,10 +16,15 @@
                 <img src="/static/img/file2.svg" alt="">
                 <p>Vista previa de feedback</p>
             </div>
-            <button class="download">
-                <img src="/static/img/download-white.svg" alt="">
-                <p>Descargar todo</p>
-            </button>
+            <form action="/generate_response_file" method="POST">
+                <input value="{{id_requests_group}}" type="hidden" name="id_request_group">
+                <button class="download" type="submit">
+                    <img src="/static/img/download-white.svg" alt="">
+                    <p>Descargar todo</p>
+                </button>
+            </form>
+            
+
         </div>
         <div class="files-name" id="scrollContainer">
             {% for key, value in requests.items() %}
