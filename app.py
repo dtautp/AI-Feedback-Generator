@@ -192,6 +192,7 @@ def read_assignments2():
         if files:
             global request_group
             request_group = create_request_group(files)
+            print('Read' + str(request_group))
             # return redirect(url_for('show_text_assignments'))
         else:
             return "No se recibieron archivos"
@@ -235,7 +236,7 @@ async def show_text_assignments3():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
-    # print(request_group)    
+    print("Process" + str(request_group))
 
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)

@@ -51,7 +51,6 @@ def create_request_group(files):
     id_request_group = generate_id()
     try:
         for file in files:
-            print(file)
             file_name = file.filename
             file_type = file.content_type
             file_text = extract_text(file, file_type)
