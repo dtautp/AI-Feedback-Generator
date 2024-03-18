@@ -179,7 +179,7 @@ def openai_api():
 
         return render_template('api-openai.html', chat = conversations)
 
-request_group = []
+
 
 @app.route('/read-assignments2', methods=['GET','POST'])
 def read_assignments2():
@@ -187,16 +187,17 @@ def read_assignments2():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
+    request_group = []
+
     if request.method == 'POST':
         files = request.files.getlist('selectedFiles[]')
         if files:
-            global request_group
             request_group = create_request_group(files)
             print('Read' + str(request_group))
             # return redirect(url_for('show_text_assignments'))
         else:
             return "No se recibieron archivos"
-    return redirect(url_for('loading'))
+    return redirect(url_for('loading', request_group=json.dumps({'request_group':request_group})))
 
 contador_progreso = 0
 @app.route('/show-text-assignments2')
@@ -215,7 +216,10 @@ async def loading():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
     
-    return render_template('loading.html')
+    request_group = json.loads(request.args.get('request_group'))
+    print('Loading' + str(request_group))
+    print(type(request_group))
+    return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']))
 
 @app.route('/get-counter-semaphore', methods=['GET'])
 def get_counter_semaphore():
@@ -224,20 +228,26 @@ def get_counter_semaphore():
         return redirect(url_for('login'))
 
     # Return the value of counter_semaphore
-    return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'doc_number':len(request_group)})
+    return json.dumps({'counter_semaphore_value': counter_semaphore._value})
 
 # Initialize a semaphore
 counter_semaphore = asyncio.Semaphore(0)
 
 #
 @app.route('/processing', methods=['GET','POST'])
-async def show_text_assignments3():
+async def processing():
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
         return redirect(url_for('login'))
+    
+    request_group = request.form.get('request_group')
 
-    global request_group
     print("Process" + str(request_group))
+    print(type(request_group))
+
+    request_group = json.loads(request_group)["request_group"]
+    print("Process" + str(request_group))
+    print(type(request_group))
 
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
