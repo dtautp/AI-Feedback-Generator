@@ -235,6 +235,8 @@ async def show_text_assignments3():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
+    print(request_group)    
+
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
     user_id = session.get('session_details',{})['user_id']
