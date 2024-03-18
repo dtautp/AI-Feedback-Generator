@@ -31,6 +31,15 @@ def validator_login(email, password):
     db.child('sessions_log').child(session_id).set(session_details)
     return {'session_id': session_id, 'session_details': session_details}
 
+def validador_multiples_sesiones(email):
+    user_email = email
+    logins = dict(db.child("sessions_log").order_by_child("user_id").equal_to(user_email).get().val())
+    multiples_logins = False
+    for i in logins.keys():
+        if(len(logins[i].keys())==3):
+            multiples_logins = True
+    return multiples_logins
+
 def add_end_datetime_session(session_id):
     end_datetime = get_datetime()
     db.child('sessions_log').child(session_id).child('end_datetime').set(end_datetime)
