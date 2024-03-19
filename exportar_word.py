@@ -3,6 +3,7 @@ from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import json
 import time
+import io
 
 def document_print(dic_list, output_path,output_file_name):
     doc = Document()
@@ -22,8 +23,12 @@ def document_print(dic_list, output_path,output_file_name):
                 value_run = key_paragraph.add_run(text)
                 value_run.bold = False
         doc.add_paragraph()
-    doc.save(output_path + output_file_name)
-    return output_path + output_file_name
+    # doc.save(output_path + output_file_name)
+    f = io.BytesIO()
+    doc.save(f)
+    f.seek(0)
+    return f
+    # return output_path + output_file_name
 
 
 def preparar_diccionario(request_list):

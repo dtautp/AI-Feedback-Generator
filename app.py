@@ -122,16 +122,17 @@ def download_temp_document():
     
     id_request_group = request.form.get('id_request_group')
     file_name = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
-    @after_this_request
-    def remove_temp_file(res):
-        for i in os.listdir('./temp_files/'):
-            try:
-                os.remove('./temp_files/'+i)
-            except Exception as error:
-                app.logger.error("Error removing file: %s", error)
-                continue
-        return res
-    return send_file(file_name, as_attachment=True)
+    # @after_this_request
+    # def remove_temp_file(res):
+    #     for i in os.listdir('./temp_files/'):
+    #         try:
+    #             os.remove('./temp_files/'+i)
+    #         except Exception as error:
+    #             app.logger.error("Error removing file: %s", error)
+    #             continue
+    #     return res
+    return send_file(file_name, mimetype='application/msword', as_attachment=True, download_name='feedback.doc')
+    # return send_file(file_name, as_attachment=True)
 
 
 @app.route('/feedback-historic')
