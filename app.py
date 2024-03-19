@@ -131,7 +131,7 @@ def download_temp_document():
     #             app.logger.error("Error removing file: %s", error)
     #             continue
     #     return res
-    return send_file(file_name, mimetype='application/msword', as_attachment=True, download_name='feedback.doc')
+    return send_file(file_name, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
     # return send_file(file_name, as_attachment=True)
 
 
