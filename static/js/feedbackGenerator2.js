@@ -250,11 +250,13 @@ function enviarResultados(resultados) {
     .then(response => {
       if (!response.ok) {
         throw new Error('Error al enviar los resultados al servidor');
+
       }
       return response.text();
     })
     .then(data => {
       console.log('Respuesta del servidor:', data);
+      window.location.href = '/loading';
     })
     .catch(error => {
       console.error('Error:', error);

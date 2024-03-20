@@ -108,10 +108,10 @@ async def loading():
     
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
-    request_group = json.loads(request.args.get('request_group'))
+    # request_group = json.loads(request.args.get('request_group'))
     print('Loading' + str(request_group))
     print(type(request_group))
-    return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']))
+    return render_template('loading.html', request_group=json.dumps({'request_group':request_group}), doc_number=len(request_group))
 
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
@@ -210,13 +210,16 @@ def feedback_generator2():
     return render_template('feedback-generator2.html', current_route='/feedback-generator')
 
 
+request_group = []
+
 @app.route('/guardar_resultados', methods=['POST'])
 def guardar_resultados():
     resultados = request.json
+    global request_group
     request_group = create_request_group2(resultados)
     print(request_group)
-    
-    return 'Resultados guardados correctamente'
+
+    return "prueba"
 
 
 if __name__ == '__main__':
