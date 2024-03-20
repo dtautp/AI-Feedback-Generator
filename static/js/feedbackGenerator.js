@@ -134,6 +134,8 @@ function handleSelectedFiles(files) {
         selectedFiles.push(files[i]);
     }
 
+    // console.log(selectedFiles);
+
     if (selectedFiles.length != 0) {
         uploadButtonFirst.style.display = 'none';
         uploadDesc.style.display = 'none';
@@ -172,58 +174,141 @@ function createDeleteHandler(listItem, fileId, fileList) {
     };
 }
 
+// submitFiles.addEventListener('click', function(event) {
+//     event.preventDefault();
+
+//     var form = document.getElementById('uploadForm');
+//     form.submit();
+
+// });
+
+
+
+function extraerTextoPDF(contenido, frase) {
+    return new Promise((resolve, reject) => {
+        const loadingTask = pdfjsLib.getDocument(new Uint8Array(contenido));
+        loadingTask.promise.then(pdf => {
+            const numPages = pdf.numPages;
+            let textoCompleto = '';
+            const getPageText = (pageNum) => {
+                if (pageNum > numPages) {
+                    // Aplicar la función para extraer el texto después de la frase
+                    textoCompleto = extraerTextoDespuesDeFrase(textoCompleto, "Write your answer");
+                    // Remover saltos de línea
+                    textoCompleto = textoCompleto.replace(/\n/g, '');
+                    resolve(textoCompleto);
+                    return;
+                }
+                pdf.getPage(pageNum).then(page => {
+                    page.getTextContent().then(textContent => {
+                        let textoPagina = '';
+                        textContent.items.forEach(item => {
+                            textoPagina += item.str + ' ';
+                        });
+                        textoCompleto += textoPagina;
+                        getPageText(pageNum + 1);
+                    }).catch(reject);
+                }).catch(reject);
+            };
+            getPageText(1);
+        }).catch(reject);
+    });
+}
+
+function extraerTextoDocx(contenido) {
+    return new Promise((resolve, reject) => {
+        mammoth.extractRawText({arrayBuffer: contenido})
+            .then(result => {
+                let texto = result.value;
+                // Aplicar la función para extraer el texto después de la frase
+                texto = extraerTextoDespuesDeFrase(texto, "Write your answer");
+                // Remover saltos de línea
+                texto = texto.replace(/\n/g, '');
+                resolve(texto);
+            }).catch(reject);
+    });
+}
+
+function extraerTextoDespuesDeFrase(texto, frase) {
+    const indiceInicio = texto.indexOf(frase);
+    if (indiceInicio !== -1) {
+        texto = texto.substring(indiceInicio + frase.length);
+    } else {
+        console.log(`La frase '${frase}' no fue encontrada en el archivo.`);
+    }
+    return texto;
+}
+
+function enviarResultados(resultados) {
+    fetch('/guardar_resultados', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(resultados)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al enviar los resultados al servidor');
+
+      }
+      return response.text();
+    })
+    .then(data => {
+      console.log('Respuesta del servidor:', data);
+      var form = document.getElementById("uploadForm");
+      form.removeChild(document.getElementById("fileInput"));
+      document.getElementById("request_group").value = data;
+      form.submit()
+    //   window.location.href = '/loading';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js'
+
 submitFiles.addEventListener('click', function(event) {
     event.preventDefault();
 
-    var form = document.getElementById('uploadForm');
-    form.submit();
+    // const filesList = document.getElementById('inputFiles').files;
+    const textos = [];
+    var resultados = [];
 
-    // var form = document.createElement('form');
-    // form.setAttribute('action', '/test_s');
-    // form.setAttribute('method', 'POST');
-    // form.setAttribute('enctype', 'multipart/form-data');
-    // var input = document.createElement('input');
-    // input.setAttribute('type', 'hidden');
-    // input.setAttribute('name', 'total');
-    // input.setAttribute('value', selectedFiles.length);
-    // form.appendChild(input);
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const contenido = event.target.result;
+            let promise;
+            if (file.type === 'application/pdf') {
+                promise = extraerTextoPDF(contenido);
+            } else if (file.name.endsWith('.docx')) {
+                promise = extraerTextoDocx(contenido);
+            }
 
+            if (promise) {
+                promise.then(texto => {
+                    const resultado = {
+                        nombreArchivo: file.name,
+                        textoExtraido: texto
+                    };
+                    resultados.push(resultado);
+                    if (resultados.length === selectedFiles.length) {
+                        console.log("Resultados de la extracción:");
+                        console.log(resultados);
+                        // Enviar los resultados a Flask
+                        enviarResultados(resultados);
+                    }
+                }).catch(error => {
+                    console.error(`Error al extraer texto del archivo ${file.name}:`, error);
+                });
+            } else {
+                console.error(`Formato de archivo no compatible: ${file.name}`);
+            }
+        };
 
-    // for (var i = 0; i < selectedFiles.length; i++) {
-    //     var input = document.createElement('input');
-    //     input.setAttribute('type', 'file');
-    //     input.setAttribute('name', i);
-    //     input.setAttribute('value', selectedFiles[i]);
-    //     form.appendChild(input);
-    // }
-
-    // document.body.appendChild(form);
-    // form.submit();
-
-
-    // var formData = new FormData();
-
-    // for (var i = 0; i < selectedFiles.length; i++) {
-    //     console.log(selectedFiles[i])
-    //     formData.append('Files[]', selectedFiles[i]);
-    // }
-
-    // console.log(JSON.stringify(formData));
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", "/read-assignments2", true);
-    
-    // xhr.onload = function() {
-    //     if (xhr.readyState === XMLHttpRequest.DONE) {
-    //         console.log('hello world')
-    //         if (xhr.status === 200) {
-    //             // window.location.href = '/loading';
-    //         } else {
-    //             console.error('Error al procesar la solicitud');
-    //         }
-    //     }
-        
-    // };
-
-    // xhr.send(formData);
+        reader.readAsArrayBuffer(file);
+    }
 });

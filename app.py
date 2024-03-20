@@ -64,21 +64,29 @@ def logout():
 
     return redirect(url_for('login'))
 
-# 3
-@app.route('/feedback-generator')
+
+@app.route('/guardar_resultados', methods=['POST'])
+def guardar_resultados():
+    resultados = request.json
+    request_group = create_request_group2(resultados)
+    print("guardar: " + str(request_group))
+
+    return json.dumps({'request_group':request_group})
+
+@app.route('/feedback-generator', methods=['GET','POST'])
 def feedback_generator():
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
         return redirect(url_for('login'))
 
-
-    session_details = session.get('session_details',{})
-    session_id = session.get('session_id', None)
-    print(session_details)
-    print(session_id)
-    global text_assignments
-    text_assignments.clear()
+    if request.method == 'POST':
+        files = request.files.getlist('archivo')
+        request_group = create_request_group(files)
+        print('Read' + str(request_group))
+            
     return render_template('feedback-generator.html', current_route='/feedback-generator')
+
+
 
 # 4
 @app.route('/read-assignments', methods=['GET','POST'])
@@ -189,35 +197,11 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
-@app.route('/feedback-generator2', methods=['GET','POST'])
-def feedback_generator2():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
-
-    if request.method == 'POST':
-        files = request.files.getlist('archivo')
-        request_group = create_request_group(files)
-        print('Read' + str(request_group))
-            
-
-    # session_details = session.get('session_details',{})
-    # session_id = session.get('session_id', None)
-    # print(session_details)
-    # print(session_id)
-    # global text_assignments
-    # text_assignments.clear()
-    return render_template('feedback-generator2.html', current_route='/feedback-generator')
 
 
 
-@app.route('/guardar_resultados', methods=['POST'])
-def guardar_resultados():
-    resultados = request.json
-    request_group = create_request_group2(resultados)
-    print("guardar: " + str(request_group))
 
-    return json.dumps({'request_group':request_group})
+
 
 
 if __name__ == '__main__':
