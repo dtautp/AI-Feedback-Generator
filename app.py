@@ -3,7 +3,7 @@ from openai_module import create_post_openAI
 from openai_module import request_prompt
 from openai_module import extract_feedback_from_response
 from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
-from extract_text import update_textAssignments, create_request_group
+from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value
 import json
@@ -187,7 +187,34 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
+@app.route('/feedback-generator2', methods=['GET','POST'])
+def feedback_generator2():
+    # Asegurar que el usuario se encuentre logeado
+    if 'session_details' not in  session:
+        return redirect(url_for('login'))
 
+    if request.method == 'POST':
+        files = request.files.getlist('archivo')
+        request_group = create_request_group(files)
+        print('Read' + str(request_group))
+            
+
+    # session_details = session.get('session_details',{})
+    # session_id = session.get('session_id', None)
+    # print(session_details)
+    # print(session_id)
+    # global text_assignments
+    # text_assignments.clear()
+    return render_template('feedback-generator2.html', current_route='/feedback-generator')
+
+
+@app.route('/guardar_resultados', methods=['POST'])
+def guardar_resultados():
+    resultados = request.json
+    request_group = create_request_group2(resultados)
+    print(request_group)
+    
+    return 'Resultados guardados correctamente'
 
 
 if __name__ == '__main__':

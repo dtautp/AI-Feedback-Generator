@@ -70,3 +70,29 @@ def create_request_group(files):
     
     # print('usando funcion update_textAssignments', listTextAssignments)
     return listTextAssignments
+
+
+def create_request_group2(files):
+    listTextAssignments = []
+    id_request_group = generate_id()
+    try:
+        for file in files:
+            file_name = file.get('nombreArchivo')
+            # file_type = file.content_type
+            file_text = file.get('textoExtraido')
+            timestamp = get_datetime()
+            id_request = generate_id()
+            file_info = {
+                'id_request': id_request,
+                'id_request_group': id_request_group,
+                'file_name': file_name,
+                'file_text': file_text,
+                'create_datetime': timestamp
+            }
+            listTextAssignments.append(file_info)
+            # print(file_info)
+    except Exception as e:
+        print(e)
+    
+    # print('usando funcion update_textAssignments', listTextAssignments)
+    return listTextAssignments
