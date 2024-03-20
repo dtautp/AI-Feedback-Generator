@@ -5,7 +5,7 @@
 {% block tabs %}
 <div class="loading">
     <div class="animation">
-        <img id="gifDisplay" alt="">
+        <img id="gifDisplay" src="animation-loading-2.gif" alt="">
     </div>
     <div class="progress-bar">
         <p>Cargando...</p>
@@ -20,27 +20,27 @@
 </form>
 <script>
 
-    var gifPaths = ["animation-loading-1.gif", "animation-loading-2.gif", "animation-loading-3.gif", "animation-loading-4.gif", "animation-loading-5.gif"];
-    var img = document.getElementById("gifDisplay")
-    function carrucel(){
-        console.log(gifPaths[0])
-        img.src = "/static/img/"+gifPaths[0]
-        setTimeout(function(){
-            img.src = "/static/img/"+gifPaths[1]
-        },3750);
-        setTimeout(function(){
-            img.src = "/static/img/"+gifPaths[2]
-        },3800+4500);
-        setTimeout(function(){
-            img.src = "/static/img/"+gifPaths[3]
-        },3800+(4500*2));
-        setTimeout(function(){
-            img.src = "/static/img/"+gifPaths[4]
-        },3800+(4500*3));
-    }
+    // var gifPaths = ["animation-loading-1.gif", "animation-loading-2.gif", "animation-loading-3.gif", "animation-loading-4.gif", "animation-loading-5.gif"];
+    // var img = document.getElementById("gifDisplay")
+    // function carrucel(){
+    //     console.log(gifPaths[0])
+    //     img.src = "/static/img/"+gifPaths[0]
+    //     setTimeout(function(){
+    //         img.src = "/static/img/"+gifPaths[1]
+    //     },3750);
+    //     setTimeout(function(){
+    //         img.src = "/static/img/"+gifPaths[2]
+    //     },3800+4500);
+    //     setTimeout(function(){
+    //         img.src = "/static/img/"+gifPaths[3]
+    //     },3800+(4500*2));
+    //     setTimeout(function(){
+    //         img.src = "/static/img/"+gifPaths[4]
+    //     },3800+(4500*3));
+    // }
 
-    carrucel();
-    setInterval(carrucel, 21850);
+    // carrucel();
+    // setInterval(carrucel, 21850);
 
     // window.onload = function() {
     //     document.getElementById("form").submit();
