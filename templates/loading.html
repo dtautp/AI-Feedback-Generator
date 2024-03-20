@@ -56,45 +56,42 @@
     window.onload = function(){
         carrucel();
         setInterval(carrucel, 21850);
+        document.getElementById("form").submit();
     };
     
-
-    // window.onload = function() {
-    //     document.getElementById("form").submit();
-    // };
 
     
 </script>
 
 <script>
     // Function to fetch counter semaphore value
-    // function update_progress_bar(new_value){
-    //     let progressBar = document.getElementById('Progress');
-    //     let old_value = progressBar.value;
-    //     for(i=old_value; i<=new_value;i++){
-    //         progressBar.value = i;
-    //     }
-    // }
+    function update_progress_bar(new_value){
+        let progressBar = document.getElementById('Progress');
+        let old_value = progressBar.value;
+        for(i=old_value; i<=new_value;i++){
+            progressBar.value = i;
+        }
+    }
 
 
-    // async function fetchCounterSemaphoreValue() {
-    //     let progressBar = document.getElementById('Progress');
-    //     try {
-    //         const response = await fetch('/get-counter-semaphore');
-    //         const data = await response.json();
-    //         document.getElementById('counterValue').textContent = data.counter_semaphore_value;
-    //         console.log(data.counter_semaphore_value);
-    //         progressBar.value = data.counter_semaphore_value
+    async function fetchCounterSemaphoreValue() {
+        let progressBar = document.getElementById('Progress');
+        try {
+            const response = await fetch('/get-counter-semaphore');
+            const data = await response.json();
+            document.getElementById('counterValue').textContent = data.counter_semaphore_value;
+            console.log(data.counter_semaphore_value);
+            progressBar.value = data.counter_semaphore_value
             
-    //     } catch (error) {
-    //         console.error('Error fetching counter semaphore value:', error);
-    //     }
-    // }
+        } catch (error) {
+            console.error('Error fetching counter semaphore value:', error);
+        }
+    }
 
-    // // Initial fetch
-    // fetchCounterSemaphoreValue();
+    // Initial fetch
+    fetchCounterSemaphoreValue();
 
-    // // Periodically update counter semaphore value
-    // setInterval(fetchCounterSemaphoreValue, 100); //
+    // Periodically update counter semaphore value
+    setInterval(fetchCounterSemaphoreValue, 100); //
 </script>
 {% endblock %}
