@@ -106,6 +106,8 @@ async def loading():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
     
+    global counter_semaphore
+    counter_semaphore = asyncio.Semaphore(0)
     request_group = json.loads(request.args.get('request_group'))
     print('Loading' + str(request_group))
     print(type(request_group))

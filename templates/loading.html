@@ -3,9 +3,23 @@
 {% extends "layout-tabs.html" %}
 
 {% block tabs %}
+
+<style>
+    .hidden-image {
+        display: none;
+    }
+</style>
+
 <div class="loading">
     <div class="animation">
-        <img src="/static/img/animation-loading.gif" alt="">
+        
+
+        <img id="gifDisplay"  alt="">
+        <img  src="/static/img/animation-loading-1.gif" alt="" class="hidden-image">
+        <img  src="/static/img/animation-loading-2.gif" alt="" class="hidden-image">
+        <img  src="/static/img/animation-loading-3.gif" alt="" class="hidden-image">
+        <img  src="/static/img/animation-loading-4.gif" alt="" class="hidden-image">
+        <img  src="/static/img/animation-loading-5.gif" alt="" class="hidden-image">
     </div>
     <div class="progress-bar">
         <p>Cargando...</p>
@@ -20,22 +34,45 @@
 </form>
 <script>
 
-    window.onload = function() {
+    var gifPaths = ["animation-loading-1.gif", "animation-loading-2.gif", "animation-loading-3.gif", "animation-loading-4.gif", "animation-loading-5.gif"];
+    var img = document.getElementById("gifDisplay")
+    function carrucel(){
+        img.src = "/static/img/"+gifPaths[0]
+        setTimeout(function(){
+            img.src = "/static/img/"+gifPaths[1]
+        },3750);
+        setTimeout(function(){
+            img.src = "/static/img/"+gifPaths[2]
+        },3800+4500);
+        setTimeout(function(){
+            img.src = "/static/img/"+gifPaths[3]
+        },3800+(4500*2));
+        setTimeout(function(){
+            img.src = "/static/img/"+gifPaths[4]
+        },3800+(4500*3));
+    }
+
+    window.onload = function(){
+        carrucel();
+        setInterval(carrucel, 21850);
         document.getElementById("form").submit();
+        fetchCounterSemaphoreValue();
+        setInterval(fetchCounterSemaphoreValue, 500); //
     };
+    
 
     
 </script>
 
 <script>
     // Function to fetch counter semaphore value
-    // function update_progress_bar(new_value){
-    //     let progressBar = document.getElementById('Progress');
-    //     let old_value = progressBar.value;
-    //     for(i=old_value; i<=new_value;i++){
-    //         progressBar.value = i;
-    //     }
-    // }
+    function update_progress_bar(new_value){
+        let progressBar = document.getElementById('Progress');
+        let old_value = progressBar.value;
+        for(i=old_value; i<=new_value;i++){
+            progressBar.value = i;
+        }
+    }
 
 
     async function fetchCounterSemaphoreValue() {
@@ -44,8 +81,12 @@
             const response = await fetch('/get-counter-semaphore');
             const data = await response.json();
             document.getElementById('counterValue').textContent = data.counter_semaphore_value;
+            console.log(progressBar.value);
             console.log(data.counter_semaphore_value);
-            progressBar.value = data.counter_semaphore_value
+            // progressBar.value = data.counter_semaphore_value;
+            if(data.counter_semaphore_value>=progressBar.value){
+                progressBar.value = data.counter_semaphore_value;
+            }
             
         } catch (error) {
             console.error('Error fetching counter semaphore value:', error);
@@ -53,9 +94,9 @@
     }
 
     // Initial fetch
-    fetchCounterSemaphoreValue();
+    // fetchCounterSemaphoreValue();
 
     // Periodically update counter semaphore value
-    setInterval(fetchCounterSemaphoreValue, 100); //
+    // setInterval(fetchCounterSemaphoreValue, 500); //
 </script>
 {% endblock %}
