@@ -56,6 +56,7 @@
     </div>
     <form id="uploadForm" action="/read-assignments" method="POST" enctype="multipart/form-data" class="upload-next">
         <input type="file" name="selectedFiles[]" id="fileInput" hidden multiple accept=".pdf,.docx">
+        <input type="hidden" name="request_group" id="request_group">
         <button type="button" id="submitFiles" class="btn btn-secondary" disabled>
             <p>siguiente</p>
             <img class="img-disable" id="imgSubmitDisable" src="/static/img/next.svg" alt="">

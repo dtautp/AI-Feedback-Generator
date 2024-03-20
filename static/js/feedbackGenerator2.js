@@ -256,7 +256,11 @@ function enviarResultados(resultados) {
     })
     .then(data => {
       console.log('Respuesta del servidor:', data);
-      window.location.href = '/loading';
+      var form = document.getElementById("uploadForm");
+      form.removeChild(document.getElementById("fileInput"));
+      document.getElementById("request_group").value = data;
+      form.submit()
+    //   window.location.href = '/loading';
     })
     .catch(error => {
       console.error('Error:', error);

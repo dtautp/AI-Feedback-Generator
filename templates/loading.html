@@ -113,8 +113,6 @@
             const response = await fetch('/get-counter-semaphore');
             const data = await response.json();
             
-            console.log(progressBar.value);
-            console.log(data.counter_semaphore_value);
             // progressBar.value = data.counter_semaphore_value;
             if(data.counter_semaphore_value>=progressBar.value){
                 progressBar.value = data.counter_semaphore_value;
@@ -127,10 +125,5 @@
         }
     }
 
-    // Initial fetch
-    // fetchCounterSemaphoreValue();
-
-    // Periodically update counter semaphore value
-    // setInterval(fetchCounterSemaphoreValue, 500); //
 </script>
 {% endblock %}
