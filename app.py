@@ -162,8 +162,7 @@ async def processing():
         task = asyncio.create_task(request_prompt(1, item['file_text']))
         tasks.append(task)
     
-    async def ask_chatgpt():
-        chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+    chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
 
     
 
