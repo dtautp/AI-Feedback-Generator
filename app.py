@@ -162,11 +162,16 @@ async def processing():
         task = asyncio.create_task(request_prompt(1, item['file_text']))
         tasks.append(task)
     
-    chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+    try:
+        chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+        await counter_semaphore.acquire() # Wait until all tasks are completed
+        return redirect(url_for('preview', id_requests_group=id_request_group))
+    except Exception as e:
+        print(e)
+        return "Se acabó el tiempo disponible de ejecucion"
+    
 
-    await counter_semaphore.acquire() # Wait until all tasks are completed
-
-    return redirect(url_for('preview', id_requests_group=id_request_group))
+    
 
 
 @app.route('/generate_response_file',methods=['POST','GET'])
