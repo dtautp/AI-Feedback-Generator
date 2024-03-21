@@ -135,6 +135,7 @@ def get_counter_semaphore():
 # 7
 @app.route('/processing', methods=['GET','POST'])
 async def processing():
+    time_start = time.time()
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
         return redirect(url_for('login'))
@@ -162,11 +163,20 @@ async def processing():
         task = asyncio.create_task(request_prompt(1, item['file_text']))
         tasks.append(task)
     
-    chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
 
+    try:
+        async with asyncio.timeout(15):
+            chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+    except Exception as e:
+        print(e)
+        return "Time out"
     
 
     await counter_semaphore.acquire() # Wait until all tasks are completed
+
+    time_end = time.time()
+    print('Exec: ' + str(time_end - time_start))
+
     return redirect(url_for('preview', id_requests_group=id_request_group))
     
 
