@@ -54,8 +54,6 @@ def login():
 def logout():
     session_details = session.get('session_details',{})
     session_id = session.get('session_id', None)
-    print(session_details)
-    print(session_id)
 
     if session_details:
         add_end_datetime_session(session_id)
@@ -69,7 +67,6 @@ def logout():
 def guardar_resultados():
     resultados = request.json
     request_group = create_request_group2(resultados)
-    print("guardar: " + str(request_group))
 
     return json.dumps({'request_group':request_group})
 
@@ -82,7 +79,6 @@ def feedback_generator():
     if request.method == 'POST':
         files = request.files.getlist('archivo')
         request_group = create_request_group(files)
-        print('Read' + str(request_group))
             
     return render_template('feedback-generator.html', current_route='/feedback-generator')
 
@@ -101,7 +97,6 @@ def read_assignments():
         files = request.files.getlist('selectedFiles[]')
         if files:
             request_group = create_request_group(files)
-            print('Read' + str(request_group))
             # return redirect(url_for('show_text_assignments'))
         else:
             return "No se recibieron archivos"
@@ -117,8 +112,6 @@ async def loading():
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
     request_group = json.loads(request.form['request_group'])
-    print('Loading' + str(request_group))
-    print(type(request_group))
     return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']))
 
 # 6
@@ -213,8 +206,8 @@ def preview(id_requests_group):
 
 @app.route('/test_asyncio')
 def test_asyncio():
-
-    return str(asyncio.__all__)
+    help(asyncio)
+    return str(help(asyncio))
 
 
 
