@@ -211,6 +211,10 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
+@app.route('/test_asyncio')
+def test_asyncio():
+
+    return str(asyncio.__all__)
 
 
 
