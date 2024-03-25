@@ -4,10 +4,10 @@
     "api": {
       "runtime": "python3.8",
       "memory": 512,
-      "includeFiles": ["app.py", "requirements.txt"],
-      "environment": {
-        "FLASK_ENV": "production"
-      }
+      "includeFiles": ["app.py", "requirements.txt"]      
     }
+  },
+  "env": {
+    "FLASK_ENV": "production"
   }
 }
