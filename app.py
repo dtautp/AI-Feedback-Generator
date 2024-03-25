@@ -160,12 +160,12 @@ async def processing():
 
     try:
             # chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
-        tasks_coroutines = [asyncio.wait_for(track_and_execute(index, task, counter_semaphore), 15) for index, task in enumerate(tasks)]
+        tasks_coroutines = [asyncio.wait_for(track_and_execute(index, task, counter_semaphore), 3) for index, task in enumerate(tasks)]
         chatgpt_responses = await asyncio.gather(*tasks_coroutines) 
         print('Tiempo suficiente')
     except Exception as e:
         print(e)
-        return "Time out"
+        return redirect(url_for('preview', id_requests_group=id_request_group, err_code='timeout'))
     
 
     await counter_semaphore.acquire() # Wait until all tasks are completed
