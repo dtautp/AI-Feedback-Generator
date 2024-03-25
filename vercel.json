@@ -1,13 +1,9 @@
 {
-  "version": 2,
-  "builds": [{ "src": "app.py", "use": "@vercel/python" }],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app.py"
+  "functions": {
+    "api/app.py": {
+      "runtime": "python3.8",
+      "memory": 512,
+      "maxDuration": 30
     }
-  ],
-  "env": {
-    "FLASK_ENV": "production"
   }
 }
