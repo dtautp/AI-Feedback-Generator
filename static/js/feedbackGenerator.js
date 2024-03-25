@@ -66,13 +66,13 @@ function handleDrop(e) {
     for (var i = 0; i < files.length; i++) {
         if (allowedTypes.includes(files[i].type)) {
             validFiles.push(files[i]);
+        } else {
+            alert(`No se pudo cargar el archivo: ${files[i].name}, ya que solo se permiten archivos de tipo Word (docx) y PDF.`)
         }
     }
 
     if (validFiles.length > 0) {
         handleSelectedFiles(validFiles);
-    } else {
-        alert("Solo se permiten archivos de tipo Word (docx) y PDF.");
     }
 }
 
@@ -126,15 +126,22 @@ function handleSelectedFiles(files) {
             </div>
         `;
 
-        listItem.id = fileId;
-        listItem.innerHTML = liContent;
-        deleteButton.appendChild(deleteImage);
-        listItem.appendChild(deleteButton);
-        fileList.appendChild(listItem);
-        selectedFiles.push(files[i]);
+        if (selectedFiles.length <= 9) {
+            if (files[i].size <= 5 * 1024 * 1024) { // Verificar si el tamaño del archivo es menor o igual a 5 MB
+                listItem.id = fileId;
+                listItem.innerHTML = liContent;
+                deleteButton.appendChild(deleteImage);
+                listItem.appendChild(deleteButton);
+                fileList.appendChild(listItem);
+                selectedFiles.push(files[i]);
+                console.log(files[i].size);
+            } else {
+                alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el tamaño máximo de 5 MB`);
+            }
+        } else {
+            alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el número máximo de 10 archivos`);
+        }
     }
-
-    // console.log(selectedFiles);
 
     if (selectedFiles.length != 0) {
         uploadButtonFirst.style.display = 'none';
@@ -181,8 +188,6 @@ function createDeleteHandler(listItem, fileId, fileList) {
 //     form.submit();
 
 // });
-
-
 
 function extraerTextoPDF(contenido, frase) {
     return new Promise((resolve, reject) => {
