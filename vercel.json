@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "functions": {
-    "api": {
-      "runtime": "python3.8",
-      "memory": 512,
-      "includeFiles": ["app.py", "requirements.txt"]      
+  "builds": [{ "src": "app.py", "use": "@vercel/python" }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
     }
-  },
+  ],
   "env": {
     "FLASK_ENV": "production"
   }
