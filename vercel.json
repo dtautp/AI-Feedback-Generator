@@ -1,8 +1,13 @@
 {
-  "functions": {
-    "api/app.py": {
-      "memory": 550,
-      "maxDuration": 60
+  "version": 2,
+  "builds": [{ "src": "app.py", "use": "@vercel/python" }],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
     }
+  ],
+  "env": {
+    "FLASK_ENV": "production"
   }
 }
