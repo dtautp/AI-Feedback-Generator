@@ -1,8 +1,7 @@
 {
   "functions": {
     "api/app.py": {
-      "runtime": "python@3.8",
-      "memory": 512,
+      "runtime": "python3.8",
       "maxDuration": 30
     }
   }
