@@ -193,3 +193,11 @@ function getTextWidth(text, font) {
     document.body.removeChild(span); // Eliminar el span
     return width;
 }
+
+// Genera alerta cuando cuando se encuentra la variable err_code
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const errCode = urlParams.get('err_code');
+if (errCode=='timeout') {
+  alert("Ups! Parece que ha pasado un poco más de tiempo del esperado, no se pudieron procesar todos los documentos.");
+}

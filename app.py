@@ -115,6 +115,8 @@ async def loading():
     request_group = json.loads(request.form['request_group'])
     return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']))
 
+request_group_len = 0
+
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
 @app.route('/get-counter-semaphore', methods=['GET'])
@@ -122,9 +124,11 @@ def get_counter_semaphore():
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
         return redirect(url_for('login'))
-    
+    print(counter_semaphore._value)
     # Return the value of counter_semaphore
-    return json.dumps({'counter_semaphore_value': counter_semaphore._value})
+    return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'total_docs':request_group_len})
+
+
 
 # 7
 @app.route('/processing', methods=['GET','POST'])
@@ -135,8 +139,10 @@ async def processing():
     if 'session_details' not in  session:
         return redirect(url_for('login'))
     
+    global request_group_len
     request_group = request.form.get('request_group')
     request_group = json.loads(request_group)["request_group"]
+    request_group_len = len(request_group)
 
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
