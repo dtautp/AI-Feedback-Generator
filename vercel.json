@@ -1,16 +1,6 @@
 {
     "version": 2,
-    "builds": [
-      { 
-        "src": "app.py", 
-        "use": "@vercel/python", 
-        "functions":{
-          "api/app": {
-            "maxDuration": 20
-          }
-        }
-      }
-    ],
+    "builds": [{ "src": "app.py", "use": "@vercel/python" }],
     "routes": [
       {
         "src": "/(.*)",
@@ -19,6 +9,11 @@
     ],
     "env": {
       "FLASK_ENV": "production"
+    },
+    "functions": {
+      "api/app": {
+        "runtime": "python3.9",
+        "maxDuration": 30
+      }
     }
-
 }
