@@ -1,10 +1,10 @@
 from flask import Flask
 
-test = Flask(__name__)
+app = Flask(__name__)
 
-@test.route('/mi_test', methods=['POST','GET'])
+@app.route('/', methods=['POST','GET'])
 def home():
-    return "hello_world"
+    return "hello world"
 
 if __name__ == '__main__':
-    test.run(debug=True)
+    app.run(debug=True)
