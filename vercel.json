@@ -11,7 +11,7 @@
       "FLASK_ENV": "production"
     },
     "functions": {
-      "api/app": {
+      "api/processing": {
         "runtime": "python3.9",
         "maxDuration": 30
       }
