@@ -1,17 +1,13 @@
 {
-  "functions": {
-    "api/**/*.py": {
-      "maxDuration": 30
-    }
-  },  
   "version": 2,
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app.py"
+  "functions": {
+    "api": {
+      "runtime": "python3.8",
+      "memory": 512,
+      "includeFiles": ["app.py", "requirements.txt"],
+      "environment": {
+        "FLASK_ENV": "production"
+      }
     }
-  ],
-  "env": {
-    "FLASK_ENV": "production"
   }
 }
