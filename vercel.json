@@ -1,11 +1,7 @@
 {
-  "version": 2,
   "functions": {
     "api/test.py": {
       "maxDuration":30
     }
-  },
-  "env": {
-    "FLASK_ENV": "production"
   }
 }
