@@ -4,6 +4,7 @@ import time
 import datetime
 import json
 from firebase_module import select_system_prompt_by_id
+from helpers import time_stamp
 import asyncio
 
 api_key = os.getenv("OPENAI_API_KEY")
@@ -26,14 +27,6 @@ def create_post_openAI(question):
         presence_penalty = 0
     )
     return str(response.choices[0].message.content)
-
-
-
-def time_stamp():
-    current_datetime = datetime.datetime.now()
-    formatted_date = current_datetime.strftime("%d/%m/%Y %H:%M:%S")
-    return formatted_date
-
 
 def api_price_calculator(usage):
     COMPLETION_TOKEN_PRICE=0.0000015

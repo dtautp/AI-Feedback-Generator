@@ -53,7 +53,7 @@
                 </div>
                 <div class="file-datetime">
                     <img src="/static/img/calendar.svg" alt="">
-                    <p><strong>Fecha de creación:</strong>  {{ value.time_stamp}}</p>
+                    <p><strong>Fecha de creación:</strong>  {{ value.time_stamp | format_time_stamp}}</p>
                 </div>
             </div>
             <div class="assignment-detail">
