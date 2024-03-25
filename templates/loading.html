@@ -4,38 +4,9 @@
 
 {% block tabs %}
 
-<style>
-    .hidden-image {
-        display: none;
-    }
-
-    .progress-container{
-        display: flex;
-        width: 100%;
-        padding: 2px;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 10px;
-
-        border-radius: 2px;
-        background: var(--Azul-Azul-10, #EFF6FF);
-        box-shadow: 1px 0px 6px 0px rgba(74, 79, 85, 0.10) inset;
-    }
-
-    .progress-bar-design{
-        height: 10px;
-        border-radius: 2px;
-        background: linear-gradient(90deg, #0071BF 0%, #0661FC 49.5%, #B7E4FF 100%, #0091E9 100%);
-    }
-
-
-</style>
-
 <div class="loading">
     <div class="animation">
         
-
         <img id="gifDisplay"  alt="">
         <img  src="/static/img/animation-loading-1.gif" alt="" class="hidden-image">
         <img  src="/static/img/animation-loading-2.gif" alt="" class="hidden-image">
@@ -44,8 +15,6 @@
         <img  src="/static/img/animation-loading-5.gif" alt="" class="hidden-image">
     </div>
 
-    
-
     <div class="progress-bar">
         <p>Cargando...</p>
         <progress value="0" max="{{doc_number}}" id="Progress" style="display: none;"></progress>
@@ -53,8 +22,6 @@
             <div id="Progress_v2" class="w3-container  w3-round-large progress-bar-design" style="width: 0%;"></div>
         </div>
     </div>
-
-    
 
     <div class="progress-count">
         <p><span id="counterValue">0</span> de <span id="doc_number">{{doc_number}}</span> archivos</p>
@@ -87,11 +54,9 @@
         carrucel();
         setInterval(carrucel, 21850);
         document.getElementById("form").submit();
-        // fetchCounterSemaphoreValue();
-        // setInterval(fetchCounterSemaphoreValue, 100); //
+        fetchCounterSemaphoreValue();
+        setInterval(fetchCounterSemaphoreValue, 100); //
     };
-    
-
     
 </script>
 
