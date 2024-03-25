@@ -15,7 +15,7 @@ def get_datetime():
     return fecha_actual
 
 def time_stamp():
-    current_datetime = datetime.datetime.now()
+    current_datetime = datetime.now()
     formatted_date = current_datetime.strftime("%d/%m/%Y %H:%M:%S")
     return formatted_date
 
