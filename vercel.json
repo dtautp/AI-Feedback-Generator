@@ -1,17 +1,18 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "app.py"
-      }
-    ],
-    "env": {
-      "FLASK_ENV": "production"
-    },
-    "functions": {
-      "app.py": {
-        "maxDuration": 30
-      }
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9",
+      "maxDuration": 30
     }
+  },  
+  "version": 2,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": "production"
+  }
 }
