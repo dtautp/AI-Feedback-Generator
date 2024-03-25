@@ -128,6 +128,7 @@ def get_counter_semaphore():
 # 7
 @app.route('/processing', methods=['GET','POST'])
 async def processing():
+    # This text have been added just to do an update
     time_start = time.time()
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
