@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/app.py": {
-      "runtime": "python3.8",
+      "runtime": "now-python@3.8",
       "maxDuration": 30
     }
   }
