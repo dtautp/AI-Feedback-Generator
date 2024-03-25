@@ -128,6 +128,7 @@ def get_counter_semaphore():
 # 7
 @app.route('/processing', methods=['GET','POST'])
 async def processing():
+    # This text have been added just to do an update
     time_start = time.time()
     # Asegurar que el usuario se encuentre logeado
     if 'session_details' not in  session:
@@ -158,8 +159,10 @@ async def processing():
     
 
     try:
-        async with asyncio.timeout(15):
-            chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+            # chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+        tasks_coroutines = [asyncio.wait_for(track_and_execute(index, task, counter_semaphore), 15) for index, task in enumerate(tasks)]
+        chatgpt_responses = await asyncio.gather(*tasks_coroutines) 
+        print('Tiempo suficiente')
     except Exception as e:
         print(e)
         return "Time out"
@@ -207,7 +210,11 @@ def preview(id_requests_group):
 @app.route('/test_asyncio')
 def test_asyncio():
     help(asyncio)
-    return str(help(asyncio))
+    import pydoc
+    help_text = pydoc.render_doc("asyncio")
+    print(type(help_text))
+    print(help_text[:300])
+    return help_text[:300]
 
 
 
