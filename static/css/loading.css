@@ -10,13 +10,11 @@
     display: flex;
     justify-content: center;
     height: 280px;
-    border: 0;
 }
 
-.loading .animation img {
+.loading .animation #gifDisplay {
     width: 500px;
     height: 280px;
-    border: 0;
 }
 
 .loading .progress-bar {
