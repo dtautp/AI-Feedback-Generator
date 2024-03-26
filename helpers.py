@@ -14,21 +14,19 @@ def get_datetime():
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return fecha_actual
 
+def time_stamp():
+    current_datetime = datetime.now()
+    formatted_date = current_datetime.strftime("%d/%m/%Y %H:%M:%S")
+    return formatted_date
+
 def format_datetime(datetime_default):
-    datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S')
+    datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S') - timedelta(hours=5)
     return datetime_format.strftime('%d/%m/%Y %I:%M %p')
 
-# def first_paragraph_value(result_text):
-#     print('first: ' + result_text)
-#     try:
-#         result_text = result_text.replace('"', "'")
-#         result_text = json.loads(result_text)
-#         first_paragraph = result_text['first_paragraph']
-#         return first_paragraph
-#     except (json.JSONDecodeError, TypeError):
-#         print('error: ')
-#         return None
-    
+def format_time_stamp(datetime_default):
+    datetime_format = datetime.strptime(datetime_default, "%d/%m/%Y %H:%M:%S") - timedelta(hours=5)
+    return datetime_format.strftime('%d/%m/%Y %I:%M %p')    
+
 def first_paragraph_value(result_text):
     first_paragraph_match = re.search(r'"first_paragraph" : "(.*?)",', result_text)
     if first_paragraph_match:

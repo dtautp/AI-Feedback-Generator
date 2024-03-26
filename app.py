@@ -5,7 +5,7 @@ from openai_module import extract_feedback_from_response
 from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
-from helpers import format_datetime, first_paragraph_value, second_paragraph_value
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
 import json
 import time
 import os
@@ -18,6 +18,7 @@ app = Flask(__name__)
 
 # custom filter
 app.jinja_env.filters["format_date"] = format_datetime
+app.jinja_env.filters["format_time_stamp"] = format_time_stamp
 app.jinja_env.filters["first_paragraph_value"] = first_paragraph_value
 app.jinja_env.filters["second_paragraph_value"] = second_paragraph_value
 

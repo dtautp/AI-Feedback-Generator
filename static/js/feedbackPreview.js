@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('selectionCounter').textContent = `1 de ${totalSelections}`;
 });
 
-// Encapsular el estado en un objeto
 const fileSelector = {
     currentSelectionIndex: 1,
     totalSelections: document.querySelectorAll('.file_name').length,
@@ -84,6 +83,7 @@ function handleClick(event) {
 
     // Calcular el desplazamiento necesario para centrar el botón
     const scrollLeft = buttonRect.left - containerRect.left - (containerRect.width - buttonRect.width) / 2;
+    console.log(scrollLeft)
     
     // Desplazar el contenedor
     scrollContainer.scrollLeft += scrollLeft;
@@ -159,7 +159,7 @@ if (nextButton.disabled) {
     nextButton.classList.add('disabled');
 }
 
-// poner puntos suspensivos al norbre del archivo
+// poner puntos suspensivos al nombre del archivo
 document.addEventListener("DOMContentLoaded", function() {
     var fileTitles = document.getElementsByClassName("file-title");
     for (var i = 0; i < fileTitles.length; i++) {
