@@ -16,29 +16,22 @@ function carrucel(){
     },3800+(4500*3));
 }
 
-async function fetchCounterSemaphoreValue() {
-    let progressBar = document.getElementById('Progress');
+var PROGRESO = 0;
+function barra_progreso_definido(){
+    let doc_number = document.getElementById('doc_number').textContent;
     let progressBar_v2 = document.getElementById('Progress_v2');
-    try {
-        const response = await fetch('/get-counter-semaphore');
-        const data = await response.json();
-        
-        // progressBar.value = data.counter_semaphore_value;
-        if(data.counter_semaphore_value>=progressBar.value){
-            progressBar.value = data.counter_semaphore_value;
-            progressBar_v2.style.width = data.counter_semaphore_value/data.total_docs*100 + "%";
-            document.getElementById('counterValue').textContent = data.counter_semaphore_value;
-        }
-        
-    } catch (error) {
-        console.error('Error fetching counter semaphore value:', error);
+    if(PROGRESO <= doc_number){
+        progressBar_v2.style.width = PROGRESO/doc_number*100 + "%";
+        document.getElementById('counterValue').textContent = PROGRESO;
+        PROGRESO++;
     }
+    
+    
 }
 
 window.onload = function(){
     carrucel();
     setInterval(carrucel, 21850);
     document.getElementById("form").submit();
-    fetchCounterSemaphoreValue();
-    setInterval(fetchCounterSemaphoreValue, 100); //
+    setInterval(barra_progreso_definido, 800);
 };

@@ -118,14 +118,14 @@ request_group_len = 0
 
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
-@app.route('/get-counter-semaphore', methods=['GET'])
-def get_counter_semaphore():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
-    print(counter_semaphore._value)
-    # Return the value of counter_semaphore
-    return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'total_docs':request_group_len})
+# @app.route('/get-counter-semaphore', methods=['GET'])
+# def get_counter_semaphore():
+#     # Asegurar que el usuario se encuentre logeado
+#     if 'session_details' not in  session:
+#         return redirect(url_for('login'))
+#     print(counter_semaphore._value)
+#     # Return the value of counter_semaphore
+#     return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'total_docs':request_group_len})
 
 
 
