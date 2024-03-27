@@ -1,4 +1,5 @@
 var selectedFiles = [];
+var maxUploadFiles = 19;
 const fileInput = document.getElementById('fileInput');
 const uploadButtonFirst = document.getElementById('uploadButtonFirst');
 const uploadDesc = document.getElementById('uploadDesc');
@@ -126,7 +127,7 @@ function handleSelectedFiles(files) {
             </div>
         `;
 
-        if (selectedFiles.length <= 9) {
+        if (selectedFiles.length <= maxUploadFiles) {
             if (files[i].size <= 5 * 1024 * 1024) { // Verificar si el tamaño del archivo es menor o igual a 5 MB
                 listItem.id = fileId;
                 listItem.innerHTML = liContent;
