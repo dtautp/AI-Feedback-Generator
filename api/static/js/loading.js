@@ -33,5 +33,5 @@ window.onload = function(){
     carrucel();
     setInterval(carrucel, 21850);
     document.getElementById("form").submit();
-    setInterval(barra_progreso_definido, 800);
+    setInterval(barra_progreso_definido, 600);
 };
