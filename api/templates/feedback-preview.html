@@ -1,0 +1,100 @@
+<link href="/static/css/feedback-preview.css" rel="stylesheet">
+
+{% extends "layout-tabs.html" %}
+
+{% block tabs %}
+<div class="feedback-preview">
+    <div class="back-historic">
+        <a href="/feedback-historic">
+            <img src="/static/img/back-blue.svg" alt="">
+            <p>Ver historial</p>
+        </a>
+    </div>
+    <div class="preview-nav">
+        <div class="desc-download">
+            <div class="desc">
+                <img src="/static/img/file2.svg" alt="">
+                <p>Vista previa de feedback</p>
+            </div>
+            <form action="/generate_response_file" method="POST">
+                <input value="{{id_requests_group}}" type="hidden" name="id_request_group">
+                <button class="download" type="submit">
+                    <img src="/static/img/download-white.svg" alt="">
+                    <p>Descargar todo</p>
+                </button>
+            </form>
+            
+
+        </div>
+        <div class="files-name" id="scrollContainer">
+            {% for key, value in requests.items() %}
+                <button id="{{ key }}" class="file_name {% if loop.first %} selected {% endif %}">
+                    <p>{{ value.file_name }}</p>
+                </button>
+            {% endfor%}
+        </div>
+        <div class="files-nav">
+            <button class="disabled" id="prevButton">
+                <img src="/static/img/back.svg" alt="">
+                <p>Anterior archivo</p>
+            </button>
+            <p id="selectionCounter"></p>
+            <button id="nextButton">
+                <p>Siguiente archivo</p>
+                <img src="/static/img/back-blue.svg" style="transform: scaleX(-1);" alt="">
+            </button>
+        </div>
+    </div>
+    {% for key, value in requests.items() %}
+        <div id="{{ key }}" class="preview-content {% if loop.first %} active {% endif %}">
+            <div class="file-detail" id="fileDetail">
+                <div class="file-title">
+                    <p >{{ value.file_name }}</p>
+                </div>
+                <div class="file-datetime">
+                    <img src="/static/img/calendar.svg" alt="">
+                    <p><strong>Fecha de creación:</strong>  {{ value.time_stamp | format_time_stamp}}</p>
+                </div>
+            </div>
+            <div class="assignment-detail">
+                <p class="assignment-desc">Archivo de estudiante:</p>
+                <div class="assignment-text">
+                    <p>
+                        {{ value.user_prompt }}
+                    </p>
+                </div>
+            </div>
+            <div class="feedback-detail">
+                <div class="feedback-download">
+                    <p class="feedback-desc">Feedback:</p>
+                    <button class="button-copy" onclick="copyFeedbackText('{{ key }}')">
+                        <img src="/static/img/copy.svg" alt="">
+                        <p>Copiar</p>
+                    </button>
+                </div>
+                
+                <div class="feedback-text" id="feedbackText_{{ key }}">
+                    {% set first_paragraph = value.result_text | first_paragraph_value %}
+                    {% if first_paragraph %}
+                        <p>
+                            <strong>Comentario general</strong>
+                            <br>
+                            {{ first_paragraph }}
+                        </p>
+                    {% endif %}
+                    
+                    {% set second_paragraph = value.result_text | second_paragraph_value %}
+                    {% if second_paragraph %}
+                        <p>
+                            <strong>Comentarios específicos</strong>
+                            <br>
+                            {{ second_paragraph }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<script src="/static/js/feedbackPreview.js"></script>
+{% endblock %}

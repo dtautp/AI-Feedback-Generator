@@ -1,0 +1,117 @@
+.tab-historic {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 64px;
+    gap: 24px;
+}
+
+.tab-historic .download-feedback {
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tab-historic .download-title p {
+    color: var(--texto-primario);
+    font-size: var(--font-size-3);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.tab-historic .download-button button {
+    display: flex;
+    padding: 2px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 2px;
+    border: 1px solid var(--azul-primario);
+    background: var(--neutro-primario);
+}
+
+.tab-historic .download-button button img { 
+    width: 12px;
+    height: 12px;
+}
+
+.tab-historic .download-button button p { 
+    color: var(--azul-primario);
+    font-size: var(--font-size-1);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+}
+
+.tab-historic .list-feedbacks {
+    max-height: 300px; 
+    overflow-y: auto;
+}
+
+.tab-historic .list-feedbacks table {
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tab-historic .list-feedbacks thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.tab-historic .list-feedbacks th {
+    background: var(--azul-azul-70);
+    vertical-align: middle;
+}
+
+.tab-historic .list-feedbacks th p {
+    color: var(--neutro-primario);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+}
+
+.tab-historic .list-feedbacks .files_name p {
+    max-width: 300px;
+    text-align: left;
+}
+
+.tab-historic .list-feedbacks td {
+  vertical-align: middle;
+  max-width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-historic .list-feedbacks .preview_link {
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.tab-historic .list-feedbacks .preview_link img {
+    width: 16px;
+    height: 16px;
+}
+
+.tab-historic .list-feedbacks .preview_link p {
+    color: var(--azul-primario);
+    font-size: var(--font-size-2);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    text-decoration-line: underline;
+}
+
+.tab-historic .list-feedbacks .checkbox-custom {
+    width: 16px;
+    height: 16px;
+}
