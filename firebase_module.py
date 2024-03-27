@@ -4,7 +4,6 @@ import pyrebase
 import uuid
 import os
 import json
-import pandas as pd
 
 config = {
     'apiKey': os.environ.get('FIREBASE_API_KEY'),
