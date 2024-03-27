@@ -36,14 +36,17 @@ def validator_login(email, password):
 def validador_multiples_sesiones(email):
     user_email = email.split('@')[0]
     logins = dict(db.child("sessions_log").order_by_child("user_id").equal_to(user_email).get().val())
-    list_dict = []
+    dic_lis = []
     if(len(logins.keys())>0):
         for i in logins.keys():
-            logins[i]['user_id'] = i
-            list_dict.append(logins[i])
-        df = pd.DataFrame(list_dict)
-        lis = list(df[df['end_datetime'].isna()]['user_id'])
-        return (len(lis),lis)
+            dic = logins[i].copy()
+            dic['session_id'] = i
+            dic_lis.append(dic)
+        session_to_close = []
+        for i in dic_lis:
+            if(len(i.keys())<=4):
+                session_to_close.append(i['session_id'])
+        return (len(session_to_close), session_to_close)
     else:
         return (0,[])
 
