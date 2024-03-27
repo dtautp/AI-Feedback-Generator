@@ -8,18 +8,17 @@
         <div class="download-title" >
             <p>Historial de feedback generado</p>
         </div>
-        <div class="download-button">
+        <!-- <div class="download-button">
             <button>
                 <img src="/static/img/download.svg" alt="">
                 <p>Descargar</p>
             </button>
-        </div>
+        </div> -->
     </div>
     <div class="list-feedbacks">
         <table class="table table-striped">
             <thead class="">
                 <tr>
-                    <!-- <th><input class="checkbox-custom" type="checkbox"></th> -->
                     <th><p>Fecha creación</p></th>
                     <th><p>Feedback generado</p></th>
                     <th><p>Enlace</p></th>
@@ -28,7 +27,6 @@
             <tbody>
             {% for key, value in requests_group_user.items() %}
                 <tr id="{{ key }}">
-                    <!-- <td><input class="checkbox-custom" type="checkbox"></td> -->
                     <td><p>{{ value.create_datetime|format_date }}</p></td>
                     <td class="files_name"><p><strong>{{ value.file_name|length }} archivo: </strong>{{ value.file_name|join(', ') }}</p></td>
                     <td class="preview_link">
