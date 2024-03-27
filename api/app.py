@@ -1,7 +1,5 @@
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
-from openai_module import create_post_openAI
-from openai_module import request_prompt
-from openai_module import extract_feedback_from_response
+from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
 from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
