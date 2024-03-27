@@ -37,17 +37,21 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        if(validador_multiples_sesiones(email)):
-            return render_template('login.html', error_code = 'Multiples sesiones')
+        sesiones_multiples = validador_multiples_sesiones(email)
+        if(sesiones_multiples[0]>0):
+            if('close_multi_session_confirmation' in request.args):
+                for i in sesiones_multiples[1]:
+                    add_end_datetime_session(i)
+            else:
+                return render_template('login.html', error_code = 'Multiples sesiones encontradas. Si inicia sesión aquí, las demás se cerrarán.')
+        
         try:
             result = validator_login(email, password)
             session['session_details'] = result['session_details']
             session['session_id'] = result['session_id']
-            print(session)
             return redirect(url_for('feedback_generator'))
         except:
             return render_template('login.html', error_code = 'Login Fallido')
-        
     return render_template('login.html')
 
 # 2
@@ -119,14 +123,6 @@ request_group_len = 0
 
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
-# @app.route('/get-counter-semaphore', methods=['GET'])
-# def get_counter_semaphore():
-#     # Asegurar que el usuario se encuentre logeado
-#     if 'session_details' not in  session:
-#         return redirect(url_for('login'))
-#     print(counter_semaphore._value)
-#     # Return the value of counter_semaphore
-#     return json.dumps({'counter_semaphore_value': counter_semaphore._value, 'total_docs':request_group_len})
 
 
 
@@ -214,14 +210,7 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
-@app.route('/test_asyncio')
-def test_asyncio():
-    help(asyncio)
-    import pydoc
-    help_text = pydoc.render_doc("asyncio")
-    print(type(help_text))
-    print(help_text[:300])
-    return help_text[:300]
+
 
 
 

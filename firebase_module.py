@@ -4,6 +4,7 @@ import pyrebase
 import uuid
 import os
 import json
+import pandas as pd
 
 config = {
     'apiKey': os.environ.get('FIREBASE_API_KEY'),
@@ -33,13 +34,18 @@ def validator_login(email, password):
     return {'session_id': session_id, 'session_details': session_details}
 
 def validador_multiples_sesiones(email):
-    user_email = email
+    user_email = email.split('@')[0]
     logins = dict(db.child("sessions_log").order_by_child("user_id").equal_to(user_email).get().val())
-    multiples_logins = False
-    for i in logins.keys():
-        if(len(logins[i].keys())==3):
-            multiples_logins = True
-    return multiples_logins
+    list_dict = []
+    if(len(logins.keys())>0):
+        for i in logins.keys():
+            logins[i]['user_id'] = i
+            list_dict.append(logins[i])
+        df = pd.DataFrame(list_dict)
+        lis = list(df[df['end_datetime'].isna()]['user_id'])
+        return (len(lis),lis)
+    else:
+        return (0,[])
 
 def add_end_datetime_session(session_id):
     end_datetime = get_datetime()
@@ -58,8 +64,6 @@ def insert_requests_group(request_group, use_id):
             }
         request_group_data[group_id]['id_request'].append(request['id_request'])
         request_group_data[group_id]['file_name'].append(request['file_name'])
-
-    # print(request_group_data[group_id])
     db.child('requests_group').child(group_id).set(request_group_data[group_id])
 
 def insert_request(group_info, chatgpt_response, session_id, user_id):
@@ -93,7 +97,6 @@ def select_requests_group(user_id):
 
     #obtener datos de fb
     requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id).get()
-    # print(requests_group_user)
     # Ordenar las solicitudes por fecha de mayor a menor
     requests_group_user_order = sorted(requests_group_user.each(), key=lambda x: x.val().get("create_datetime", 0), reverse=True)
     # Convertir la lista ordenada en un diccionario
