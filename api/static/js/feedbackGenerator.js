@@ -63,13 +63,24 @@ function handleDrop(e) {
     var files = e.dataTransfer.files;
     var allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     var validFiles = [];
+    var extensionErrorList = [];
 
     for (var i = 0; i < files.length; i++) {
         if (allowedTypes.includes(files[i].type)) {
             validFiles.push(files[i]);
         } else {
-            alert(`No se pudo cargar el archivo: ${files[i].name}, ya que solo se permiten archivos de tipo Word (docx) y PDF.`)
+            extensionErrorList.push(files[i].name)
         }
+    }
+
+    if (extensionErrorList.length > 0) {
+        let errorMessage = `<p>No se pudieron agregar los siguientes archivos, ya que solo se permiten archivos de tipo Word (docx) o PDF:</p><ul>`;
+        extensionErrorList.forEach(function(errorItem) {
+            errorMessage += `<li><p>${errorItem}</p></li>`;
+        });
+        errorMessage += `</ul>`;
+        $('#extensionErrorModalBody').html(errorMessage);
+        $('#extensionErrorModal').modal('show');
     }
 
     if (validFiles.length > 0) {
@@ -108,7 +119,9 @@ function showSelectFiles(content, files) {
 
 function handleSelectedFiles(files) {
     var fileList = document.getElementById('selectedFilesList');
-
+    var sizeErrorList = []
+    var quantityErrorList = []
+    
     for (var i = 0; i < files.length; i++) {
         var fileId = 'file_' + i;
         var listItem = document.createElement('li');
@@ -137,13 +150,34 @@ function handleSelectedFiles(files) {
                 selectedFiles.push(files[i]);
                 console.log(files[i].size);
             } else {
-                alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el tamaño máximo de 5 MB`);
+                sizeErrorList.push(files[i].name)
             }
         } else {
-            alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el número máximo de 10 archivos`);
+            quantityErrorList.push(files[i].name)
         }
     }
 
+    // Mostrar modal de errores maximo de peso y archivos
+    if (sizeErrorList.length > 0) {
+        let errorMessage = `<p>No se pudieron agregar los siguientes archivos, ya que superaron el tamaño máximo de 5 MB:</p><ul>`;
+        sizeErrorList.forEach(function(errorItem) {
+            errorMessage += `<li><p>${errorItem}</p></li>`;
+        });
+        errorMessage += `</ul>`;
+        $('#sizeErrorModalBody').html(errorMessage);
+        $('#sizeErrorModal').modal('show');
+    }
+
+    if (quantityErrorList.length > 0) {
+        let errorMessage = `<p>No se pudieron agregar los siguientes archivos, ya que superaron el número máximo de ${maxUploadFiles + 1} archivos:</p><ul>`;
+        quantityErrorList.forEach(function(errorItem) {
+            errorMessage += `<li><p>${errorItem}</p></li>`;
+        });
+        errorMessage += `</ul>`;
+        $('#quantityErrorModalBody').html(errorMessage);
+        $('#quantityErrorModal').modal('show');
+    }
+    
     if (selectedFiles.length != 0) {
         uploadButtonFirst.style.display = 'none';
         uploadDesc.style.display = 'none';
@@ -181,14 +215,6 @@ function createDeleteHandler(listItem, fileId, fileList) {
         }
     };
 }
-
-// submitFiles.addEventListener('click', function(event) {
-//     event.preventDefault();
-
-//     var form = document.getElementById('uploadForm');
-//     form.submit();
-
-// });
 
 function extraerTextoPDF(contenido, frase) {
     return new Promise((resolve, reject) => {

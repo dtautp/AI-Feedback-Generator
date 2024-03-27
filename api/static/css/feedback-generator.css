@@ -268,3 +268,7 @@
     font-weight: 700;
     line-height: normal;
 }
+
+.modal .modal-body p {
+    font-size: var(--font-size-2);
+}
