@@ -140,7 +140,7 @@ function handleSelectedFiles(files) {
                 alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el tamaño máximo de 5 MB`);
             }
         } else {
-            // alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el número máximo de 10 archivos`);
+            alert(`No se pudo agregar el archivo ${files[i].name}, ya que superó el número máximo de 10 archivos`);
         }
     }
 
