@@ -16,7 +16,10 @@
                 <input type="password" class="form-control" name="password"  id="password" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1">
                 <img class="input-group-text" src="/static/img/password.svg" alt="">
             </div>
-            <button class="login-button" id="login-button">Iniciar sesión</button>
+            <button class="login-button" id="login-button">
+              Iniciar sesión 
+              <img src="/static/img/loading.gif" width="20px" class="loading_img" id="loading_img">
+            </button>
         </form>
         <label style="color: red;" id="error_code">{{error_code}}</label>
     </div>

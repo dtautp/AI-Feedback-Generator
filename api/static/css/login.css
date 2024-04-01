@@ -67,3 +67,7 @@
     font-weight: 500;
     line-height: normal;
 }
+
+.loading_img {
+    display: none; /* Initially hide loading GIF */
+}

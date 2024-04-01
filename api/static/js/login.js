@@ -1,4 +1,6 @@
 function form_submition(){
+    let loadingImg = document.getElementById("loading_img");
+    loadingImg.style.display = "inline-block";
     let form = document.getElementById('form');
     form.submit();
 }
@@ -11,6 +13,9 @@ const button = document.getElementById('login-button');
 button.addEventListener('click', function(event) {
     event.preventDefault();
     
+    let loadingImg = document.getElementById("loading_img");
+    loadingImg.style.display = "inline-block";
+
     let postData = {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
@@ -37,9 +42,11 @@ button.addEventListener('click', function(event) {
             if(data['response']==400){
                 let error_code = data['error_code'];
                 if(error_code=='login_fail'){
+                    loadingImg.style.display = "none";
                     document.getElementById('error_code').textContent = 'Usuario o contraseña incorrectos'
                 }
                 if(error_code=='multi_login'){
+                    loadingImg.style.display = "none";
                     $('#multiSessionsModal').modal('show');
                 }
             }
@@ -51,3 +58,5 @@ button.addEventListener('click', function(event) {
             console.error('There was a problem with the fetch operation:', error);
         });
 });
+
+
