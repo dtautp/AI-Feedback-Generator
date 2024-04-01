@@ -32,6 +32,11 @@ def validator_login(email, password):
     db.child('sessions_log').child(session_id).set(session_details)
     return {'session_id': session_id, 'session_details': session_details}
 
+def validator_login_datos(email, password):
+    user = auth.sign_in_with_email_and_password(email, password)
+    print(user)
+    return True
+
 def validador_multiples_sesiones(email):
     user_email = email.split('@')[0]
     logins = dict(db.child("sessions_log").order_by_child("user_id").equal_to(user_email).get().val())

@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
-from firebase_module import validator_login, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
+from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
@@ -38,20 +38,37 @@ def login():
         password = request.form.get('password')
         sesiones_multiples = validador_multiples_sesiones(email)
         if(sesiones_multiples[0]>0):
-            if('close_multi_session_confirmation' in request.args):
-                for i in sesiones_multiples[1]:
-                    add_end_datetime_session(i)
-            else:
-                return render_template('login.html', error_code = 'Multiples sesiones encontradas. Si inicia sesión aquí, las demás se cerrarán.')
-        
+            print(sesiones_multiples)
+            for i in sesiones_multiples[1]:
+                add_end_datetime_session(i)
         try:
             result = validator_login(email, password)
             session['session_details'] = result['session_details']
             session['session_id'] = result['session_id']
             return redirect(url_for('feedback_generator'))
         except:
-            return render_template('login.html', error_code = 'Login Fallido')
+            return render_template('login.html', error_code = 'Usuario o contraseña incorrectos')
     return render_template('login.html')
+
+# 1
+@app.route('/user_cheking', methods=['POST','GET'])
+def user_cheking():
+    if request.method == 'POST':
+        email = request.json.get('email')
+        password = request.json.get('password')
+        try:
+            # Validar de que el usuario sea correcto
+            validator_login_datos(email, password)
+            # Validar multiples sesiones
+            sesiones_multiples = validador_multiples_sesiones(email)
+            if(sesiones_multiples[0]>0):
+                print(sesiones_multiples)
+                return json.dumps({'response':400, 'error_code':'multi_login'})
+        except Exception as e:
+            print(e)
+            return json.dumps({'response':400, 'error_code':'login_fail'})
+    
+    return json.dumps({'response':200, 'error_code':''})
 
 # 2
 @app.route('/logout')

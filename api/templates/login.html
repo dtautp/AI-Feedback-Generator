@@ -7,16 +7,16 @@
     <div class="login-content">
         <p class="login-title">Generador de Feedback Automático</p>
         <p class="login-desc">Ingresa tus datos para <strong>iniciar sesión</strong></p>
-        <form class="login-form" action="/" method="POST" id="form">              
+        <form class="login-form" action="/" method="POST" id="form">
             <div class="user input-group mb-3">
-                <input type="text" class="form-control" name="email" placeholder="Correo UTP" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" name="email" id="email" placeholder="Correo UTP" aria-label="Username" aria-describedby="basic-addon1">
                 <img class="input-group-text" src="/static/img/mail.svg" alt="">
             </div>              
             <div class="password input-group mb-3">
-                <input type="password" class="form-control" name="password" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="password" class="form-control" name="password"  id="password" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1">
                 <img class="input-group-text" src="/static/img/password.svg" alt="">
             </div>
-            <button class="login-button" onclick="form_submition()">Iniciar sesión</button>
+            <button class="login-button" id="login-button">Iniciar sesión</button>
         </form>
         <label style="color: red;" id="error_code">{{error_code}}</label>
     </div>
@@ -27,14 +27,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Error al subir archivo</h5>
+          <h5 class="modal-title">Multiples sesiones encontradas!</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <p>Multiples sesiones encontradas. Si inicia sesión aquí, las demás se cerrarán.</p>
+            <p>Si continua, las demás sesiones se cerrarán.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continuar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="form_submition()">Continuar</button>
         </div>
       </div>
     </div>
