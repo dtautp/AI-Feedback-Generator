@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
-from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session
+from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
@@ -144,7 +144,6 @@ async def loading():
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
     request_group = json.loads(request.form['request_group'])
-    # print(json.loads(request.form['request_group']))
     return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']), homework_number = request.form['homework_number'])
 
 request_group_len = 0
@@ -206,8 +205,9 @@ async def processing():
 
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
-    
-    file = preparar_diccionario(select_requests_by_id_request_group(request.form.get('id_request_group')))
+    id_request_group = request.form.get('id_request_group')
+    file = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
+    contador_descargas(id_request_group)
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
 
 

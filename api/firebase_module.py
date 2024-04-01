@@ -124,3 +124,17 @@ def validador_session(session_id):
         return None
     else:
         return 'end_datetime' in dict(val_ses).keys()
+    
+
+def contador_descargas(id_request_group):
+    try:
+        dic = dict(db.child('requests_group').child(id_request_group).get().val())
+        if 'download_count' in dic.keys():
+            dic['download_count'] += 1
+            db.child('requests_group').child(id_request_group).set(dic)
+        else:
+            dic['download_count'] = 1
+            db.child('requests_group').child(id_request_group).set(dic)
+    except Exception as e:
+        print(e)
+    

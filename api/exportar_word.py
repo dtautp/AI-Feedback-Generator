@@ -40,7 +40,6 @@ def preparar_diccionario(request_list):
         dic['Fecha proceso'] = (0, request['time_stamp'])
         dic['Tarea entregada'] = (1, request['user_prompt'])
         text = ''
-        print(request['result_text'])
         try:
             text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'
         except Exception:
