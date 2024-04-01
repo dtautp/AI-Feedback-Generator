@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
-from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones
+from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
@@ -27,6 +27,26 @@ conversations = []
 text_assignments = []
 
 
+excluded_routes = ['', 'user_cheking','static']  # Add routes to exclude from session verification
+@app.before_request
+def before_request():
+    if(str(request.path).split('/')[1] not in excluded_routes):
+        if 'session_details' not in  session:
+            return redirect(url_for('login'))
+        val_ses = validador_session(session['session_id'])
+        if(val_ses == None):
+            session.pop('session_details', {})
+            session.pop('session_id', None)
+            return render_template('login.html', error_code = 'Error Sesión')
+        elif(val_ses == True):
+            session.pop('session_details', {})
+            session.pop('session_id', None)
+            return render_template('login.html', error_code = 'La sessión ha terminado')
+
+
+
+    
+
 # 1
 @app.route('/', methods=['POST','GET'])
 def login():
@@ -38,7 +58,6 @@ def login():
         password = request.form.get('password')
         sesiones_multiples = validador_multiples_sesiones(email)
         if(sesiones_multiples[0]>0):
-            print(sesiones_multiples)
             for i in sesiones_multiples[1]:
                 add_end_datetime_session(i)
         try:
@@ -62,7 +81,6 @@ def user_cheking():
             # Validar multiples sesiones
             sesiones_multiples = validador_multiples_sesiones(email)
             if(sesiones_multiples[0]>0):
-                print(sesiones_multiples)
                 return json.dumps({'response':400, 'error_code':'multi_login'})
         except Exception as e:
             print(e)
@@ -93,9 +111,6 @@ def guardar_resultados():
 
 @app.route('/feedback-generator', methods=['GET','POST'])
 def feedback_generator():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
 
     if request.method == 'POST':
         files = request.files.getlist('archivo')

@@ -34,7 +34,6 @@ def validator_login(email, password):
 
 def validator_login_datos(email, password):
     user = auth.sign_in_with_email_and_password(email, password)
-    print(user)
     return True
 
 def validador_multiples_sesiones(email):
@@ -117,3 +116,10 @@ def select_requests(id_requests_group):
     requests_data = {request.key(): request.val() for request in requests_order}
 
     return requests_data
+
+def validador_session(session_id):
+    val_ses = db.child('sessions_log').child(session_id).get().val()
+    if(val_ses == None):
+        return None
+    else:
+        return 'end_datetime' in dict(val_ses).keys()
