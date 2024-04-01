@@ -57,13 +57,14 @@ def add_end_datetime_session(session_id):
     end_datetime = get_datetime()
     db.child('sessions_log').child(session_id).child('end_datetime').set(end_datetime)
 
-def insert_requests_group(request_group, use_id):
+def insert_requests_group(request_group, use_id, homework_number):
     request_group_data = {}
     for request in request_group:
         group_id = request['id_request_group']
         if group_id not in request_group_data:
             request_group_data[group_id] = {
                 'id_user': use_id,
+                'homework_number' : homework_number,
                 'id_request': [],
                 'file_name': [],
                 'create_datetime': request['create_datetime'],

@@ -37,11 +37,13 @@ def before_request():
         if(val_ses == None):
             session.pop('session_details', {})
             session.pop('session_id', None)
-            return render_template('login.html', error_code = 'Error Sesión')
+            # return render_template('login.html', error_code = 'Error Sesión')
+            return redirect(url_for('login'))
         elif(val_ses == True):
             session.pop('session_details', {})
             session.pop('session_id', None)
-            return render_template('login.html', error_code = 'La sessión ha terminado')
+            # return render_template('login.html', error_code = 'La sessión ha terminado')
+            return redirect(url_for('login'))
 
 
 
@@ -102,12 +104,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/guardar_resultados', methods=['POST'])
-def guardar_resultados():
-    resultados = request.json
-    request_group = create_request_group2(resultados)
 
-    return json.dumps({'request_group':request_group})
 
 @app.route('/feedback-generator', methods=['GET','POST'])
 def feedback_generator():
@@ -118,15 +115,17 @@ def feedback_generator():
             
     return render_template('feedback-generator.html', current_route='/feedback-generator')
 
+@app.route('/guardar_resultados', methods=['POST'])
+def guardar_resultados():
+    resultados = request.json
+    request_group = create_request_group2(resultados)
+    return json.dumps({'request_group':request_group})
+
 
 
 # 4
 @app.route('/read-assignments', methods=['GET','POST'])
 def read_assignments():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
-
     request_group = []
 
     if request.method == 'POST':
@@ -141,30 +140,22 @@ def read_assignments():
 # 5
 @app.route('/loading', methods=['GET','POST'])
 async def loading():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
     
     global counter_semaphore
     counter_semaphore = asyncio.Semaphore(0)
     request_group = json.loads(request.form['request_group'])
-    return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']))
+    # print(json.loads(request.form['request_group']))
+    return render_template('loading.html', request_group=json.dumps(request_group), doc_number=len(request_group['request_group']), homework_number = request.form['homework_number'])
 
 request_group_len = 0
 
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
 
-
-
 # 7
 @app.route('/processing', methods=['GET','POST'])
 async def processing():
-    # This text have been added just to do an update
     time_start = time.time()
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
     
     global request_group_len
     request_group = request.form.get('request_group')
@@ -175,7 +166,7 @@ async def processing():
     counter_semaphore = asyncio.Semaphore(0)
     user_id = session.get('session_details',{})['user_id']
     file_text = []
-    insert_requests_group_result = insert_requests_group(request_group, user_id)
+    insert_requests_group_result = insert_requests_group(request_group, user_id, request.form.get('homework_number'))
     id_request_group = ''
     tasks = []
 
@@ -193,7 +184,7 @@ async def processing():
     
 
     try:
-            # chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
+        # chatgpt_responses = await asyncio.gather(*[track_and_execute(index, task, counter_semaphore) for index, task in enumerate(tasks)])
         tasks_coroutines = [asyncio.wait_for(track_and_execute(index, task, counter_semaphore), 40) for index, task in enumerate(tasks)]
         chatgpt_responses = await asyncio.gather(*tasks_coroutines) 
         print('Tiempo suficiente')
@@ -215,9 +206,6 @@ async def processing():
 
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
     
     file = preparar_diccionario(select_requests_by_id_request_group(request.form.get('id_request_group')))
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
@@ -225,36 +213,15 @@ def download_temp_document():
 
 @app.route('/feedback-historic')
 def feedback_historic():
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
     
     requests_group_user = select_requests_group(session.get('session_details',{})['user_id'])
     return render_template('feedback-historic.html', current_route='/feedback-historic', requests_group_user=requests_group_user)
 
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
-    # Asegurar que el usuario se encuentre logeado
-    if 'session_details' not in  session:
-        return redirect(url_for('login'))
 
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
-
-
-@app.route('/maxd_test', methods=['POST','GET'])
-def maxd_test():
-    start_time = time.time()
-    for i in range(40):
-        time.sleep(1)
-        if((i%5)==0):
-            print("step" + str(i))
-    end_time = time.time()
-    print("Exec Time:")
-    print(end_time-start_time)
-    return "This test have been a success!!!"
-
-
 
 
 

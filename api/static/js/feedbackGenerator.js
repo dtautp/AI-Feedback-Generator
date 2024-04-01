@@ -288,7 +288,8 @@ function enviarResultados(resultados) {
     })
     .then(data => {
       console.log('Respuesta del servidor:', data);
-      var form = document.getElementById("uploadForm");
+      let form = document.getElementById("uploadForm");
+      document.getElementById('homework_number').value = document.getElementById('tarea_numero').value
       form.removeChild(document.getElementById("fileInput"));
       document.getElementById("request_group").value = data;
       form.submit()

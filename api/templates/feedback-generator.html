@@ -15,7 +15,7 @@
         </div>
         <div class="input">
             <p>Tarea:</p>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" id="tarea_numero">
                 <option selected>Open this select menu</option>
                 <option value="1" selected>🔴 (AC-S04) Week 04 - Task: Assignment – Jobs and Occupations</option>
                 <option value="2">🔴 (AC-S07) Week 07 - Task: Assignment - My Family</option>
@@ -57,6 +57,7 @@
     </div>
     <form id="uploadForm" action="/loading" method="POST" enctype="multipart/form-data" class="upload-next">
         <input type="file" name="selectedFiles[]" id="fileInput" hidden multiple accept=".pdf,.docx">
+        <input type="hidden" name="homework_number" id="homework_number">
         <input type="hidden" name="request_group" id="request_group">
         <button type="button" id="submitFiles" class="btn btn-secondary" disabled>
             <p>siguiente</p>
