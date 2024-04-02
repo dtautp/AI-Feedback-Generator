@@ -32,17 +32,18 @@ excluded_routes = ['', 'user_cheking','static','guardar_resultados']  # Add rout
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
         if 'session_details' not in  session:
+            print("Sesion Flask no encontrada")
             return redirect(url_for('login', error_code="Sesión Error"))
         val_ses = validador_session(session['session_id'])
         if(val_ses == None):
             session.pop('session_details', {})
             session.pop('session_id', None)
-            # return render_template('login.html', error_code = 'Error Sesión')
+            print("Sesion Val resulto None")
             return redirect(url_for('login', error_code="Sesión Error"))
         elif(val_ses == True):
             session.pop('session_details', {})
             session.pop('session_id', None)
-            # return render_template('login.html', error_code = 'La sessión ha terminado')
+            print("Sesion Val resulto True")
             return redirect(url_for('login', error_code="Se ha cerrado la sesión"))
 
 
