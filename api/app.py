@@ -27,23 +27,23 @@ conversations = []
 text_assignments = []
 
 
-excluded_routes = ['', 'user_cheking','static']  # Add routes to exclude from session verification
+excluded_routes = ['', 'user_cheking','static','guardar_resultados']  # Add routes to exclude from session verification
 @app.before_request
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
         if 'session_details' not in  session:
-            return redirect(url_for('login'))
+            return redirect(url_for('login', error_code="Sesión Error"))
         val_ses = validador_session(session['session_id'])
         if(val_ses == None):
             session.pop('session_details', {})
             session.pop('session_id', None)
             # return render_template('login.html', error_code = 'Error Sesión')
-            return redirect(url_for('login'))
+            return redirect(url_for('login', error_code="Sesión Error"))
         elif(val_ses == True):
             session.pop('session_details', {})
             session.pop('session_id', None)
             # return render_template('login.html', error_code = 'La sessión ha terminado')
-            return redirect(url_for('login'))
+            return redirect(url_for('login', error_code="Se ha cerrado la sesión"))
 
 
 
@@ -67,8 +67,11 @@ def login():
             session['session_details'] = result['session_details']
             session['session_id'] = result['session_id']
             return redirect(url_for('feedback_generator'))
-        except:
-            return render_template('login.html', error_code = 'Usuario o contraseña incorrectos')
+        except Exception as e:
+            print(e)
+            return render_template('login.html', error_code = "Usuario o contraseña incorrectos")
+    if 'error_code' in request.args:
+        return render_template('login.html', error_code = request.args['error_code'])
     return render_template('login.html')
 
 # 1
@@ -213,17 +216,14 @@ def download_temp_document():
 
 @app.route('/feedback-historic')
 def feedback_historic():
-    
     requests_group_user = select_requests_group(session.get('session_details',{})['user_id'])
     return render_template('feedback-historic.html', current_route='/feedback-historic', requests_group_user=requests_group_user)
 
+
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
-
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
-
-
 
 
 if __name__ == '__main__':
