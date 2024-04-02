@@ -27,7 +27,7 @@ conversations = []
 text_assignments = []
 
 
-excluded_routes = ['', 'user_cheking','static','guardar_resultados']  # Add routes to exclude from session verification
+excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known']  # Add routes to exclude from session verification
 @app.before_request
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
