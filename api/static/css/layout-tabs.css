@@ -103,3 +103,9 @@
 .feedback-menu .nav-link:not(.active) {
     background: #F2F4F8 !important;
 }
+
+#btnLogout {
+    position: absolute;
+    top: 6%;
+    right: 2%;
+}
