@@ -1,7 +1,7 @@
 function copyFeedbackText(key) {
     // Selecciona el contenido del div
     var contenido = document.getElementById('feedbackText_' + key);
-    
+    contador_copy(key);
     // Verifica si el div tiene contenido
     if (contenido.innerText.trim() === '') {
         // Si no hay contenido, muestra un mensaje de alerta
@@ -33,6 +33,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalSelections = document.querySelectorAll('.file_name').length;
     document.getElementById('selectionCounter').textContent = `1 de ${totalSelections}`;
 });
+
+
+function contador_copy(key){
+    console.log(key)
+    const newData = {
+        request_id: key,
+    };
+
+    // Options for the fetch request
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+    };
+
+    // Make the API request
+    fetch('contador_copiar', options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display the updated response data
+            console.log(JSON.stringify(data));
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
 
 const fileSelector = {
     currentSelectionIndex: 1,

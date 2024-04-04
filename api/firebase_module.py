@@ -138,3 +138,15 @@ def contador_descargas(id_request_group):
     except Exception as e:
         print(e)
     
+
+def contador_copias(id_request):
+    try:
+        dic = dict(db.child('requests').child(id_request).get().val())
+        if 'copy_count' in dic.keys():
+            dic['copy_count'] += 1
+            db.child('requests').child(id_request).set(dic)
+        else:
+            dic['copy_count'] = 1
+            db.child('requests').child(id_request).set(dic)
+    except Exception as e:
+        print(e)
