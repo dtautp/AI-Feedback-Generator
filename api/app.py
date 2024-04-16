@@ -8,6 +8,7 @@ import json
 import time
 import os
 import asyncio
+import sys
 
 # import uuid
 # from datetime import datetime
@@ -235,6 +236,9 @@ def preview(id_requests_group):
 @app.route('/get_ruta')
 def get_ruta():
     current_file_path = os.path.abspath(__file__)
+    print("System path for module search:")
+    for path in sys.path:
+        print(path)
     return current_file_path
 
 if __name__ == '__main__':
