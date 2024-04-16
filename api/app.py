@@ -236,8 +236,9 @@ def preview(id_requests_group):
 @app.route('/get_ruta')
 def get_ruta():
     current_file_path = os.path.abspath(__file__)
+    print(current_file_path)
     print(current_file_path.split('\\'))
-    if(current_file_path.split('\\')[0]=='C:'):
+    if(current_file_path.split('\\')[1]=='var'):
         module_dir = os.path.abspath('/var/task/api')
         sys.path.append(module_dir)
 
