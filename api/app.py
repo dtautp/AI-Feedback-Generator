@@ -232,6 +232,10 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
 
+@app.route('/get_ruta')
+def get_ruta():
+    current_file_path = os.path.abspath(__file__)
+    return current_file_path
 
 if __name__ == '__main__':
     app.run(debug=True)
