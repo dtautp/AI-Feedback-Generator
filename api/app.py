@@ -28,7 +28,7 @@ conversations = []
 text_assignments = []
 
 
-excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known']  # Add routes to exclude from session verification
+excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known','get_ruta']  # Add routes to exclude from session verification
 @app.before_request
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
@@ -236,7 +236,11 @@ def preview(id_requests_group):
 @app.route('/get_ruta')
 def get_ruta():
     current_file_path = os.path.abspath(__file__)
-    print("System path for module search:")
+    print(current_file_path.split('\\'))
+    if(current_file_path.split('\\')[0]=='C:'):
+        module_dir = os.path.abspath('/var/task/api')
+        sys.path.append(module_dir)
+
     for path in sys.path:
         print(path)
     return current_file_path
