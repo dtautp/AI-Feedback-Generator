@@ -1,3 +1,12 @@
+import os
+import sys
+
+current_file_path = os.path.abspath(__file__)
+if(current_file_path[:4]=='/var'):
+    module_dir = os.path.abspath('/var/task/api')
+    sys.path.append(module_dir)
+
+
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
 from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias
@@ -6,9 +15,9 @@ from exportar_word import document_print, preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
 import json
 import time
-import os
+
 import asyncio
-import sys
+
 
 # import uuid
 # from datetime import datetime
@@ -236,8 +245,6 @@ def preview(id_requests_group):
 @app.route('/get_ruta')
 def get_ruta():
     current_file_path = os.path.abspath(__file__)
-    print(current_file_path)
-    print(current_file_path[:4])
     if(current_file_path[:4]=='/var'):
         module_dir = os.path.abspath('/var/task/api')
         sys.path.append(module_dir)
