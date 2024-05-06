@@ -101,9 +101,8 @@ def select_requests_by_id_request_group(id_request_group):
     return requests
 
 def select_requests_group(user_id):
-
     #obtener datos de fb
-    requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id).get()
+    requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id.lower()).get()
     # Ordenar las solicitudes por fecha de mayor a menor
     requests_group_user_order = sorted(requests_group_user.each(), key=lambda x: x.val().get("create_datetime", 0), reverse=True)
     # Convertir la lista ordenada en un diccionario
