@@ -35,7 +35,6 @@ def first_paragraph_value(result_text):
         first_paragraph = None
     return first_paragraph
 
-    
 def second_paragraph_value(result_text):
     start_index = result_text.find('"second_paragraph"') + len('"second_paragraph"') + 1
     end_index = result_text.find("]", start_index)
@@ -58,3 +57,15 @@ def second_paragraph_value(result_text):
 
     concatenated_ideas = ' '.join(ideas)
     return concatenated_ideas
+
+def get_form_by_homework(homework_number):
+    homework_form = {
+        'S04' : 'no form',
+        'S07' : 'https://docs.google.com/forms/d/e/1FAIpQLScmrgxoztCG0sXEi0BPVCLwYaYT6yFGd7HB-6lv2ttv6cvLAw/viewform?usp=pp_url&entry.611754790=',
+        'S09' : 'no form',
+        'S12' : 'no form',
+        'S14' : 'no form',
+        'S17' : 'no form'
+    }
+
+    return homework_form.get(homework_number, "no form")

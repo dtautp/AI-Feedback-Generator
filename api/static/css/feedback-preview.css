@@ -264,6 +264,11 @@
     overflow-y: auto;
 }
 
+.feedback-preview .preview-content .assignment-detail .assignment-text, 
+.preview-content .feedback-detail .feedback-text a {
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+}
+
 .feedback-preview .preview-content .assignment-detail .assignment-text p, 
 .preview-content .feedback-detail .feedback-text p {
     color: var(--texto-primario);

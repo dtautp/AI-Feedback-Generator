@@ -100,6 +100,10 @@ def select_requests_by_id_request_group(id_request_group):
     requests = dict(db.child("requests").order_by_child("id_request_group").equal_to(id_request_group).get().val())
     return requests
 
+def select_value_request_group(id_request_group):
+    requests = dict(db.child("requests_group").child(id_request_group).get().val())
+    return requests
+
 def select_requests_group(user_id):
     #obtener datos de fb
     requests_group_user = db.child("requests_group").order_by_child("id_user").equal_to(user_id.lower()).get()
