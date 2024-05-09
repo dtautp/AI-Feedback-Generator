@@ -77,8 +77,6 @@
                     {% set first_paragraph = value.result_text | first_paragraph_value %}
                     {% if first_paragraph %}
                         <p>
-                            <strong>Comentario general</strong>
-                            <br>
                             {{ first_paragraph }}
                         </p>
                     {% endif %}
@@ -86,8 +84,6 @@
                     {% set second_paragraph = value.result_text | second_paragraph_value %}
                     {% if second_paragraph %}
                         <p>
-                            <strong>Comentarios específicos</strong>
-                            <br>
                             {{ second_paragraph }}
                         </p>
                     {% endif %}
