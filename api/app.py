@@ -1,17 +1,20 @@
+import os
+import sys
+
+current_file_path = os.path.abspath(__file__)
+if(current_file_path[:4]=='/var'):
+    module_dir = os.path.abspath('/var/task/api')
+    sys.path.append(module_dir)
+
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
-from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias
+from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
-from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework
 import json
 import time
-import os
 import asyncio
-
-# import uuid
-# from datetime import datetime
-# this comment is a test
 
 app = Flask(__name__)
 
@@ -26,8 +29,7 @@ app.secret_key = 'secret'
 conversations = []
 text_assignments = []
 
-
-excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known']  # Add routes to exclude from session verification
+excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known','get_ruta']  # Add routes to exclude from session verification
 @app.before_request
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
@@ -45,10 +47,6 @@ def before_request():
             session.pop('session_id', None)
             print("Sesion Val resulto True")
             return redirect(url_for('login', error_code="Se ha cerrado la sesión"))
-
-
-
-    
 
 # 1
 @app.route('/', methods=['POST','GET'])
@@ -75,6 +73,7 @@ def login():
         return render_template('login.html', error_code = request.args['error_code'])
     return render_template('login.html')
 
+
 # 1
 @app.route('/user_cheking', methods=['POST','GET'])
 def user_cheking():
@@ -94,6 +93,7 @@ def user_cheking():
     
     return json.dumps({'response':200, 'error_code':''})
 
+
 # 2
 @app.route('/logout')
 def logout():
@@ -106,9 +106,6 @@ def logout():
         session_id = session.pop('session_id', None)
 
     return redirect(url_for('login'))
-
-
-
 
 @app.route('/feedback-generator', methods=['GET','POST'])
 def feedback_generator():
@@ -126,7 +123,6 @@ def guardar_resultados():
     return json.dumps({'request_group':request_group})
 
 
-
 # 4
 @app.route('/read-assignments', methods=['GET','POST'])
 def read_assignments():
@@ -141,6 +137,7 @@ def read_assignments():
             return "No se recibieron archivos"
     return redirect(url_for('loading', request_group=json.dumps({'request_group':request_group})))
 
+
 # 5
 @app.route('/loading', methods=['GET','POST'])
 async def loading():
@@ -152,8 +149,10 @@ async def loading():
 
 request_group_len = 0
 
+
 # 6
 counter_semaphore = asyncio.Semaphore(0) # Initialize a semaphore
+
 
 # 7
 @app.route('/processing', methods=['GET','POST'])
@@ -204,13 +203,12 @@ async def processing():
     return redirect(url_for('preview', id_requests_group=id_request_group))
     
 
-    
-
-
 @app.route('/generate_response_file',methods=['POST','GET'])
 def download_temp_document():
     id_request_group = request.form.get('id_request_group')
-    file = preparar_diccionario(select_requests_by_id_request_group(id_request_group))
+    request_group = select_value_request_group(id_request_group)
+    link_form_homework = get_form_by_homework(request_group['homework_number'])
+    file = preparar_diccionario(select_requests_by_id_request_group(id_request_group), link_form_homework)
     contador_descargas(id_request_group)
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
 
@@ -230,8 +228,10 @@ def feedback_historic():
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
     requests = select_requests(id_requests_group)
-    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group)
+    request_group = select_value_request_group(id_requests_group)
+    link_form_homework = get_form_by_homework(request_group['homework_number'])
 
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework)
 
 if __name__ == '__main__':
     app.run(debug=True)
