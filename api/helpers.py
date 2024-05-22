@@ -58,6 +58,9 @@ def second_paragraph_value(result_text):
     concatenated_ideas = ' '.join(ideas)
     return concatenated_ideas
 
+
+
+
 def get_form_by_homework(homework_number):
     homework_form = {
         'S04' : 'no form',
@@ -69,3 +72,21 @@ def get_form_by_homework(homework_number):
     }
 
     return homework_form.get(homework_number, "no form")
+
+
+def get_feedback(result_text):
+    result_json = json.loads(result_text)
+    result = ''
+    for i in result_json['feedback']:
+        result += '- ' + i + '\n'
+    result += '\n' +result_json['general-comment']
+    return result
+
+def get_feedback_print(result_text):
+    result_json = json.loads(result_text)
+    lis_result = []
+    for i in result_json['feedback']:
+        lis_result.append('- ' + i)
+    lis_result.append('')
+    lis_result.append(result_json['general-comment'])
+    return lis_result

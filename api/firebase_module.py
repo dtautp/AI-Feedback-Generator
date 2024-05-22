@@ -73,7 +73,7 @@ def insert_requests_group(request_group, use_id, homework_number):
         request_group_data[group_id]['file_name'].append(request['file_name'])
     db.child('requests_group').child(group_id).set(request_group_data[group_id])
 
-def insert_request(group_info, chatgpt_response, session_id, user_id):
+def insert_request(group_info, chatgpt_response, session_id, user_id, homework_number):
     insert_dict = {}
     request_id = group_info['id_request']
     insert_dict['id_session'] = session_id
@@ -81,7 +81,7 @@ def insert_request(group_info, chatgpt_response, session_id, user_id):
     insert_dict['file_name'] = group_info['file_name']
     insert_dict['id_user'] = user_id
     insert_dict['system_prompt_id'] = chatgpt_response['system_prompt_id']
-    insert_dict['user_prompt'] = chatgpt_response['user_prompt']
+    insert_dict['user_prompt'] = group_info['file_text']
     insert_dict['seed'] = chatgpt_response['seed']
     insert_dict['system_fingerprint'] = chatgpt_response['system_fingerprint']
     insert_dict['usage'] = chatgpt_response['usage']
@@ -89,6 +89,7 @@ def insert_request(group_info, chatgpt_response, session_id, user_id):
     insert_dict['time_stamp'] = chatgpt_response['time_stamp']
     insert_dict['price'] = chatgpt_response['price']
     insert_dict['execution_time'] = chatgpt_response['execution_time']
+    insert_dict['homework_number'] = homework_number
     db.child('requests').child(request_id).set(insert_dict)
     return insert_dict
 

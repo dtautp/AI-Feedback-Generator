@@ -7,11 +7,12 @@ if(current_file_path[:4]=='/var'):
     sys.path.append(module_dir)
 
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
-from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response
+from openai_module import create_post_openAI, request_prompt, extract_feedback_from_response, request_prompt_no_async
 from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
-from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework, get_feedback, get_feedback_print
+from grammformer_module import gramm
 import json
 import time
 import asyncio
@@ -23,13 +24,15 @@ app.jinja_env.filters["format_date"] = format_datetime
 app.jinja_env.filters["format_time_stamp"] = format_time_stamp
 app.jinja_env.filters["first_paragraph_value"] = first_paragraph_value
 app.jinja_env.filters["second_paragraph_value"] = second_paragraph_value
+app.jinja_env.filters["get_feedback"] = get_feedback
+app.jinja_env.filters["get_feedback_print"] = get_feedback_print
 
 app.secret_key = 'secret'
 
 conversations = []
 text_assignments = []
 
-excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known','get_ruta']  # Add routes to exclude from session verification
+excluded_routes = ['', 'user_cheking','static','guardar_resultados','.well-known','get_ruta','processing2']  # Add routes to exclude from session verification
 @app.before_request
 def before_request():
     if(str(request.path).split('/')[1] not in excluded_routes):
@@ -201,6 +204,22 @@ async def processing():
     print('Exec: ' + str(time_end - time_start))
 
     return redirect(url_for('preview', id_requests_group=id_request_group))
+
+
+# 7
+@app.route('/processing2', methods=['GET','POST'])
+def processing2():
+    grammformer = gramm()
+    request_group = json.loads(request.form.get('request_group'))["request_group"]
+    user_id = session.get('session_details',{})['user_id']
+    insert_requests_group(request_group, user_id, request.form.get('homework_number'))
+    for item in request_group:
+        id_request_group = item['id_request_group']
+        mistakes = grammformer.gramm_best(item['file_text'])
+        result = request_prompt_no_async(3, mistakes)
+        if result is not None:
+            insert_request(item, result, session.get('session_id'), user_id, request.form.get('homework_number')) # Perform your insertions here
+    return redirect(url_for('preview2', id_requests_group=id_request_group))
     
 
 @app.route('/generate_response_file',methods=['POST','GET'])
@@ -232,6 +251,16 @@ def preview(id_requests_group):
     link_form_homework = get_form_by_homework(request_group['homework_number'])
 
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework)
+
+
+@app.route('/feedback-preview2/<id_requests_group>')
+def preview2(id_requests_group):
+    requests = select_requests(id_requests_group)
+    request_group = select_value_request_group(id_requests_group)
+    link_form_homework = get_form_by_homework(request_group['homework_number'])
+
+    return render_template('feedback-preview2.html', current_route='/feedback-historic2', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,6 +4,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.opc.constants import RELATIONSHIP_TYPE
+from helpers import get_feedback, get_form_by_homework
 import json
 import time
 import io
@@ -90,23 +91,14 @@ def preparar_diccionario(request_list, link_form_homework):
         dic['Archivo Nombre'] = (2, request['file_name'])
         dic['Fecha Proceso'] = (0, request['time_stamp'])
         dic['Tarea Entregada'] = (1, request['user_prompt'])
-        
-        text = ''
-        try:
-            text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'
-        except Exception:
-            text += 'Error en el formato - 1er párrafo\n\n'
-        
-        try:
-            for j in json.loads(request['result_text'])['second_paragraph']:
-                text += j[list(j.keys())[0]] + ' '
-        except Exception:
-            text += 'Error en el formato - 2do párrafo '
 
-        if link_form_homework != 'no form':
-            text += f'\n\nHelp us to improve! Rate the feedback given by filling the following survey:\n{link_form_homework}{request_key}'
-
-        dic['Feedback'] = (1, text)
+        feedback = get_feedback(request['result_text'])
+        feedback += '\n' + '\nHelp us to improve! Rate the feedback given by filling the following survey:'
+        if ('homework_number' in request.keys()):
+            feedback += '\n' + get_form_by_homework(request['homework_number'])
+        else:
+            feedback += '\n' + get_form_by_homework('x')
+        dic['Feedback'] = (1, feedback)
         dic_lis.append(dic)
 
     # Generar el documento de Word con la función document_print
