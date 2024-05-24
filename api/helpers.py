@@ -83,7 +83,12 @@ def get_feedback(result_text):
     return result
 
 def get_feedback_print(result_text):
-    result_json = json.loads(result_text)
+    try:
+        result_json = json.loads(result_text)
+    except Exception as e:
+        print(e)
+        print(result_text)
+        return 'error formato'
     lis_result = []
     for i in result_json['feedback']:
         lis_result.append('- ' + i)

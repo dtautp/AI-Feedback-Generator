@@ -39,6 +39,7 @@ async def prompt_request(prompt, user_prompt, seed,temp_t, frequency_penalty):
         response = await asyncio.to_thread(
                 client.chat.completions.create,
                 model="gpt-3.5-turbo-0125",
+                response_format={ "type": "json_object" },
                 messages=[
                     {
                         "role": "system",
@@ -99,6 +100,7 @@ def prompt_request_no_async(prompt, user_prompt, seed,temp_t, frequency_penalty)
     try:
         response = client.chat.completions.create(
                 model="gpt-3.5-turbo-0125",
+                response_format={ "type": "json_object" },
                 messages=[
                     {
                         "role": "system",
@@ -110,7 +112,7 @@ def prompt_request_no_async(prompt, user_prompt, seed,temp_t, frequency_penalty)
                     }
                 ],
                 temperature=temp_t,
-                max_tokens=500,
+                max_tokens=1000,
                 # seed=seed,
                 top_p=1,
                 frequency_penalty=frequency_penalty,

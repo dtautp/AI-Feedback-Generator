@@ -1,5 +1,5 @@
 var selectedFiles = [];
-var maxUploadFiles = 19;
+var maxUploadFiles = 2000;
 const fileInput = document.getElementById('fileInput');
 const uploadButtonFirst = document.getElementById('uploadButtonFirst');
 const uploadDesc = document.getElementById('uploadDesc');
