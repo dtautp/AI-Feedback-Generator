@@ -43,6 +43,8 @@
             </button>
         </div>
     </div>
+    <!-- Contenedor para la alerta de copiado -->
+    <div id="alertContainer"></div>
     {% for key, value in requests.items() %}
         <div id="{{ key }}" class="preview-content {% if loop.first %} active {% endif %}">
             <div class="file-detail" id="fileDetail">

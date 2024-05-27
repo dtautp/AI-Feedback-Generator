@@ -52,7 +52,8 @@ def before_request():
 @app.route('/', methods=['POST','GET'])
 def login():
     if 'session_details' in  session:
-        return redirect(url_for('feedback_generator'))
+        # return redirect(url_for('feedback_generator'))
+        return redirect(url_for('feedback_historic'))
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -65,7 +66,8 @@ def login():
             result = validator_login(email, password)
             session['session_details'] = result['session_details']
             session['session_id'] = result['session_id']
-            return redirect(url_for('feedback_generator'))
+            # return redirect(url_for('feedback_generator'))
+            return redirect(url_for('feedback_historic'))
         except Exception as e:
             print(e)
             return render_template('login.html', error_code = "Usuario o contraseña incorrectos")
@@ -114,7 +116,8 @@ def feedback_generator():
         files = request.files.getlist('archivo')
         request_group = create_request_group(files)
             
-    return render_template('feedback-generator.html', current_route='/feedback-generator')
+    # return render_template('feedback-generator.html', current_route='/feedback-generator')
+    return redirect(url_for('feedback_historic'))   
 
 @app.route('/guardar_resultados', methods=['POST'])
 def guardar_resultados():

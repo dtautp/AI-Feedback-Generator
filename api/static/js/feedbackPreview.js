@@ -25,7 +25,35 @@ function copyFeedbackText(key) {
     selection.removeAllRanges();
 
     // Notifica al usuario que se ha copiado el contenido
-    alert('¡Contenido copiado al portapapeles!');
+    // alert('¡Contenido copiado al portapapeles!');
+    showBootstrapAlert('¡Contenido copiado al portapapeles!', 'success');
+}
+
+function showBootstrapAlert(message, alertType) {
+    var alertContainer = document.getElementById('alertContainer');
+    var alertId = 'alert-' + new Date().getTime();
+
+    // Crea el div de alerta
+    var alertDiv = document.createElement('div');
+    alertDiv.id = alertId;
+    alertDiv.className = 'alert alert-' + alertType + ' alert-dismissible fade show';
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = message;
+
+    // Añade la alerta al contenedor
+    alertContainer.appendChild(alertDiv);
+
+    // Auto cierra la alerta después de 3 segundos
+    setTimeout(function() {
+        var alertElement = document.getElementById(alertId);
+        if (alertElement) {
+            alertElement.classList.remove('show');
+            alertElement.classList.add('fade');
+            alertElement.addEventListener('transitionend', function() {
+                alertElement.remove();
+            });
+        }
+    }, 1000);
 }
 
 // Configurar el contador de selección al cargar la página
