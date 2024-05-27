@@ -213,7 +213,8 @@ def download_temp_document():
     id_request_group = request.form.get('id_request_group')
     request_group = select_value_request_group(id_request_group)
     link_form_homework = get_form_by_homework(request_group['homework_number'])
-    file = preparar_diccionario(select_requests_by_id_request_group(id_request_group), link_form_homework)
+    homework_number = request_group['homework_number']
+    file = preparar_diccionario(select_requests_by_id_request_group(id_request_group), link_form_homework, homework_number)
     contador_descargas(id_request_group)
     return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
 

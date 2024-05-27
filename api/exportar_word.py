@@ -8,6 +8,7 @@ import json
 import time
 import io
 import re
+from helpers import get_feedback
 
 # Función para crear hipervínculos en un párrafo
 def add_hyperlink(paragraph, text, url, relationship_id):
@@ -82,7 +83,40 @@ def document_print(dic_list):
     return f  # Devolver el objeto BytesIO
 
 # Función para preparar el diccionario
-def preparar_diccionario(request_list, link_form_homework):
+# def preparar_diccionario(request_list, link_form_homework):
+#     dic_lis = []
+#     for request_key in request_list.keys():
+#         request = request_list[request_key]
+#         dic = {}
+#         dic['Archivo Nombre'] = (2, request['file_name'])
+#         dic['Fecha Proceso'] = (0, request['time_stamp'])
+#         dic['Tarea Entregada'] = (1, request['user_prompt'])
+        
+#         text = ''
+#         try:
+#             text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'
+#         except Exception:
+#             text += 'Error en el formato - 1er párrafo\n\n'
+        
+#         try:
+#             for j in json.loads(request['result_text'])['second_paragraph']:
+#                 text += j[list(j.keys())[0]] + ' '
+#         except Exception:
+#             text += 'Error en el formato - 2do párrafo '
+
+#         if link_form_homework != 'no form':
+#             text += f'\n\nHelp us to improve! Rate the feedback given by filling the following survey:\n{link_form_homework}{request_key}'
+
+#         dic['Feedback'] = (1, text)
+#         dic_lis.append(dic)
+
+#     # Generar el documento de Word con la función document_print
+#     doc_file = document_print(dic_lis)
+
+#     return doc_file  # Devolver el objeto BytesIO
+
+# Función para preparar el diccionario
+def preparar_diccionario(request_list, link_form_homework, homework_number):
     dic_lis = []
     for request_key in request_list.keys():
         request = request_list[request_key]
@@ -90,23 +124,28 @@ def preparar_diccionario(request_list, link_form_homework):
         dic['Archivo Nombre'] = (2, request['file_name'])
         dic['Fecha Proceso'] = (0, request['time_stamp'])
         dic['Tarea Entregada'] = (1, request['user_prompt'])
-        
-        text = ''
-        try:
-            text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'
-        except Exception:
-            text += 'Error en el formato - 1er párrafo\n\n'
-        
-        try:
-            for j in json.loads(request['result_text'])['second_paragraph']:
-                text += j[list(j.keys())[0]] + ' '
-        except Exception:
-            text += 'Error en el formato - 2do párrafo '
 
-        if link_form_homework != 'no form':
-            text += f'\n\nHelp us to improve! Rate the feedback given by filling the following survey:\n{link_form_homework}{request_key}'
+        if (homework_number != 'S09'):
+            text = ''
+            try:
+                text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'
+            except Exception:
+                text += 'Error en el formato - 1er párrafo\n\n'
+            
+            try:
+                for j in json.loads(request['result_text'])['second_paragraph']:
+                    text += j[list(j.keys())[0]] + ' '
+            except Exception:
+                text += 'Error en el formato - 2do párrafo '
 
-        dic['Feedback'] = (1, text)
+            if link_form_homework != 'no form':
+                text += f'\n\nHelp us to improve! Rate the feedback given by filling the following survey:\n{link_form_homework}{request_key}'
+
+            dic['Feedback'] = (1, text)
+        else:
+            feedback = get_feedback(request['result_text'])
+            feedback += f'\n\nHelp us to improve! Rate the feedback given by filling the following survey:\n{link_form_homework}{request_key}'
+            dic['Feedback'] = (1, feedback)
         dic_lis.append(dic)
 
     # Generar el documento de Word con la función document_print

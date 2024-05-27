@@ -62,7 +62,7 @@ def get_form_by_homework(homework_number):
     homework_form = {
         'S04' : 'no form',
         'S07' : 'https://docs.google.com/forms/d/e/1FAIpQLScmrgxoztCG0sXEi0BPVCLwYaYT6yFGd7HB-6lv2ttv6cvLAw/viewform?usp=pp_url&entry.611754790=',
-        'S09' : 'no form',
+        'S09' : 'https://docs.google.com/forms/d/e/1FAIpQLSdA2thYoQSwrCgsMfu0k_RPeikhOwbA9CY82RD3IZyXqIA_TA/viewform?usp=pp_url&entry.611754790=',
         'S12' : 'no form',
         'S14' : 'no form',
         'S17' : 'no form'
