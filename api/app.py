@@ -56,7 +56,7 @@ def login():
         return redirect(url_for('feedback_historic'))
 
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email').lower()
         password = request.form.get('password')
         sesiones_multiples = validador_multiples_sesiones(email)
         if(sesiones_multiples[0]>0):

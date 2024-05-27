@@ -5,7 +5,7 @@ import re
 
 def email_to_code(email):
     user_id = email.split('@')[0]
-    return user_id
+    return user_id.lower()
 
 def generate_id():
     return str(uuid.uuid4())

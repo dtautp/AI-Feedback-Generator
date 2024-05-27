@@ -26,7 +26,7 @@ def validator_login(email, password):
     session_id = str(uuid.uuid4())
     session_details = {
         'user_id': email_to_code(email),
-        'user_email': email,
+        'user_email': email.lower(),
         'start_datetime': current_datetime
     }
     db.child('sessions_log').child(session_id).set(session_details)
@@ -37,7 +37,7 @@ def validator_login_datos(email, password):
     return True
 
 def validador_multiples_sesiones(email):
-    user_email = email.split('@')[0]
+    user_email = email.split('@')[0].lower()
     logins = dict(db.child("sessions_log").order_by_child("user_id").equal_to(user_email).get().val())
     dic_lis = []
     if(len(logins.keys())>0):
@@ -63,7 +63,7 @@ def insert_requests_group(request_group, use_id, homework_number):
         group_id = request['id_request_group']
         if group_id not in request_group_data:
             request_group_data[group_id] = {
-                'id_user': use_id,
+                'id_user': use_id.lower(),
                 'homework_number' : homework_number,
                 'id_request': [],
                 'file_name': [],
@@ -79,7 +79,7 @@ def insert_request(group_info, chatgpt_response, session_id, user_id):
     insert_dict['id_session'] = session_id
     insert_dict['id_request_group'] = group_info['id_request_group']
     insert_dict['file_name'] = group_info['file_name']
-    insert_dict['id_user'] = user_id
+    insert_dict['id_user'] = user_id.lower()
     insert_dict['system_prompt_id'] = chatgpt_response['system_prompt_id']
     insert_dict['user_prompt'] = chatgpt_response['user_prompt']
     insert_dict['seed'] = chatgpt_response['seed']
