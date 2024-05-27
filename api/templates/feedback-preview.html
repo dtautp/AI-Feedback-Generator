@@ -74,25 +74,41 @@
                 </div>
                 
                 <div class="feedback-text" id="feedbackText_{{ key }}">
-                    {% set first_paragraph = value.result_text | first_paragraph_value %}
-                    {% if first_paragraph %}
-                        <p>
-                            {{ first_paragraph }}
-                        </p>
-                    {% endif %}
+                    {% if homework_number != 'S09' %}
                     
-                    {% set second_paragraph = value.result_text | second_paragraph_value %}
-                    {% if second_paragraph %}
-                        <p>
-                            {{ second_paragraph }}
-                        </p>
-                    {% endif %}
-                    
-                    {% if link_form_homework != 'no form' %}
-                        <p>
-                            👋Help us to improve! Rate the feedback given by filling the following survey:
-                            <a target="_blank" href="{{ link_form_homework }}{{ key }}">{{ link_form_homework }}{{ key }}</a>
-                        </p>
+                        {% set first_paragraph = value.result_text | first_paragraph_value %}
+                        {% if first_paragraph %}
+                            <p>
+                                {{ first_paragraph }}
+                            </p>
+                        {% endif %}
+                        
+                        {% set second_paragraph = value.result_text | second_paragraph_value %}
+                        {% if second_paragraph %}
+                            <p>
+                                {{ second_paragraph }}
+                            </p>
+                        {% endif %}
+                        
+                        {% if link_form_homework != 'no form' %}
+                            <p>
+                                👋Help us to improve! Rate the feedback given by filling the following survey:
+                                <a target="_blank" href="{{ link_form_homework }}{{ key }}">{{ link_form_homework }}{{ key }}</a>
+                            </p>
+                        {% endif %}
+
+                    {% else %}
+                        {% set feedback_list = value.result_text | get_feedback_print %}
+                        {% for feed in feedback_list %}
+                            {{ feed }}<br>
+                        {% endfor %}
+                        
+                        {% if link_form_homework != 'no form' %}
+                            <p>
+                                👋Help us to improve! Rate the feedback given by filling the following survey:
+                                <a target="_blank" href="{{ link_form_homework }}{{ key }}">{{ link_form_homework }}{{ key }}</a>
+                            </p>
+                        {% endif %}
                     {% endif %}
 
                 </div>

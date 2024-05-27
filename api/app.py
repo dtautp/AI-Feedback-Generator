@@ -11,7 +11,7 @@ from openai_module import create_post_openAI, request_prompt, extract_feedback_f
 from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, insert_requests_group, select_requests_by_id_request_group,  select_requests_group, insert_request, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group
 from extract_text import update_textAssignments, create_request_group, create_request_group2
 from exportar_word import document_print, preparar_diccionario
-from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework, get_feedback, get_feedback_print
 import json
 import time
 import asyncio
@@ -23,6 +23,8 @@ app.jinja_env.filters["format_date"] = format_datetime
 app.jinja_env.filters["format_time_stamp"] = format_time_stamp
 app.jinja_env.filters["first_paragraph_value"] = first_paragraph_value
 app.jinja_env.filters["second_paragraph_value"] = second_paragraph_value
+app.jinja_env.filters["get_feedback"] = get_feedback
+app.jinja_env.filters["get_feedback_print"] = get_feedback_print
 
 app.secret_key = 'secret'
 
@@ -233,8 +235,9 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     request_group = select_value_request_group(id_requests_group)
     link_form_homework = get_form_by_homework(request_group['homework_number'])
+    homework_number = request_group['homework_number']
 
-    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework)
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number)
 
 if __name__ == '__main__':
     app.run(debug=True)
