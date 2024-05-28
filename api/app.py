@@ -234,6 +234,7 @@ def feedback_historic():
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
     requests = select_requests(id_requests_group)
+    print(requests)
     request_group = select_value_request_group(id_requests_group)
     link_form_homework = get_form_by_homework(request_group['homework_number'])
     homework_number = request_group['homework_number']

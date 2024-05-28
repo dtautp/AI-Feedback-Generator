@@ -99,9 +99,11 @@
 
                     {% else %}
                         {% set feedback_list = value.result_text | get_feedback_print %}
-                        {% for feed in feedback_list %}
-                            {{ feed }}<br>
-                        {% endfor %}
+                        <p>
+                            {% for feed in feedback_list %}
+                                {{ feed }}<br>
+                            {% endfor %}
+                        </p>
                         
                         {% if link_form_homework != 'no form' %}
                             <p>
