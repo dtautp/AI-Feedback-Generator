@@ -25,7 +25,7 @@ def format_datetime(datetime_default):
 
 def format_time_stamp(datetime_default):
     datetime_format = datetime.strptime(datetime_default, "%d/%m/%Y %H:%M:%S") - timedelta(hours=5)
-    return datetime_format.strftime('%d/%m/%Y %I:%M %p')    
+    return datetime_format.strftime('%d/%m/%Y')    
 
 def first_paragraph_value(result_text):
     first_paragraph_match = re.search(r'"first_paragraph" : "(.*?)",', result_text)
