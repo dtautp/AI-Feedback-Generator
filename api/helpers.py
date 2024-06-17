@@ -63,9 +63,9 @@ def get_form_by_homework(homework_number):
         'S04' : 'no form',
         'S07' : 'https://docs.google.com/forms/d/e/1FAIpQLScmrgxoztCG0sXEi0BPVCLwYaYT6yFGd7HB-6lv2ttv6cvLAw/viewform?usp=pp_url&entry.611754790=',
         'S09' : 'https://docs.google.com/forms/d/e/1FAIpQLSdA2thYoQSwrCgsMfu0k_RPeikhOwbA9CY82RD3IZyXqIA_TA/viewform?usp=pp_url&entry.611754790=',
-        'S12' : 'no form',
-        'S14' : 'no form',
-        'S17' : 'no form'
+        'S12' : 'https://docs.google.com/forms/d/e/1FAIpQLSeR07pEJXEy5WCre_5kOwY3IIaSbz_vFxXEJNyVhPb4BVkuOA/viewform?usp=pp_url&entry.611754790=',
+        'S14' : 'https://docs.google.com/forms/d/e/1FAIpQLSfFuZ5MHaCdq5k4PmA5JW1PZdOu6lNrtloYrgQgIcyA-p6oGw/viewform?usp=pp_url&entry.611754790=',
+        'S17' : 'https://docs.google.com/forms/d/e/1FAIpQLSchfWTIpidsQQ4s-xOM3mRezdj0d77aFcc2eUgCf_jQ7mqIjg/viewform?usp=pp_url&entry.611754790='
     }
 
     return homework_form.get(homework_number, "no form")
