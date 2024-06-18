@@ -125,7 +125,7 @@ def preparar_diccionario(request_list, link_form_homework, homework_number):
         dic['Fecha Proceso'] = (0, request['time_stamp'])
         dic['Tarea Entregada'] = (1, request['user_prompt'])
 
-        if (homework_number != 'S09'):
+        if ( (homework_number == 'S04') or (homework_number == 'S07') ):
             text = ''
             try:
                 text += json.loads(request['result_text'])['first_paragraph'] + '\n\n'

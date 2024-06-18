@@ -74,7 +74,7 @@
                 </div>
                 
                 <div class="feedback-text" id="feedbackText_{{ key }}">
-                    {% if homework_number != 'S09' %}
+                    {% if (homework_number == 'S04') or (homework_number == 'S07')  %}
                     
                         {% set first_paragraph = value.result_text | first_paragraph_value %}
                         {% if first_paragraph %}
@@ -103,6 +103,7 @@
                             {% for feed in feedback_list %}
                                 {{ feed }}<br>
                             {% endfor %}
+                            <br>
                         </p>
                         
                         {% if link_form_homework != 'no form' %}
