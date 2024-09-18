@@ -9,21 +9,29 @@
             <img src="/static/img/back-blue.svg" alt="">
             <p>Ver historial</p>
         </a>
+        <form action="/generate_response_file" method="POST">
+            <input value="{{id_requests_group}}" type="hidden" name="id_request_group">
+            <button class="download" type="submit">
+                <img src="/static/img/download-white.svg" alt="">
+                <p>Descargar todo</p>
+            </button>
+        </form>
+    </div>
+    <div class="file-detail">
+        <div class="file-assignment">
+            <img src="/static/img/calendar.svg" alt="">
+            <p><strong>Actividad: </strong>🔴 (AC-S07) Week 07 - Task: Assignment - My Family</p>
+        </div>
+        <div class="file-section">
+            <img src="/static/img/calendar.svg" alt="">
+            <p><strong>Sección: </strong>12345</p>
+        </div>
+        <!-- <div class="file-datetime">
+            <img src="/static/img/calendar.svg" alt="">
+            <p><strong>Fecha de creación:</strong>18/09/2024</p>
+        </div> -->
     </div>
     <div class="preview-nav">
-        <div class="desc-download">
-            <div class="desc">
-                <img src="/static/img/file2.svg" alt="">
-                <p>Vista previa de feedback</p>
-            </div>
-            <form action="/generate_response_file" method="POST">
-                <input value="{{id_requests_group}}" type="hidden" name="id_request_group">
-                <button class="download" type="submit">
-                    <img src="/static/img/download-white.svg" alt="">
-                    <p>Descargar todo</p>
-                </button>
-            </form>
-        </div>
         <div class="files-name" id="scrollContainer">
             {% for key, value in requests.items() %}
                 <button id="{{ key }}" class="file_name {% if loop.first %} selected {% endif %}">
@@ -43,11 +51,9 @@
             </button>
         </div>
     </div>
-    <!-- Contenedor para la alerta de copiado -->
-    <div id="alertContainer"></div>
     {% for key, value in requests.items() %}
         <div id="{{ key }}" class="preview-content {% if loop.first %} active {% endif %}">
-            <div class="file-detail" id="fileDetail">
+            <!-- <div class="file-detail" id="fileDetail">
                 <div class="file-title">
                     <p >{{ value.file_name }}</p>
                 </div>
@@ -55,9 +61,9 @@
                     <img src="/static/img/calendar.svg" alt="">
                     <p><strong>Fecha de creación:</strong>  {{ value.time_stamp | format_time_stamp}}</p>
                 </div>
-            </div>
+            </div> -->
             <div class="assignment-detail">
-                <p class="assignment-desc">Archivo de estudiante:</p>
+                <p class="assignment-desc">Archivo del estudiante: {{ value.file_name }}</p>
                 <div class="assignment-text">
                     <p>
                         {{ value.user_prompt }}
@@ -93,6 +99,7 @@
             </div>
         </div>
     {% endfor %}
+    <div id="alertContainer"></div>
 </div>
 <script src="/static/js/feedbackPreview.js?v=1"></script>
 {% endblock %}

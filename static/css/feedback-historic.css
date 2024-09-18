@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 64px;
+    padding: 50px;
     gap: 24px;
 }
 
@@ -76,9 +76,9 @@
     line-height: 21px;
 }
 
-.tab-historic .list-feedbacks .files_name p {
+.tab-historic .list-feedbacks .count_files p {
     max-width: 300px;
-    text-align: left;
+    text-align: center;
 }
 
 .tab-historic .list-feedbacks td {

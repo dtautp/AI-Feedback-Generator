@@ -4,6 +4,9 @@ import pyrebase
 import uuid
 import os
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 config = {
     'apiKey': os.environ.get('FIREBASE_API_KEY'),
