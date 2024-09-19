@@ -88,7 +88,7 @@
 .feedback-preview .file-detail div {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
 }
 
 .feedback-preview .file-detail div p {
@@ -98,6 +98,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.feedback-preview .file-detail img {
+    width: 18px;
 }
 
 .feedback-preview .preview-nav .files-name {

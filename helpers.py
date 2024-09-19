@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import uuid
 import json
 import re
+import html
 
 def email_to_code(email):
     user_id = email.split('@')[0]
@@ -60,7 +61,7 @@ def second_paragraph_value(result_text):
 
 def get_form_by_homework(homework_number):
     homework_form = {
-        'S04' : 'no form',
+        'S04' : 'https://docs.google.com/forms/d/e/1FAIpQLSc2E6385BKy7Tdi-fyQIPLqG9AWI5mPKzU76jehojXNxa2Fmw/viewform?usp=pp_url&entry.611754790=',
         'S07' : 'https://docs.google.com/forms/d/e/1FAIpQLScmrgxoztCG0sXEi0BPVCLwYaYT6yFGd7HB-6lv2ttv6cvLAw/viewform?usp=pp_url&entry.611754790=',
         'S09' : 'https://docs.google.com/forms/d/e/1FAIpQLSdA2thYoQSwrCgsMfu0k_RPeikhOwbA9CY82RD3IZyXqIA_TA/viewform?usp=pp_url&entry.611754790=',
         'S12' : 'https://docs.google.com/forms/d/e/1FAIpQLSeR07pEJXEy5WCre_5kOwY3IIaSbz_vFxXEJNyVhPb4BVkuOA/viewform?usp=pp_url&entry.611754790=',
@@ -78,16 +79,14 @@ def get_feedback(result_text):
     result += '\n' +result_json['general-comment']
     return result
 
-def get_feedback_print(result_text):
-    try:
-        result_json = json.loads(result_text)
-    except Exception as e:
-        print(e)
-        print(result_text)
-        return 'error formato'
-    lis_result = []
-    for i in result_json['feedback']:
-        lis_result.append( i)
-    lis_result.append('')
-    lis_result.append(result_json['general-comment'])
-    return lis_result
+def get_name_homework(homework_number):
+    homework_form = {
+        'S04' : '🔴 (AC-S04) Week 04 - Task: Assignment – Jobs and Occupation',
+        'S07' : '🔴 (AC-S07) Week 07 - Task: Assignment - My Family',
+        'S09' : '🔴 (AC-S09) Week 09 - Task: Assignment - A family member I admire',
+        'S12' : '🔴 (AC-S12) Week 12 - Task: Assignment – What\'s their daily routine?',
+        'S14' : '🔴 (AC-S14) Week 14 - Task: Assignment - Things I like and don\'t like',
+        'S17' : '🔴 (AC-S17) Week 17 - Task: Assignment - Final Assignment - “Applying to Disney - Part I'
+    }
+
+    return homework_form.get(homework_number, "no name")

@@ -9,7 +9,7 @@ if(current_file_path[:4]=='/var'):
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
 from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, select_requests_by_id_request_group, select_requests_group, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group
 from exportar_word import preparar_diccionario
-from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework, get_feedback, get_feedback_print
+from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework, get_feedback, get_name_homework
 import json
 
 app = Flask(__name__)
@@ -20,7 +20,7 @@ app.jinja_env.filters["format_time_stamp"] = format_time_stamp
 app.jinja_env.filters["first_paragraph_value"] = first_paragraph_value
 app.jinja_env.filters["second_paragraph_value"] = second_paragraph_value
 app.jinja_env.filters["get_feedback"] = get_feedback
-app.jinja_env.filters["get_feedback_print"] = get_feedback_print
+app.jinja_env.filters["get_name_homework"] = get_name_homework
 
 app.secret_key = 'secret'
 
@@ -125,12 +125,14 @@ def feedback_historic():
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
     requests = select_requests(id_requests_group)
-    print(requests)
+    # print(requests)
     request_group = select_value_request_group(id_requests_group)
     link_form_homework = get_form_by_homework(request_group['homework_number'])
+    print(link_form_homework)
     homework_number = request_group['homework_number']
+    nro_clase = request_group['nro_clase']
 
-    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number)
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number, nro_clase=nro_clase)
 
 if __name__ == '__main__':
     app.run(debug=True)

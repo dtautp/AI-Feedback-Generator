@@ -23,11 +23,9 @@
             <tbody>
             {% for key, value in requests_group_user.items() %}
                 <tr id="{{ key }}">
-                    <td><p>{{ value.create_datetime|format_date }}</p></td>
-
-                    <td><p>12345</p></td>
-                    <td><p>AC-S04</p></td>
-
+                    <td><p>{{ value.create_datetime | format_date }}</p></td>
+                    <td><p>{{ value.nro_clase }}</p></td>
+                    <td><p>{{ value.homework_number }}</p></td>
                     <td class="count_files">
                         <p>
                             <strong>
@@ -40,7 +38,6 @@
                             </strong>
                         </p>
                     </td>
-
                     <td class="preview_link">
                         <img src="/static/img/eye.svg" alt="">
                             <a href="/feedback-preview/{{ key }}" id="qwert">

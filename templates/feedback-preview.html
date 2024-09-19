@@ -19,23 +19,19 @@
     </div>
     <div class="file-detail">
         <div class="file-assignment">
-            <img src="/static/img/calendar.svg" alt="">
-            <p><strong>Actividad: </strong>🔴 (AC-S07) Week 07 - Task: Assignment - My Family</p>
+            <img src="/static/img/file-text.svg" alt="">
+            <p><strong>Actividad: </strong>{{ homework_number | get_name_homework }}</p>
         </div>
         <div class="file-section">
-            <img src="/static/img/calendar.svg" alt="">
-            <p><strong>Sección: </strong>12345</p>
+            <img src="/static/img/box.svg" alt="">
+            <p><strong>Sección: </strong>{{ nro_clase }}</p>
         </div>
-        <!-- <div class="file-datetime">
-            <img src="/static/img/calendar.svg" alt="">
-            <p><strong>Fecha de creación:</strong>18/09/2024</p>
-        </div> -->
     </div>
     <div class="preview-nav">
         <div class="files-name" id="scrollContainer">
             {% for key, value in requests.items() %}
                 <button id="{{ key }}" class="file_name {% if loop.first %} selected {% endif %}">
-                    <p>{{ value.file_name }}</p>
+                    <p>{{ value.file_name | replace(',', ', ') }}</p>
                 </button>
             {% endfor%}
         </div>
@@ -53,20 +49,11 @@
     </div>
     {% for key, value in requests.items() %}
         <div id="{{ key }}" class="preview-content {% if loop.first %} active {% endif %}">
-            <!-- <div class="file-detail" id="fileDetail">
-                <div class="file-title">
-                    <p >{{ value.file_name }}</p>
-                </div>
-                <div class="file-datetime">
-                    <img src="/static/img/calendar.svg" alt="">
-                    <p><strong>Fecha de creación:</strong>  {{ value.time_stamp | format_time_stamp}}</p>
-                </div>
-            </div> -->
             <div class="assignment-detail">
-                <p class="assignment-desc">Archivo del estudiante: {{ value.file_name }}</p>
+                <p class="assignment-desc">Archivo del estudiante: {{ value.file_name | replace(',', ', ') }}</p>
                 <div class="assignment-text">
                     <p>
-                        {{ value.user_prompt }}
+                        {{ value.user_prompt | replace('\n', '<br>') | safe}}
                     </p>
                 </div>
             </div>
@@ -80,21 +67,15 @@
                 </div>
                 
                 <div class="feedback-text" id="feedbackText_{{ key }}">
-                    {% set feedback_list = value.result_text | get_feedback_print %}
                     <p>
-                        {% for feed in feedback_list %}
-                            {{ feed }}<br>
-                        {% endfor %}
-                        <br>
-                    </p>
-                    
-                    {% if link_form_homework != 'no form' %}
-                        <p>
-                            👋Help us to improve! Rate the feedback given by filling the following survey:
+                        {{ value.result_text | replace('\n', '<br>') | safe}}
+                        
+                        {% if link_form_homework != 'no form' %}
+                            <br><br>
+                            👋 Did you like this feedback? Rate it in the survey!
                             <a target="_blank" href="{{ link_form_homework }}{{ key }}">{{ link_form_homework }}{{ key }}</a>
-                        </p>
-                    {% endif %}
-
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>
