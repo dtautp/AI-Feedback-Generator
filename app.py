@@ -125,14 +125,13 @@ def feedback_historic():
 @app.route('/feedback-preview/<id_requests_group>')
 def preview(id_requests_group):
     requests = select_requests(id_requests_group)
-    # print(requests)
+    sorted_requests = dict(sorted(requests.items(), key=lambda item: item[1]['file_name']))
     request_group = select_value_request_group(id_requests_group)
     link_form_homework = get_form_by_homework(request_group['homework_number'])
-    print(link_form_homework)
     homework_number = request_group['homework_number']
     nro_clase = request_group['nro_clase']
 
-    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number, nro_clase=nro_clase)
+    return render_template('feedback-preview.html', current_route='/feedback-historic', requests=sorted_requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number, nro_clase=nro_clase)
 
 if __name__ == '__main__':
     app.run(debug=True)
