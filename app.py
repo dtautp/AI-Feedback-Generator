@@ -128,9 +128,6 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     sorted_requests = dict(sorted(requests.items(), key=lambda item: item[1]['file_name']))
     request_group = select_value_request_group(id_requests_group)
-    # link_form_homework = get_form_by_homework(request_group['homework_number'])
-    # homework_number = request_group['homework_number']
-    # nro_clase = request_group.get('nro_clase', '')
     link_form_homework = get_form_by_homework(request_group.get('homework_number', ''))
     homework_number = request_group.get('homework_number', '')
     nro_clase = request_group.get('nro_clase', '')
