@@ -104,12 +104,13 @@ def logout():
 def download_temp_document():
     id_request_group = request.form.get('id_request_group')
     request_group = select_value_request_group(id_request_group)
-    link_form_homework = get_form_by_homework(request_group['homework_number'])
-    homework_number = request_group['homework_number']
-    print(preparar_diccionario(select_requests_by_id_request_group(id_request_group), link_form_homework, homework_number))
+    link_form_homework = get_form_by_homework(request_group.get('homework_number', ''))
+    homework_number = request_group.get('homework_number', '')
+    nro_clase = request_group.get('nro_clase', '')
     file = preparar_diccionario(select_requests_by_id_request_group(id_request_group), link_form_homework, homework_number)
     contador_descargas(id_request_group)
-    return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name='feedback.docx')
+    filename_download = f'feedback_{homework_number}_{nro_clase}.docx'
+    return send_file(file, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name=filename_download)
 
 @app.route('/feedback-preview/contador_copiar',methods=['PUT'])
 def contador_copiar():
@@ -127,9 +128,12 @@ def preview(id_requests_group):
     requests = select_requests(id_requests_group)
     sorted_requests = dict(sorted(requests.items(), key=lambda item: item[1]['file_name']))
     request_group = select_value_request_group(id_requests_group)
-    link_form_homework = get_form_by_homework(request_group['homework_number'])
-    homework_number = request_group['homework_number']
-    nro_clase = request_group['nro_clase']
+    # link_form_homework = get_form_by_homework(request_group['homework_number'])
+    # homework_number = request_group['homework_number']
+    # nro_clase = request_group.get('nro_clase', '')
+    link_form_homework = get_form_by_homework(request_group.get('homework_number', ''))
+    homework_number = request_group.get('homework_number', '')
+    nro_clase = request_group.get('nro_clase', '')
 
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=sorted_requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number, nro_clase=nro_clase)
 

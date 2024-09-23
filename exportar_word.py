@@ -4,8 +4,6 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.opc.constants import RELATIONSHIP_TYPE
-import json
-import time
 import io
 import re
 from helpers import get_form_by_homework
@@ -97,7 +95,7 @@ def preparar_diccionario(request_list, link_form_homework, homework_number):
         # Agregar link al feedback
         link_form_homework = str(get_form_by_homework(homework_number))
         feedback = f'{request["result_text"]}'
-        feedback += f'\n\n👋 Did you like this feedback? Rate it in the survey!\n{link_form_homework}{request_key}'
+        feedback += f'\n\nDid you like this feedback? Rate it in the survey!\n{link_form_homework}{request_key}'
         dic['Feedback'] = (1,feedback)
         dic_lis.append(dic)
 
