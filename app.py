@@ -7,7 +7,7 @@ if(current_file_path[:4]=='/var'):
     sys.path.append(module_dir)
 
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify, flash, send_file, after_this_request
-from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, select_requests_by_id_request_group, select_requests_group, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group
+from firebase_module import validator_login, validator_login_datos, add_end_datetime_session, select_requests_by_id_request_group, select_requests_group, select_requests, validador_multiples_sesiones, validador_session, contador_descargas, contador_copias, select_value_request_group, update_feedback_reaction
 from exportar_word import preparar_diccionario
 from helpers import format_datetime, first_paragraph_value, second_paragraph_value, format_time_stamp, get_form_by_homework, get_feedback, get_name_homework
 import json
@@ -133,6 +133,14 @@ def preview(id_requests_group):
     nro_clase = request_group.get('nro_clase', '')
 
     return render_template('feedback-preview.html', current_route='/feedback-historic', requests=sorted_requests, id_requests_group=id_requests_group, link_form_homework=link_form_homework, homework_number=homework_number, nro_clase=nro_clase)
+
+@app.route('/update-feedback-reaction', methods=['POST'])
+def feedback_reaction():
+    data = request.get_json()
+    key = data.get('key')
+    reaction = data.get('reaction')
+    update_feedback_reaction(key, reaction)
+    return jsonify(key,reaction)
 
 if __name__ == '__main__':
     app.run(debug=True)

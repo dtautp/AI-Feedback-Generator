@@ -21,7 +21,7 @@ function copyFeedbackText(key) {
     // Ejecuta el comando de copiar
     document.execCommand('copy');
 
-    // Deselecciona el texto
+    // Seselecciona el texto
     selection.removeAllRanges();
 
     // Notifica al usuario que se ha copiado el contenido
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function contador_copy(key){
-    console.log(key)
+    // console.log(key)
     const newData = {
         request_id: key,
     };
@@ -88,7 +88,7 @@ function contador_copy(key){
         })
         .then(data => {
             // Display the updated response data
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -144,7 +144,7 @@ function handleClick(event) {
 
     // Calcular el desplazamiento necesario para centrar el botón
     const scrollLeft = buttonRect.left - containerRect.left - (containerRect.width - buttonRect.width) / 2;
-    console.log(scrollLeft)
+    // console.log(scrollLeft)
     
     // Desplazar el contenedor
     scrollContainer.scrollLeft += scrollLeft;
@@ -261,4 +261,37 @@ const urlParams = new URLSearchParams(queryString);
 const errCode = urlParams.get('err_code');
 if (errCode=='timeout') {
   alert("Ups! Parece que ha pasado un poco más de tiempo del esperado, no se pudieron procesar todos los documentos.");
+}
+
+// Funciones para dar like y dislike
+function sendReaction(key, reaction) {
+    fetch('/update-feedback-reaction', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ key: key, reaction: reaction })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Aquí actualizas la interfaz de usuario
+        updateReactionUI(key, reaction);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function updateReactionUI(key, reaction) {
+    const likeButton = document.querySelector(`.button-like[data-key="${key}"]`);
+    const dislikeButton = document.querySelector(`.button-dislike[data-key="${key}"]`);
+
+    // Actualiza el estado de los botones
+    if (reaction === 1) {
+        likeButton.classList.add('seleted');
+        dislikeButton.classList.remove('seleted');
+        showBootstrapAlert('¡Gracias!', 'success');
+    } else {
+        dislikeButton.classList.add('seleted');
+        likeButton.classList.remove('seleted');
+        showBootstrapAlert('¡Gracias, seguiremos mejorando!', 'secondary');
+    }
 }

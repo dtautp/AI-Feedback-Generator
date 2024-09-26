@@ -249,6 +249,33 @@
     align-self: stretch;
 }
 
+.feedback-preview .preview-content .feedback-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    gap: 20px;
+}
+
+.feedback-preview .preview-content .feedback-option .feedback-reaction {
+    display: flex;
+}
+
+.feedback-preview .preview-content .feedback-option .feedback-reaction img {
+    width: 30px;
+    height: 30px;
+}
+
+.feedback-preview .preview-content .feedback-option .feedback-reaction .seleted {
+    filter: invert(34%) sepia(90%) saturate(3500%) hue-rotate(210deg) brightness(95%) contrast(101%);
+    opacity: 1;
+}
+
+.feedback-preview .preview-content .feedback-option .button-like, .feedback-preview .preview-content .feedback-option .button-dislike {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
 .feedback-preview .preview-content .feedback-download .button-copy {
     display: flex;
     align-items: flex-start;

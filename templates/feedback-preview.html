@@ -60,10 +60,16 @@
             <div class="feedback-detail">
                 <div class="feedback-download">
                     <p class="feedback-desc">Feedback:</p>
-                    <button class="button-copy" onclick="copyFeedbackText('{{ key }}')">
-                        <img src="/static/img/copy.svg" alt="">
-                        <p>Copiar</p>
-                    </button>
+                    <div class="feedback-option">
+                        <div class="feedback-reaction">
+                            <img class="button-like {{ 'seleted' if value.reaction == 1 else '' }}" src="/static/img/like.svg" alt="like" data-key="{{ key }}" onclick="sendReaction('{{ key }}', 1)">
+                            <img class="button-dislike {{ 'seleted' if value.reaction == 0 else '' }}" src="/static/img/dislike.svg" alt="dislike" data-key="{{ key }}" onclick="sendReaction('{{ key }}', 0)">
+                        </div>
+                        <button class="button-copy" onclick="copyFeedbackText('{{ key }}')">
+                            <img src="/static/img/copy.svg" alt="">
+                            <p>Copiar</p>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="feedback-text" id="feedbackText_{{ key }}">

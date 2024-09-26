@@ -60,40 +60,40 @@ def add_end_datetime_session(session_id):
     end_datetime = get_datetime()
     db.child('sessions_log').child(session_id).child('end_datetime').set(end_datetime)
 
-def insert_requests_group(request_group, use_id, homework_number):
-    request_group_data = {}
-    for request in request_group:
-        group_id = request['id_request_group']
-        if group_id not in request_group_data:
-            request_group_data[group_id] = {
-                'id_user': use_id.lower(),
-                'homework_number' : homework_number,
-                'id_request': [],
-                'file_name': [],
-                'create_datetime': request['create_datetime'],
-            }
-        request_group_data[group_id]['id_request'].append(request['id_request'])
-        request_group_data[group_id]['file_name'].append(request['file_name'])
-    db.child('requests_group').child(group_id).set(request_group_data[group_id])
+# def insert_requests_group(request_group, use_id, homework_number):
+#     request_group_data = {}
+#     for request in request_group:
+#         group_id = request['id_request_group']
+#         if group_id not in request_group_data:
+#             request_group_data[group_id] = {
+#                 'id_user': use_id.lower(),
+#                 'homework_number' : homework_number,
+#                 'id_request': [],
+#                 'file_name': [],
+#                 'create_datetime': request['create_datetime'],
+#             }
+#         request_group_data[group_id]['id_request'].append(request['id_request'])
+#         request_group_data[group_id]['file_name'].append(request['file_name'])
+#     db.child('requests_group').child(group_id).set(request_group_data[group_id])
 
-def insert_request(group_info, chatgpt_response, session_id, user_id):
-    insert_dict = {}
-    request_id = group_info['id_request']
-    insert_dict['id_session'] = session_id
-    insert_dict['id_request_group'] = group_info['id_request_group']
-    insert_dict['file_name'] = group_info['file_name']
-    insert_dict['id_user'] = user_id.lower()
-    insert_dict['system_prompt_id'] = chatgpt_response['system_prompt_id']
-    insert_dict['user_prompt'] = chatgpt_response['user_prompt']
-    insert_dict['seed'] = chatgpt_response['seed']
-    insert_dict['system_fingerprint'] = chatgpt_response['system_fingerprint']
-    insert_dict['usage'] = chatgpt_response['usage']
-    insert_dict['result_text'] = chatgpt_response['result_text']
-    insert_dict['time_stamp'] = chatgpt_response['time_stamp']
-    insert_dict['price'] = chatgpt_response['price']
-    insert_dict['execution_time'] = chatgpt_response['execution_time']
-    db.child('requests').child(request_id).set(insert_dict)
-    return insert_dict
+# def insert_request(group_info, chatgpt_response, session_id, user_id):
+#     insert_dict = {}
+#     request_id = group_info['id_request']
+#     insert_dict['id_session'] = session_id
+#     insert_dict['id_request_group'] = group_info['id_request_group']
+#     insert_dict['file_name'] = group_info['file_name']
+#     insert_dict['id_user'] = user_id.lower()
+#     insert_dict['system_prompt_id'] = chatgpt_response['system_prompt_id']
+#     insert_dict['user_prompt'] = chatgpt_response['user_prompt']
+#     insert_dict['seed'] = chatgpt_response['seed']
+#     insert_dict['system_fingerprint'] = chatgpt_response['system_fingerprint']
+#     insert_dict['usage'] = chatgpt_response['usage']
+#     insert_dict['result_text'] = chatgpt_response['result_text']
+#     insert_dict['time_stamp'] = chatgpt_response['time_stamp']
+#     insert_dict['price'] = chatgpt_response['price']
+#     insert_dict['execution_time'] = chatgpt_response['execution_time']
+#     db.child('requests').child(request_id).set(insert_dict)
+#     return insert_dict
 
 def select_system_prompt_by_id(system_prompt_id):
     system_prompt = dict(db.child('system_prompt').child(system_prompt_id).get().val())
@@ -124,6 +124,21 @@ def select_requests(id_requests_group):
 
     return requests_data
 
+def update_feedback_reaction(id_request, reaction):
+    try:
+        # Referencia al documento específico en Firestore
+        request_ref = db.child('requests').child(id_request)
+        
+        # Actualizar el campo 'reaction' en el documento
+        request_ref.update({
+            'reaction': reaction
+        })
+
+        return {'success': True, 'message': 'Reacción actualizada con éxito'}
+
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
 def validador_session(session_id):
     val_ses = db.child('sessions_log').child(session_id).get().val()
     if(val_ses == None):
@@ -131,7 +146,6 @@ def validador_session(session_id):
     else:
         return 'end_datetime' in dict(val_ses).keys()
     
-
 def contador_descargas(id_request_group):
     try:
         dic = dict(db.child('requests_group').child(id_request_group).get().val())
@@ -144,7 +158,6 @@ def contador_descargas(id_request_group):
     except Exception as e:
         print(e)
     
-
 def contador_copias(id_request):
     try:
         dic = dict(db.child('requests').child(id_request).get().val())
