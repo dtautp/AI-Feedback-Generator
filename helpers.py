@@ -21,7 +21,8 @@ def time_stamp():
     return formatted_date
 
 def format_datetime(datetime_default):
-    datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S') - timedelta(hours=5)
+    # datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S') - timedelta(hours=5)
+    datetime_format = datetime.strptime(datetime_default, '%Y-%m-%d %H:%M:%S')
     return datetime_format.strftime('%d/%m/%Y %I:%M %p')
 
 def format_time_stamp(datetime_default):
